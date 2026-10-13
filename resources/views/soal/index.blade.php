@@ -1,0 +1,255 @@
+@extends('layouts.app')
+@section('title', 'Data Soal')
+@section('breadcrumb')
+  <h1>Data Soal</h1>
+@endsection
+@section('content')
+<div class="col-md-12">
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title">Paket Soal</h3>
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+    	<button type="button" id="btn-soal" class="btn btn-primary btn-md"><i class="fa fa-pencil-square-o"></i> &nbsp;Buat Paket Soal</button>
+    	<!--<a href="{{ url('/download-file-format/soal') }}" class="btn btn-success btn-md"><i class="fa fa-file-excel-o"></i> &nbsp;Download Format Excel</a>
+    	<button type="button" id="btn-upload-soal" class="btn btn-info btn-md"><i class="fa fa-cloud-upload"></i> &nbsp;Upload Excel</button>-->
+      <div class="well" style="margin-top: 15px; display: none;" id="wrap-soal">
+        <form class="form-horizontal" id="formSoal">
+          {{ csrf_field() }}
+          <input type="hidden" name="id" value="N">
+          <div class="box-body">
+            <div class="form-group">
+              <label for="paket" class="col-sm-2 control-label">Paket</label>
+              <div class="col-sm-8">
+                <input id="paket" type="text" class="form-control" name="paket" placeholder="Try Out">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="deskripsi" class="col-sm-2 control-label">Deskripsi</label>
+              <div class="col-sm-8">
+                <textarea id="deskripsi" name="deskripsi" class="form-control" placeholder="Deskripsi"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="waktu" class="col-sm-2 control-label">Waktu (<small>Detik</small>)</label>
+              <div class="col-sm-2">
+                <input id="waktu" type="text" class="form-control numOnly" data-toggle="tooltip" title="Masukkan waktu ujian dalam satuan detik" name="waktu" placeholder="60">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="tipe_waktu" class="col-sm-2 control-label">Jenis Soal</label>
+              <div class="col-sm-2">
+                <select id="jenis" class="form-control" data-toggle="tooltip" name="jenis">
+                  <option value="0" selected>Normal</option>
+                  <option value="1">Cerdas Cermat</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password" class="col-sm-2 control-label">Password</label>
+              <div class="col-sm-2">
+                <input id="password" type="text" class="form-control" data-toggle="tooltip" title="Masukkan password untuk soal" name="password" placeholder="Password Soal">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <div id="wrap-btn">
+                  <button type="button" class="btn btn-danger" id="btnbatal">Batal</button>
+                  <button type="button" class="btn btn-info" id="btnSimpan">Simpan</button>
+                </div>
+                <div id="notif" style="display: none; margin-top: 15px""></div>
+              </div>
+            </div>
+            <div class="overlay" id="loading" style="display: none;"><i class="fa fa-refresh fa-spin" ></i></div>
+          </div>
+        </form>
+      </div>
+      <div class="well" style="margin-top: 15px; display: none;" id="wrap-upload-soal">
+        <form class="form-horizontal" action="{{ url('/crud/simpan-detail-soal-via-excel') }}" enctype="multipart/form-data" method="POST">
+          {{ csrf_field() }}
+          <div class="box-body">
+            <div class="form-group">
+              <input type="file" name="file" id="file" class="inputfile" />
+              <label for="file"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Pilih file excel</label>
+              <p class="help-block">Silahkan pilih file format soal dalam bentuk excel yang telah diisi dengan benar.</p>
+            </div>
+            <div class="box-footer">
+              <input class="btn btn-danger" id="batal-upload" type="button" value="Batal" />
+              <input class="btn btn-primary" name="upload" type="submit" value="Import" />
+            </div>
+          </div>
+        </form>
+      </div>
+    	<hr style="margin: 10px 0 15px 0">
+      <table class="table table-hover table-striped" id="table_soal">
+      	@if (Auth::user()->status == 'G')
+	        <caption>Data paket soal yang Anda buat</caption>
+        @else
+        	<caption>Data paket soal</caption>
+        @endif
+        <thead>
+          <tr>
+            <th>ID Soal</th>
+            <th>Nama Paket</th>
+            <th>Deskripsi</th>
+            <th style="text-align: center; width: 70px">Waktu</th>
+            <th style="text-align: center; width: 100px">Jenis Soal</th>
+            <th style="text-align: center; width: 70px">Password</th>
+            <th style="text-align: center; width: 150px">Aksi</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="del-soal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="blue bigger">Hapus Paket Soal</h4>
+          </div>
+            <div class="modal-body">
+                <form role="form" id="delete" action="{{ route('soal.paket.hapus') }}" method="post">
+                    @csrf
+                    @method('delete')
+                    <input type="hidden" id="id_soal" name="id_soal">
+                </form>
+                <div>
+                    <p>Anda yakin ingin menghapus paket soal <b><span id="paket_soal" class="bolder"></span></b>?</p>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                <button id="button-delete" type="button" class="btn btn-danger" onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@push('css')
+  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/media/css/dataTables.bootstrap.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.css')}}">
+  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/css/fixedHeader.bootstrap.css')}}">
+  <style type="text/css">
+    .panel {
+      margin-bottom: 5px !important;
+    }
+    .form-group {
+      margin-bottom: 5px;
+    }
+    .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
+    .inputfile + label {
+      font-size: 1.25em;
+      font-weight: 700;
+      color: white;
+      background-color: green;
+      display: inline-block;
+      padding: 10px;
+    }
+    .inputfile:focus + label,.inputfile + label:hover {
+      background-color: darkgreen;
+    }
+    .inputfile + label {
+      cursor: pointer;
+    }
+    .inputfile:focus + label {
+      outline: 1px dotted #000;
+      outline: -webkit-focus-ring-color auto 5px;
+    }
+    .inputfile + label * {
+      pointer-events: none;
+    }
+  </style>
+@endpush
+@push('scripts')
+<script src="{{URL::asset('assets/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatables/media/js/dataTables.bootstrap.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js')}}"></script>
+<script>
+$(document).ready(function (){
+  table_soal = $('#table_soal').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    lengthChange: true,
+    ajax: {
+      url: '{!! route('elearning.get-soal') !!}',
+      
+    },
+    columns: [
+      {data: 'id', name: 'id', orderable: true, searchable: true },
+      {data: 'paket', name: 'paket', orderable: true, searchable: true },
+      {data: 'deskripsi', name: 'deskripsi', orderable: true, searchable: true },
+      {data: 'waktu', name: 'waktu', orderable: true, searchable: true },
+      {data: 'jenis', name: 'jenis', orderable: true, searchable: true },
+      {data: 'password', name: 'password', orderable: true, searchable: true },
+      {data: 'action', name: 'action', orderable: false, searchable: false, },
+    ],
+    "drawCallback": function (setting) {}
+  });
+  $("#btn-upload-soal").click(function() {
+    $("#wrap-soal").hide();
+    $("#wrap-upload-soal").slideToggle();
+  })
+  $("#batal-upload").click(function() {
+    $("#wrap-upload-soal").slideToggle();
+  })
+  $("#btn-soal").click(function() {
+    $("#wrap-upload-soal").hide();
+    $("#wrap-soal").slideToggle();
+  })
+  $("#btnbatal").click(function() {
+    $("#wrap-soal").slideToggle();
+  })
+  $("#btnSimpan").click(function(){
+    $("#wrap-btn").hide();
+    $("#loading").show();
+    var dataString = $("#formSoal").serialize();
+    $.ajax({
+      type: "POST",
+      url: "{{ url('/crud/simpan-soal') }}",
+      data: dataString,
+      success: function(data){
+        console.log(data);
+        if (data == 'ok') {
+          $("#loading").hide();
+          $("#wrap-btn").show();
+          $("#notif").removeClass('alert alert-danger').addClass('alert alert-info').html("<i class='fa fa-info-circle'></i> Data berhasil disimpan.").fadeIn(350);
+          window.location.href = "{{ url('/elearning/soal') }}";
+        }else{
+          $("#loading").hide();
+          $("#wrap-btn").show();
+          $("#notif").removeClass('alert alert-info').addClass('alert alert-danger').html(data).fadeIn(350);
+        }
+      }
+    })
+  });
+});
+function deleteSoal(id_soal, paketSoal) {
+  $("#id_soal").val(id_soal);
+  $("#paket_soal").text(paketSoal);
+}
+</script>
+@if(Session::has('success'))
+  <script>
+    swal("", '{!! Session::get("success") !!}', "success");
+  </script>
+@endif
+@if(Session::has('error'))
+  <script>
+    swal("", '{!! Session::get("error") !!}', "error");
+  </script>
+@endif
+@endpush
