@@ -34,6 +34,21 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="kategori_utama" class="col-sm-2 control-label">Kategori Utama</label>
+              <div class="col-sm-4">
+                <select id="kategori_utama" class="form-control" name="kategori_utama">
+                  <option value="Kedinasan & Polri (SKD BKN/Akademik)" selected>Kedinasan & Polri (SKD BKN/Akademik)</option>
+                  <option value="SMA & UTBK (SNBT)">SMA & UTBK (SNBT)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sub_kategori" class="col-sm-2 control-label">Sub Kategori</label>
+              <div class="col-sm-4">
+                <input id="sub_kategori" type="text" class="form-control" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif, Penalaran">
+              </div>
+            </div>
+            <div class="form-group">
               <label for="waktu" class="col-sm-2 control-label">Waktu (<small>Detik</small>)</label>
               <div class="col-sm-2">
                 <input id="waktu" type="text" class="form-control numOnly" data-toggle="tooltip" title="Masukkan waktu ujian dalam satuan detik" name="waktu" placeholder="60">

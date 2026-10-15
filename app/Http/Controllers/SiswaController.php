@@ -201,26 +201,46 @@ class SiswaController extends Controller
       $jawab->revisi = $jawab->revisi + 1;
     }
 
-    $exist = Jawab::where([['no_soal_id', $id_detail_soal], ['id_user', auth()->user()->id], ['pilihan', $pilihan]])->exists();
-    
-    if(!$exist){
-      $jawab->no_soal_id = $id_detail_soal;
-      $jawab->id_soal = $detail_soal->id_soal;
-      $jawab->id_user = auth()->user()->id;
-      $jawab->nama = auth()->user()->nama;
-      $jawab->pilihan = $pilihan;
+    $jawab->no_soal_id = $id_detail_soal;
+    $jawab->id_soal = $detail_soal->id_soal;
+    $jawab->id_user = auth()->user()->id;
+    $jawab->nama = auth()->user()->nama;
+    $jawab->status = 0;
 
-      $check_jawaban = Detailsoal::where('id', $id_detail_soal)->where('kunci', $pilihan)->first();
-      if ($check_jawaban) {
+    if ($detail_soal->tipe_soal == 'multi') {
+      $current_multi = !empty($jawab->jawaban_multi) ? json_decode($jawab->jawaban_multi, true) : [];
+      if (!is_array($current_multi)) {
+        $current_multi = !empty($jawab->pilihan) ? explode(',', $jawab->pilihan) : [];
+      }
+      if (in_array($pilihan, $current_multi)) {
+        $current_multi = array_values(array_diff($current_multi, [$pilihan]));
+      } else {
+        $current_multi[] = $pilihan;
+        sort($current_multi);
+      }
+      $jawab->jawaban_multi = json_encode($current_multi);
+      $jawab->pilihan = implode(',', $current_multi);
+
+      $kunci_multi = json_decode($detail_soal->kunci, true);
+      if (!is_array($kunci_multi)) {
+        $kunci_multi = explode(',', $detail_soal->kunci);
+      }
+      sort($kunci_multi);
+      if ($current_multi == $kunci_multi) {
         $jawab->score = $detail_soal->score;
       } else {
         $jawab->score = 0;
       }
-      $jawab->status = 0;
-
-    
-      $jawab->save();
+    } else {
+      $jawab->pilihan = $pilihan;
+      if ($detail_soal->kunci == $pilihan) {
+        $jawab->score = $detail_soal->score;
+      } else {
+        $jawab->score = 0;
+      }
     }
+
+    $jawab->save();
     
     return 1;
   }
@@ -256,8 +276,43 @@ class SiswaController extends Controller
   public function finishUjian($id)
   {
     $soal = Soal::find($id);
-    $nilai = Jawab::where('id_soal', $id)->where('id_user', auth()->user()->id)->sum('score');
-    return view('halaman-siswa.finish', compact('soal', 'nilai'));
+    $user_id = auth()->user()->id;
+    $nilai = Jawab::where('id_soal', $id)->where('id_user', $user_id)->sum('score');
+    $jawabs = Jawab::where('id_soal', $id)->where('id_user', $user_id)->get()->keyBy('no_soal_id');
+    $detail_soals = Detailsoal::where('id_soal', $id)->where('status', 'Y')->get();
+
+    $total_soal = $detail_soals->count();
+    $benar = 0;
+    $salah = 0;
+    $kosong = 0;
+
+    foreach ($detail_soals as $ds) {
+      if (isset($jawabs[$ds->id]) && !empty($jawabs[$ds->id]->pilihan)) {
+        $user_ans = $jawabs[$ds->id]->pilihan;
+        if ($ds->tipe_soal == 'multi') {
+          $user_arr = array_map('trim', explode(',', $user_ans));
+          $kunci_decoded = json_decode($ds->kunci, true);
+          $kunci_arr = is_array($kunci_decoded) ? $kunci_decoded : array_map('trim', explode(',', $ds->kunci));
+          sort($user_arr);
+          sort($kunci_arr);
+          if ($user_arr == $kunci_arr) {
+            $benar++;
+          } else {
+            $salah++;
+          }
+        } else {
+          if (trim(strtoupper($user_ans)) == trim(strtoupper($ds->kunci))) {
+            $benar++;
+          } else {
+            $salah++;
+          }
+        }
+      } else {
+        $kosong++;
+      }
+    }
+
+    return view('halaman-siswa.finish', compact('soal', 'nilai', 'detail_soals', 'jawabs', 'total_soal', 'benar', 'salah', 'kosong'));
   }
 
   public function delete()

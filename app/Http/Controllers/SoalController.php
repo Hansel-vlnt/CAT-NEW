@@ -223,6 +223,12 @@ class SoalController extends Controller
       if(!empty($request['password'])){
         $query->password = $request['password'];
       }
+      if($request->has('kategori_utama')){
+        $query->kategori_utama = $request['kategori_utama'];
+      }
+      if($request->has('sub_kategori')){
+        $query->sub_kategori = $request['sub_kategori'];
+      }
       $query->save();
       return 'ok';
     }
@@ -231,7 +237,7 @@ class SoalController extends Controller
   {
     if ($request->soal == "") {
       return "Soal tidak boleh kosong.";
-    } elseif ($request->kunci == "") {
+    } elseif (empty($request->kunci)) {
       return "Kunci jawaban soal tidak boleh kosong.";
     } elseif ($request->score == "") {
       return "Score soal tidak boleh kosong.";
@@ -253,9 +259,23 @@ class SoalController extends Controller
       $query->pilc = $request->pilc;
       $query->pild = $request->pild;
       $query->pile = $request->pile;
-      $query->kunci = $request->kunci;
+      $query->kunci = is_array($request->kunci) ? json_encode($request->kunci) : $request->kunci;
       $query->score = $request->score;
       $query->status = $request->status;
+
+      if ($request->has('tipe_soal')) {
+        $query->tipe_soal = $request->tipe_soal;
+      }
+      if ($request->has('pembahasan_cepat')) {
+        $query->pembahasan_cepat = $request->pembahasan_cepat;
+      }
+      if ($request->has('pembahasan_konsep')) {
+        $query->pembahasan_konsep = $request->pembahasan_konsep;
+      }
+      if ($request->has('bobot_opsi')) {
+        $query->bobot_opsi = is_array($request->bobot_opsi) ? json_encode($request->bobot_opsi) : $request->bobot_opsi;
+      }
+
       $query->save();
       return 'ok';
     }

@@ -15,76 +15,77 @@
   <link rel="stylesheet" href="{{ url('/assets/plugins/ionicons-2.0.1/css/ionicons.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('/assets/dist/css/AdminLTE.min.css') }}">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. -->
   <link rel="stylesheet" href="{{ url('/assets/dist/css/skins/_all-skins.min.css') }}">
+  <!-- Tailwind CSS & Modern Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ url('/assets/plugins/iCheck/flat/blue.css') }}">
-  <!-- Morris chart -->
-  <!-- <link rel="stylesheet" href="{{ url('/assets/plugins/morris/morris.css') }}"> -->
-  <!-- jvectormap -->
-  <!-- <link rel="stylesheet" href="{{ url('/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css') }}"> -->
   <!-- Date Picker -->
   <link rel="stylesheet" href="{{ url('/assets/plugins/datepicker/datepicker3.css') }}">
-  <!-- Daterange picker -->
-  <!-- <link rel="stylesheet" href="{{ url('/assets/plugins/daterangepicker/daterangepicker.css') }}"> -->
-  <!-- bootstrap Sweetalert -->
-  <!-- <link rel="stylesheet" href="{{ url('/assets/plugins/sweetalert-master/dist/sweetalert.css') }}"> -->
   <link rel="stylesheet" type="text/css" href="{{ url('/assets/plugins/sweetalert-master/themes/facebook/facebook.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url('/assets/plugins/sweetalert2-1.0.5/dist/sweetalert2.min.css') }}">
   <link rel="icon" href="{{ url('/assets/img/favicon.jpg') }}" type="image/x-icon"/>
   <style type="text/css">
-    .dataTable td{
-      font-size: 10pt !important;
+    body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        font-size: 14px;
+        color: #1e293b;
+        background-color: #f8fafc;
     }
-    .form-group{
-      margin-bottom: 4px;
+    .main-header .navbar {
+        background-color: #0f172a !important;
+        border-bottom: 1px solid #1e293b;
     }
-    .box-header.with-border {border-bottom: thin solid #d0ced8 !important;}
-    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-        padding-right: 5px !important;
-        padding-left: 5px !important;
+    .main-header .logo {
+        background-color: #090d16 !important;
+        color: #ffffff !important;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        border-bottom: 1px solid #1e293b;
     }
-    .row {
-      margin-right: -5px !important;
-      margin-left: -5px !important;
+    .main-sidebar, .left-side {
+        background-color: #0f172a !important;
+    }
+    .sidebar-menu > li.header {
+        color: #64748b !important;
+        background: #090d16 !important;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        font-size: 11px;
+    }
+    .sidebar-menu > li > a {
+        color: #94a3b8 !important;
+        border-left: 3px solid transparent;
+        font-weight: 500;
+    }
+    .sidebar-menu > li:hover > a, .sidebar-menu > li.active > a {
+        color: #ffffff !important;
+        background: #1e293b !important;
+        border-left-color: #3b82f6 !important;
+    }
+    .content-wrapper {
+        background-color: #f8fafc !important;
     }
     .box {
-      margin-bottom: 10px !important;
+        border-radius: 14px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    .box.box-primary {
+        border-top-color: #3b82f6 !important;
+    }
+    .box-header.with-border {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+    .dataTable td{
+      font-size: 11pt !important;
     }
   </style>
-  <style type="text/css">
-    body {
-        font-family: "Montserrat", sans-serif;
-        font-size: 16px;
-        line-height: 1.4;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        height: 100%;
-        /* background: #ffffff; */
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    .imgtgl {
-        
-    }
-
-    .imgjam {
-
-    }
-
-</style>
   @stack('css')
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
 </head>
 <body class="hold-transition skin-blue fixed sidebar-mini">
 <div class="wrapper">
@@ -93,14 +94,17 @@
   ?>
   <header class="main-header">
     <!-- Logo -->
-    <a href="{{ url('/') }}" class="logo" style="background-color: #381c06 !important;">
+    <a href="{{ url('/') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">APdi</span>
+      <span class="logo-mini font-black text-blue-500">AP</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">Abdi Praja Edukasi</span>
+      <span class="logo-lg flex items-center gap-2">
+        <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-extrabold text-xs inline-block">ED</span>
+        <span>Abdi Praja Bank Soal</span>
+      </span>
     </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top" style="background-color: #542c0e !important;">
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>

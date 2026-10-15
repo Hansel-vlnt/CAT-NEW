@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduCAT Pro - Web CBT & Bank Soal Bimbel (Responsive Desktop & Mobile)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- ============================================================== -->
+  <!-- 1. TOP GLOBAL NAVBAR (RESPONSIVE WEB HEADER)                   -->
+  <!-- ============================================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- LOGO & BRAND -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-red-100">
+          GO
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-slate-900 text-base leading-none">EduCAT Bimbel</span>
+            <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800">
+              Web &amp; Mobile Responsive
+            </span>
+          </div>
+          <div class="text-xs text-slate-500 font-medium hidden sm:block mt-0.5">
+            Sistem Bank Soal SMA &amp; Kedinasan (Preserving All Original CBT Features)
+          </div>
+        </div>
+      </div>
+
+      <!-- ROLE & VIEW SWITCHER (UNTUK PREVIEW) -->
+      <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+        <button id="nav-btn-exam" onclick="switchMainTab('exam')" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition">
+          Ruang Ujian (Siswa)
+        </button>
+        <button id="nav-btn-review" onclick="switchMainTab('review')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Hasil &amp; Pembahasan
+        </button>
+        <button id="nav-btn-admin" onclick="switchMainTab('admin')" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          Kelola Soal (Admin)
+        </button>
+      </div>
+
+      <!-- USER PROFILE DROPDOWN (PRESERVED FROM OLD APP) -->
+      <div class="hidden md:flex items-center gap-3">
+        <div class="text-right">
+          <div class="text-xs font-bold text-slate-900">Desi Chrisdamayanti</div>
+          <div class="text-[11px] text-slate-500">Siswa &bull; Kelas XII SMA</div>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs border border-slate-300">
+          DC
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================== -->
+  <!-- TAB 1: RUANG UJIAN (RESPONSIF DESKTOP & MOBILE)               -->
+  <!-- ============================================================== -->
+  <main id="tab-exam" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1">
+    
+    <!-- SUB-HEADER INFO UJIAN (FUNGSI ASLI: NAMA PAKET, DESKRIPSI, PASSWORD, TIMER) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 mb-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-red-50 text-red-700 border border-red-200">
+            KEDINASAN &bull; TIU &amp; LOGIKA
+          </span>
+          <span class="text-xs text-slate-500">&bull; Paket: Latihan Kecerdasan #2</span>
+          <span class="hidden sm:inline-block text-xs text-slate-400">&bull; Token Terverifikasi</span>
+        </div>
+        <h1 class="text-lg sm:text-xl font-bold text-slate-900">
+          Simulasi Tes Inteligensi Umum &amp; Penalaran Akademis
+        </h1>
+        <div class="text-xs text-slate-500 mt-1">
+          Alokasi Waktu: 5.400 Detik (90 Menit) &bull; Soal Pilihan Ganda &amp; Multi-Select
+        </div>
+      </div>
+
+      <!-- TIMER HITUNG MUNDUR (RESPONSIF: TETAP MENONJOL DI PC & HP) -->
+      <div class="flex items-center gap-3 bg-slate-900 text-white px-4 py-2.5 rounded-xl shrink-0 self-start md:self-auto shadow-sm">
+        <div class="text-right">
+          <div class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Sisa Waktu</div>
+          <div class="text-xl sm:text-2xl font-black text-amber-400 code-font">01:24:18</div>
+        </div>
+        <div class="w-9 h-9 rounded-lg bg-slate-800 text-amber-400 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN RESPONSIVE GRID -->
+    <!-- DESKTOP: 8 COLUMNS SOAL + 4 COLUMNS PANEL NOMOR -->
+    <!-- MOBILE: FULL WIDTH SOAL + BOTTOM DRAWER / ACCORDION -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- KOLOM KIRI: LEMBAR SOAL AKTIF (8 COLS DI DESKTOP, 100% DI HP) -->
+      <div class="lg:col-span-8 space-y-5">
+        
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm">
+          
+          <!-- BAR INFORMASI NOMOR & PENGATUR UKURAN FONT -->
+          <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+            <div class="flex items-center gap-2.5">
+              <span class="w-9 h-9 rounded-xl bg-slate-900 text-white font-extrabold text-sm flex items-center justify-center">
+                7
+              </span>
+              <div>
+                <span class="text-sm font-bold text-slate-900">Soal Nomor 7</span>
+                <span class="text-xs text-slate-500 block">Dari total 50 butir soal</span>
+              </div>
+            </div>
+
+            <!-- FONT SIZER (FUNGSI ASLI CBT TETAP ADA) -->
+            <div class="flex items-center gap-1.5 text-xs text-slate-600">
+              <span class="hidden sm:inline text-slate-400 mr-1">Ukuran Font:</span>
+              <button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold flex items-center justify-center">A-</button>
+              <button class="w-7 h-7 rounded-lg bg-slate-200 font-bold flex items-center justify-center">A</button>
+              <button class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold flex items-center justify-center">A+</button>
+            </div>
+          </div>
+
+          <!-- KONTEN BACAAN / PERTANYAAN (ASLI DARI DATABASE CBT LAMA DENGAN FORMAT BERSIH) -->
+          <div class="text-base sm:text-lg text-slate-900 font-medium leading-relaxed mb-6">
+            Jarak sebuah desa dengan pusat kota kurang lebih 770 km. Naufal berangkat dari desa pukul 16.00 dengan kelajuan rata-rata 60 km/jam. Rio berangkat dari pusat kota pukul 18.00 dengan kelajuan rata-rata 70 km/jam. Apabila Naufal dan Rio melalui lintasan yang sama, maka Naufal akan bertemu dengan Rio setelah Naufal menempuh jarak sejauh ... km.
+          </div>
+
+          <!-- PILIHAN JAWABAN (CARD-STYLE SENTUH LEGA & NYAMAN DI PC / HP) -->
+          <div class="space-y-3">
+            
+            <!-- Opsi A (Terpilih) -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border-2 border-red-600 bg-red-50/40 cursor-pointer transition select-none">
+              <div class="w-7 h-7 rounded-lg bg-red-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                A
+              </div>
+              <div class="text-sm sm:text-base text-slate-900 font-medium pt-0.5">
+                420 km
+              </div>
+            </label>
+
+            <!-- Opsi B -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition select-none">
+              <div class="w-7 h-7 rounded-lg border border-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                B
+              </div>
+              <div class="text-sm sm:text-base text-slate-800 pt-0.5">
+                400 km
+              </div>
+            </label>
+
+            <!-- Opsi C -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition select-none">
+              <div class="w-7 h-7 rounded-lg border border-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                C
+              </div>
+              <div class="text-sm sm:text-base text-slate-800 pt-0.5">
+                360 km
+              </div>
+            </label>
+
+            <!-- Opsi D -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition select-none">
+              <div class="w-7 h-7 rounded-lg border border-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                D
+              </div>
+              <div class="text-sm sm:text-base text-slate-800 pt-0.5">
+                320 km
+              </div>
+            </label>
+
+            <!-- Opsi E -->
+            <label class="flex items-start gap-3.5 p-4 rounded-xl border border-slate-200 hover:border-slate-300 bg-white cursor-pointer transition select-none">
+              <div class="w-7 h-7 rounded-lg border border-slate-300 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                E
+              </div>
+              <div class="text-sm sm:text-base text-slate-800 pt-0.5">
+                300 km
+              </div>
+            </label>
+
+          </div>
+
+          <!-- ACTION BUTTONS: PREVIOUS, RAGU-RAGU, NEXT (FUNGSI ASLI DIJAGA LENGKAP) -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mt-8 pt-6 border-t border-slate-100">
+            <button class="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+              &larr; Soal Sebelumnya
+            </button>
+
+            <!-- TOMBOL RAGU-RAGU (FUNGSI ASLI CBT) -->
+            <button class="px-5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold transition flex items-center gap-2">
+              <input type="checkbox" class="w-4 h-4 rounded text-amber-600">
+              <span>Tandai Ragu-Ragu</span>
+            </button>
+
+            <button class="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-100 transition flex items-center gap-1.5">
+              <span>Soal Berikutnya</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- KOLOM KANAN: SIDEBAR NOMOR SOAL (DI DESKTOP MUNCUL DI SAMPING, DI HP RESPONSIF) -->
+      <div class="lg:col-span-4 space-y-4">
+        
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm sticky top-24">
+          
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">Navigasi Nomor Soal</h3>
+              <div class="text-[11px] text-slate-500">Klik nomor untuk melompat langsung</div>
+            </div>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">50 Soal</span>
+          </div>
+
+          <!-- INDIKATOR WARNA STATUS (FUNGSI ASLI CBT) -->
+          <div class="grid grid-cols-3 gap-2 text-[11px] text-slate-600 mb-4 pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-1.5 bg-emerald-50 text-emerald-800 p-1.5 rounded-lg border border-emerald-200">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 24 Dijawab
+            </div>
+            <div class="flex items-center gap-1.5 bg-amber-50 text-amber-800 p-1.5 rounded-lg border border-amber-200">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> 2 Ragu
+            </div>
+            <div class="flex items-center gap-1.5 bg-slate-50 text-slate-600 p-1.5 rounded-lg border border-slate-200">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span> 24 Kosong
+            </div>
+          </div>
+
+          <!-- GRID TOMBOL NOMOR (DESKTOP: MATRIKS 5 KOLOM, RESPONSIF) -->
+          <div class="grid grid-cols-5 gap-2 max-h-72 overflow-y-auto p-0.5">
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">1</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">2</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">3</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">4</button>
+            <button class="h-10 rounded-xl bg-amber-400 text-white font-bold text-xs hover:opacity-90">5</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">6</button>
+            <!-- No 7 Aktif -->
+            <button class="h-10 rounded-xl bg-red-600 text-white font-extrabold text-xs ring-2 ring-red-600 ring-offset-2">7</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">8</button>
+            <button class="h-10 rounded-xl bg-emerald-500 text-white font-bold text-xs hover:opacity-90">9</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">10</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">11</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">12</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">13</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">14</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">15</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">16</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">17</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">18</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">19</button>
+            <button class="h-10 rounded-xl bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">20</button>
+          </div>
+
+          <!-- TOMBOL KUMPULKAN / SELESAIKAN UJIAN (FUNGSI ASLI CBT) -->
+          <button onclick="switchMainTab('review')" class="w-full mt-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-md">
+            Selesaikan Ujian Sekarang
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ============================================================== -->
+  <!-- TAB 2: HASIL & PEMBAHASAN LENGKAP (FITUR BARU ALA GO KREASI)   -->
+  <!-- ============================================================== -->
+  <main id="tab-review" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 hidden">
+    
+    <!-- HERO SCORECARD (EVALUASI PRESTASI BELAJAR) -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 mb-8 shadow-xl">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-red-600 text-white text-xs font-bold uppercase tracking-wider">
+            Hasil Ujian &bull; Bimbel Evaluation
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Latihan Kecerdasan #2</h2>
+          <p class="text-slate-300 text-sm mt-1">Ujian selesai pada 15 Oktober 2026, 18:30 WIB &bull; Waktu Pengerjaan: 52 Menit</p>
+        </div>
+
+        <div class="flex items-center gap-6 bg-white/10 backdrop-blur p-4 rounded-2xl border border-white/10 shrink-0">
+          <div>
+            <div class="text-xs text-slate-300 font-medium">Nilai Total Kamu</div>
+            <div class="text-3xl sm:text-4xl font-black text-amber-400 code-font mt-0.5">84 <span class="text-sm font-normal text-slate-300">/ 100</span></div>
+          </div>
+          <div class="h-10 w-px bg-white/20"></div>
+          <div>
+            <div class="text-xs text-slate-300 font-medium">Status Kelulusan</div>
+            <div class="text-sm sm:text-base font-bold text-emerald-400 mt-0.5">Memenuhi KKM (75)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- METRIK BENAR, SALAH, KOSONG -->
+      <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-6 pt-6 border-t border-white/10 max-w-lg">
+        <div class="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
+          <div class="text-xs text-emerald-400 font-bold">42 Benar</div>
+          <div class="text-lg font-black text-white">84%</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
+          <div class="text-xs text-red-400 font-bold">6 Salah</div>
+          <div class="text-lg font-black text-white">12%</div>
+        </div>
+        <div class="bg-white/5 rounded-xl p-3 border border-white/10 text-center">
+          <div class="text-xs text-slate-400 font-bold">2 Kosong</div>
+          <div class="text-lg font-black text-white">4%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STRIP REVIU NOMOR SOAL DENGAN INDIKATOR STATUS (HIJAU / MERAH / ABU) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 mb-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+        <h3 class="font-bold text-slate-900 text-sm">Pilih Nomor Soal untuk Melihat Pembahasan:</h3>
+        <div class="flex items-center gap-3 text-xs text-slate-500">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Benar</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-red-500"></span> Salah</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-300"></span> Kosong</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">1</button>
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">2</button>
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">3</button>
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">4</button>
+        <button class="w-9 h-9 rounded-xl bg-red-500 text-white font-bold text-xs shrink-0">5</button>
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">6</button>
+        <!-- No 7 Sedang Dibahas -->
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-extrabold text-xs shrink-0 ring-2 ring-red-600 ring-offset-2">7</button>
+        <button class="w-9 h-9 rounded-xl bg-red-500 text-white font-bold text-xs shrink-0">8</button>
+        <button class="w-9 h-9 rounded-xl bg-slate-300 text-slate-700 font-bold text-xs shrink-0">9</button>
+        <button class="w-9 h-9 rounded-xl bg-emerald-500 text-white font-bold text-xs shrink-0">10</button>
+      </div>
+    </div>
+
+    <!-- KARTU DETAIL PEMBAHASAN KHAS GO (DUAL EXPLANATION: CARA CEPAT & CARA FORMAL) -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      
+      <!-- STATUS NOMOR -->
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pembahasan Lengkap</span>
+          <h3 class="text-lg font-bold text-slate-900">Soal Nomor 7 &bull; Pengetahuan Kuantitatif / Kecepatan Jarak</h3>
+        </div>
+        <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
+          Jawaban Kamu: A (Benar +1)
+        </span>
+      </div>
+
+      <!-- SOAL ASLI -->
+      <div class="text-slate-800 text-base leading-relaxed mb-6 font-medium">
+        Jarak sebuah desa dengan pusat kota kurang lebih 770 km. Naufal berangkat dari desa pukul 16.00 dengan kelajuan rata-rata 60 km/jam. Rio berangkat dari pusat kota pukul 18.00 dengan kelajuan rata-rata 70 km/jam. Apabila Naufal dan Rio melalui lintasan yang sama, maka Naufal akan bertemu dengan Rio setelah Naufal menempuh jarak sejauh ... km.
+      </div>
+
+      <!-- DUA KOTAK PEMBAHASAN BERDAMPINGAN DI DESKTOP / MENUMPUK DI MOBILE -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- KOTAK 1: METODE THE KING (TRIK CEPAT BENGKEL SOAL ALA GO) -->
+        <div class="bg-amber-50/70 border border-amber-300 rounded-2xl p-5 relative overflow-hidden">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="px-2.5 py-1 rounded-md bg-amber-500 text-white text-[11px] font-black uppercase tracking-wider">
+              Metode The King GO
+            </span>
+            <span class="text-xs font-bold text-amber-950">Rumus Papasan Berbeda Waktu</span>
+          </div>
+
+          <div class="text-xs text-slate-800 leading-relaxed space-y-2.5">
+            <p>1. <b>Selisih Waktu</b> Naufal dan Rio = 18.00 &minus; 16.00 = <b>2 jam</b>.</p>
+            <p>2. Jarak yang sudah ditempuh Naufal duluan:</p>
+            <div class="bg-white p-2 rounded-lg border border-amber-200 code-font font-bold text-amber-900">
+              S₁ = 60 km/jam &times; 2 jam = 120 km
+            </div>
+            <p>3. <b>Sisa Jarak</b> untuk berpapasan bersama:</p>
+            <div class="bg-white p-2 rounded-lg border border-amber-200 code-font font-bold text-amber-900">
+              S_sisa = 770 &minus; 120 = 650 km
+            </div>
+            <p>4. <b>Waktu Papasan Bersama (t):</b></p>
+            <div class="bg-white p-2 rounded-lg border border-amber-200 code-font font-bold text-amber-900">
+              t = S_sisa / (V₁ + V₂) = 650 / (60 + 70) = 5 Jam
+            </div>
+            <p>5. <b>Total Jarak Naufal</b> = 120 km + (60 &times; 5) = 120 + 300 = <b class="text-red-700">420 km (Kunci: A)</b></p>
+          </div>
+        </div>
+
+        <!-- KOTAK 2: CARA KONSEPTUAL AKADEMIS (LANGKAH FORMAL) -->
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+          <div class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3">
+            Cara Konseptual / Runtut
+          </div>
+          <div class="text-xs text-slate-700 leading-relaxed space-y-2">
+            <p>Misalkan waktu tempuh Rio sejak berangkat adalah <code class="code-font font-bold">t</code> jam.</p>
+            <p>Maka waktu tempuh Naufal adalah <code class="code-font font-bold">(t + 2)</code> jam.</p>
+            <p>Saat keduanya berpapasan di lintasan yang sama, jumlah jarak keduanya sama dengan jarak total antara desa dan pusat kota:</p>
+            <div class="bg-white p-2.5 rounded-lg border border-slate-200 code-font text-slate-900">
+              S_Naufal + S_Rio = 770<br>
+              60(t + 2) + 70(t) = 770<br>
+              60t + 120 + 70t = 770<br>
+              130t = 650 &rArr; t = 5 jam.
+            </div>
+            <p>Jarak tempuh Naufal = 60 &times; (5 + 2) = 60 &times; 7 = <b>420 km</b>.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ============================================================== -->
+  <!-- TAB 3: KELOLA SOAL ADMIN (RE-DESIGNED DARI SCREENSHOT LAMA)    -->
+  <!-- ============================================================== -->
+  <main id="tab-admin" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 hidden">
+    
+    <!-- HEADER MANAJEMEN SOAL (FUNGSI ASLI ADMIN: UBAH DATA, TULIS SOAL, IMPORT EXCEL) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 mb-6 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+              ID Paket: #8 &bull; Kategori: Kedinasan
+            </span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900">Latihan Kecerdasan #2</h2>
+          <div class="text-xs text-slate-500 mt-1">
+            Password: <code class="code-font bg-slate-100 px-1.5 py-0.5 rounded text-indigo-700 font-bold">kecerdasan2</code> &bull; Waktu: 5.400 Detik &bull; Jenis: Normal
+          </div>
+        </div>
+
+        <!-- FUNGSI ASLI: BUTTONS -->
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <button class="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-sm flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            Ubah Informasi Paket
+          </button>
+          <button class="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition shadow-sm flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Import Soal Excel
+          </button>
+          <button class="px-4 py-2 text-xs font-bold text-white bg-red-600 rounded-xl hover:bg-red-700 transition shadow-md shadow-red-100 flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            Tulis Butir Soal Baru
+          </button>
+        </div>
+      </div>
+
+      <!-- FILTER KATEGORI SOAL (SMA vs KEDINASAN) -->
+      <div class="flex items-center gap-2 pt-4 overflow-x-auto no-scrollbar text-xs">
+        <span class="font-bold text-slate-400 uppercase tracking-wider mr-1">Filter Soal:</span>
+        <button class="px-3 py-1 rounded-lg bg-slate-900 text-white font-semibold">Semua Soal (50)</button>
+        <button class="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium hover:bg-slate-200">Pilihan Ganda Biasa (45)</button>
+        <button class="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium hover:bg-slate-200">Multi-Select Checkbox (5)</button>
+      </div>
+    </div>
+
+    <!-- TABEL SOAL MODERN (PENGGANTI TABEL DATATABLES COKELAT KUSAM LAMA) -->
+    <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+      <div class="p-4 bg-slate-50/70 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="font-bold text-slate-900 text-sm">Daftar Butir Soal Paket Ini</h3>
+        <div class="text-xs text-slate-500">Menampilkan 3 butir soal pertama</div>
+      </div>
+
+      <div class="divide-y divide-slate-100">
+        
+        <!-- ROW 1 (SOAL 1 DARI SCREENSHOT) -->
+        <div class="p-5 hover:bg-slate-50/50 transition flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div class="flex items-start gap-3 flex-1">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+              #1
+            </span>
+            <div class="space-y-1.5 flex-1">
+              <div class="text-sm text-slate-900 leading-relaxed font-medium">
+                Jarak sebuah desa dengan pusat kota kurang lebih 770 km. Naufal berangkat dari desa pukul 16.00 dengan kelajuan rata-rata 60 km/jam. Rio berangkat dari pusat kota pukul 18.00 dengan kelajuan rata-rata 70 km/jam...
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-500 pt-1">
+                <span>Kunci: <b class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">A</b></span>
+                <span>Bobot Skor: <b>1 Poin</b></span>
+                <span>Status: <b class="text-emerald-700">Tampil</b></span>
+                <span>Tipe: <b>Pilihan Ganda Tunggal</b></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACTIONS LAMA: UBAH, HAPUS, DETAIL -->
+          <div class="flex items-center gap-1.5 shrink-0 self-end md:self-start">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-100">Detail</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-indigo-700 text-xs font-semibold hover:bg-indigo-50">Ubah</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-red-700 text-xs font-semibold hover:bg-red-50">Hapus</button>
+          </div>
+        </div>
+
+        <!-- ROW 2 (SOAL 2 DARI SCREENSHOT) -->
+        <div class="p-5 hover:bg-slate-50/50 transition flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div class="flex items-start gap-3 flex-1">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-800 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-slate-200">
+              #2
+            </span>
+            <div class="space-y-1.5 flex-1">
+              <div class="text-sm text-slate-900 leading-relaxed font-medium">
+                Jika hari libur maka saya pergi mendaki gunung. Jika pergi mendaki gunung maka saya bahagia. Hari Kamis depan adalah hari libur. Maka kesimpulan yang tepat adalah...
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-500 pt-1">
+                <span>Kunci: <b class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">D</b></span>
+                <span>Bobot Skor: <b>1 Poin</b></span>
+                <span>Status: <b class="text-emerald-700">Tampil</b></span>
+                <span>Tipe: <b>Silogisme Logika</b></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 shrink-0 self-end md:self-start">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-100">Detail</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-indigo-700 text-xs font-semibold hover:bg-indigo-50">Ubah</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-red-700 text-xs font-semibold hover:bg-red-50">Hapus</button>
+          </div>
+        </div>
+
+        <!-- ROW 3 (CONTOH SOAL MULTI-SELECT KEDINASAN BARU) -->
+        <div class="p-5 hover:bg-slate-50/50 transition flex flex-col md:flex-row md:items-start justify-between gap-4 bg-amber-50/20">
+          <div class="flex items-start gap-3 flex-1">
+            <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 border border-amber-300">
+              #3
+            </span>
+            <div class="space-y-1.5 flex-1">
+              <div class="text-sm text-slate-900 leading-relaxed font-medium">
+                Berdasarkan UU No. 2 Tahun 2002, manakah wewenang kepolisian yang dapat dilakukan dalam rangka penegakan hukum pidana? (Pilih semua opsi yang benar)
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-500 pt-1">
+                <span>Kunci: <b class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">A, C</b></span>
+                <span>Bobot Skor: <b>5 Poin</b></span>
+                <span>Status: <b class="text-emerald-700">Tampil</b></span>
+                <span class="text-amber-800 font-bold bg-amber-100 px-2 py-0.5 rounded">Multi-Select (Checkbox)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 shrink-0 self-end md:self-start">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-100">Detail</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-indigo-700 text-xs font-semibold hover:bg-indigo-50">Ubah</button>
+            <button class="px-3 py-1.5 rounded-lg border border-slate-200 text-red-700 text-xs font-semibold hover:bg-red-50">Hapus</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- JAVASCRIPT SWITCHER UNTUK MENGUJI SETIAP TAB -->
+  <script>
+    function switchMainTab(tab) {
+      const tExam = document.getElementById('tab-exam');
+      const tReview = document.getElementById('tab-review');
+      const tAdmin = document.getElementById('tab-admin');
+
+      const bExam = document.getElementById('nav-btn-exam');
+      const bReview = document.getElementById('nav-btn-review');
+      const bAdmin = document.getElementById('nav-btn-admin');
+
+      // Reset buttons
+      [bExam, bReview, bAdmin].forEach(b => {
+        b.className = "px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition";
+      });
+      [tExam, tReview, tAdmin].forEach(t => t.classList.add('hidden'));
+
+      if (tab === 'exam') {
+        tExam.classList.remove('hidden');
+        bExam.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition";
+      } else if (tab === 'review') {
+        tReview.classList.remove('hidden');
+        bReview.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition";
+      } else if (tab === 'admin') {
+        tAdmin.classList.remove('hidden');
+        bAdmin.className = "px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition";
+      }
+    }
+  </script>
+
+</body>
+</html>

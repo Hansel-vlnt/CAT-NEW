@@ -217,45 +217,71 @@
 </noscript>
 @endsection
 @push('css')
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" /> -->
 <style>
-	.dijawab {
-		background: #1980d4;
-		color: #fff;
-		padding: 5px 10px;
-		border-radius: 3px;
-	}
-
-	.pagination>li>a,
-	.pagination>li>span {
-		width: 38px;
-		text-align: center;
-		margin: 3px;
-	}
-
-	.timer {
-		border: solid thin #b9b2b2;
-		padding: 5px 15px;
-		font-size: 14pt;
-		color: #fff;
-		background: #291a71;
-	}
-
 	.soal {
-		margin: 0 0 15px 0;
-	}
-
-	.box-footer {
-		border-top: 1px solid #ebebeb !important;
+		font-size: 16px;
+		line-height: 1.6;
+		color: #0f172a;
+		margin-bottom: 20px;
+		font-weight: 500;
 	}
 
 	.jawab {
 		cursor: pointer;
-		margin: 0 0 7px 0;
+		margin-bottom: 12px;
+		padding: 14px 18px;
+		border-radius: 14px;
+		border: 1.5px solid #e2e8f0;
+		background: #ffffff;
+		transition: all 0.15s ease-in-out;
+		font-size: 15px;
+		user-select: none;
+	}
+
+	.jawab:hover {
+		border-color: #94a3b8;
+		background: #f8fafc;
+	}
+
+	.jawab.dijawab {
+		background: #eff6ff !important;
+		border-color: #2563eb !important;
+		color: #1e3a8a !important;
+		font-weight: 600;
+		box-shadow: 0 2px 6px -1px rgba(37, 99, 235, 0.15);
+	}
+
+	.jawab.dijawab td {
+		color: #1e3a8a !important;
+	}
+
+	.timer {
+		border: 1px solid #334155 !important;
+		padding: 6px 16px !important;
+		font-size: 15pt !important;
+		font-weight: 800 !important;
+		color: #f59e0b !important;
+		background: #0f172a !important;
+		border-radius: 12px !important;
+		font-family: 'JetBrains Mono', monospace !important;
+		display: inline-block;
+	}
+
+	.box-footer {
+		border-top: 1px solid #f1f5f9 !important;
 	}
 
 	.pilihan p {
 		margin: 0;
+	}
+
+	.no_soal a {
+		border-radius: 10px !important;
+		font-weight: 700 !important;
+		min-width: 44px !important;
+		height: 38px !important;
+		line-height: 26px !important;
+		transition: all 0.15s ease-in-out;
 	}
 </style>
 @endpush
@@ -484,26 +510,22 @@
 			var $this = $(this);
 			var get_jawab = $this.attr('data-jawab');
 			var id_soal = $this.attr('data-id');
-			var paket_soal = $this.attr('soal-id');
-			//$('#nav' + id_soal).find('a').css({
-			//	"background-color": "#1980d4",
-			//	"color": "#fff",
-			//	"font-weight": "bold"
-			//});
-			$('#nav' + id_soal).find('a').toggleClass("btn-danger btn-success");
-			// console.log(id_soal);
-			$(".jawab").css({
-				"background-color": "#fff",
-				"color": "#000",
-				"padding": "0",
-				"border-radius": "0"
-			});
-			$this.css({
-				"background-color": "#1980d4",
-				"color": "#fff",
-				"padding": "5px 10px",
-				"border-radius": "3px"
-			});
+			var container = $this.closest('.opsi-container');
+			var tipe = container.length ? container.attr('data-tipe') : 'single';
+
+			if (tipe === 'multi') {
+				$this.toggleClass('dijawab');
+				var anySelected = container.find('.jawab.dijawab').length > 0;
+				if (anySelected) {
+					$('#nav' + id_soal).find('a').removeClass("btn-danger").addClass("btn-success");
+				} else {
+					$('#nav' + id_soal).find('a').removeClass("btn-success").addClass("btn-danger");
+				}
+			} else {
+				$(".jawab").removeClass('dijawab');
+				$this.addClass('dijawab');
+				$('#nav' + id_soal).find('a').removeClass("btn-danger").addClass("btn-success");
+			}
 
 			$.ajax({
 				type: "POST",
@@ -514,8 +536,7 @@
 				success: function(data) {
 					console.log(data);
 				}
-			})
-
+			});
 		});
 	});
 </script>
