@@ -81,10 +81,33 @@ test.describe('CBT Platform E2E Tests - Bank Soal & Pembahasan', () => {
     // 3. Go to Siswa Ujian Catalog
     await page.goto('/siswa/ujian');
     await expect(page.locator('text=Daftar Paket Latihan Soal')).toBeVisible();
+    await expect(page.locator('#search-input')).toBeVisible();
     await expect(page.locator('button:has-text("Kedinasan & Polri")')).toBeVisible();
     await expect(page.locator('button:has-text("SMA & UTBK")')).toBeVisible();
 
+    // 4. Test Search Functionality
+    await page.fill('#search-input', 'Kecerdasan');
+    await expect(page.locator('#paket-counter')).toContainText('Ditemukan');
+    await expect(page.locator('#btn-clear-search')).toBeVisible();
+
+    // 5. Clear Search
+    await page.click('#btn-clear-search');
+    await expect(page.locator('#search-input')).toHaveValue('');
+    await expect(page.locator('#paket-counter')).toContainText('Menampilkan');
+
     await page.screenshot({ path: `screenshots/04_siswa_katalog${suffix}`, fullPage: true });
+
+    // 6. Search with Results & Screenshot
+    await page.fill('#search-input', 'Kecerdasan');
+    await expect(page.locator('.paket-card:visible').first()).toBeVisible();
+    await page.screenshot({ path: `screenshots/04b_siswa_katalog_search_active${suffix}`, fullPage: true });
+
+    // 7. Test Empty State & Reset Button
+    await page.fill('#search-input', 'query_yang_pasti_tidak_ada_xyz');
+    await expect(page.locator('#no-results-box')).toBeVisible();
+    await page.click('button:has-text("Reset Pencarian")');
+    await expect(page.locator('#no-results-box')).toBeHidden();
+    await expect(page.locator('#search-input')).toHaveValue('');
   });
 
   test('4. Siswa Portal - Scorecard Evaluation & Dual Explanations Review', async ({ page }, testInfo) => {
