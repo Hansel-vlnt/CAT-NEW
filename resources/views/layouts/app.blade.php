@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title')</title>
-  <!-- Tell the browser to be responsive to screen width -->
+  <title>@yield('title', 'Portal Belajar') - Latihan Soal Abdi Praja</title>
+  <!-- Responsive screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="{{ url('/assets/bootstrap/css/bootstrap.min.css') }}">
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="{{ url('/assets/plugins/ionicons-2.0.1/css/ionicons.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ url('/assets/dist/css/AdminLTE.min.css') }}">
-  <!-- AdminLTE Skins. -->
+  <!-- AdminLTE Skins -->
   <link rel="stylesheet" href="{{ url('/assets/dist/css/skins/_all-skins.min.css') }}">
   <!-- Tailwind CSS & Modern Font -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -32,57 +32,136 @@
   <style type="text/css">
     body {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-        font-size: 14px;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
         color: #1e293b;
         background-color: #f8fafc;
+        -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #0f172a;
+        font-weight: 700;
+        letter-spacing: -0.015em;
     }
     .main-header .navbar {
         background-color: #0f172a !important;
         border-bottom: 1px solid #1e293b;
+        min-height: 54px;
     }
     .main-header .logo {
         background-color: #090d16 !important;
         color: #ffffff !important;
         font-weight: 800;
-        letter-spacing: -0.025em;
+        letter-spacing: -0.02em;
         border-bottom: 1px solid #1e293b;
+        height: 54px;
+        line-height: 54px;
     }
     .main-sidebar, .left-side {
         background-color: #0f172a !important;
+        border-right: 1px solid #1e293b;
     }
     .sidebar-menu > li.header {
         color: #64748b !important;
         background: #090d16 !important;
         font-weight: 700;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
         font-size: 11px;
+        padding: 12px 20px 8px 20px;
     }
     .sidebar-menu > li > a {
         color: #94a3b8 !important;
         border-left: 3px solid transparent;
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 12px 18px;
+        transition: all 0.15s ease-in-out;
     }
     .sidebar-menu > li:hover > a, .sidebar-menu > li.active > a {
         color: #ffffff !important;
         background: #1e293b !important;
-        border-left-color: #3b82f6 !important;
+        border-left-color: #6366f1 !important;
     }
     .content-wrapper {
         background-color: #f8fafc !important;
+        min-height: calc(100vh - 105px) !important;
+    }
+    .content-header {
+        padding: 20px 24px 8px 24px !important;
+    }
+    .content-header > h1 {
+        font-size: 24px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+    .content {
+        padding: 16px 24px 32px 24px !important;
     }
     .box {
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         border: 1px solid #e2e8f0 !important;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04) !important;
+        background-color: #ffffff !important;
     }
     .box.box-primary {
-        border-top-color: #3b82f6 !important;
+        border-top: 3px solid #4f46e5 !important;
+    }
+    .box.box-default {
+        border-top: 1px solid #e2e8f0 !important;
     }
     .box-header.with-border {
         border-bottom: 1px solid #f1f5f9 !important;
+        padding: 16px 20px !important;
     }
-    .dataTable td{
-      font-size: 11pt !important;
+    .box-title {
+        font-size: 17px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+    .form-control {
+        border-radius: 10px !important;
+        border: 1px solid #cbd5e1 !important;
+        font-size: 15px !important;
+        height: 48px !important;
+        padding: 10px 14px !important;
+        color: #1e293b !important;
+        box-shadow: none !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .form-control:focus {
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+    }
+    .btn {
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        padding: 10px 18px !important;
+        letter-spacing: 0.01em;
+        transition: all 0.15s ease-in-out;
+    }
+    .btn-primary {
+        background-color: #4f46e5 !important;
+        border-color: #4f46e5 !important;
+        color: #ffffff !important;
+    }
+    .btn-primary:hover, .btn-primary:focus {
+        background-color: #4338ca !important;
+        border-color: #4338ca !important;
+    }
+    .dataTable td {
+        font-size: 14px !important;
+        vertical-align: middle !important;
+    }
+    .main-footer {
+        background-color: #ffffff !important;
+        border-top: 1px solid #e2e8f0 !important;
+        color: #64748b !important;
+        font-size: 13px !important;
+        padding: 16px 24px !important;
     }
   </style>
   @stack('css')
@@ -96,11 +175,11 @@
     <!-- Logo -->
     <a href="{{ url('/') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini font-black text-blue-500">AP</span>
+      <span class="logo-mini font-black text-indigo-400">AP</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg flex items-center gap-2">
-        <span class="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center font-extrabold text-xs inline-block">ED</span>
-        <span>Abdi Praja Bank Soal</span>
+        <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-extrabold text-xs inline-flex shadow-sm">AP</span>
+        <span class="font-bold tracking-tight text-white text-base">Latihan Soal Abdi Praja</span>
       </span>
     </a>
     <!-- Header Navbar -->
@@ -112,17 +191,6 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <!--<li class="nav-item d-none d-sm-inline-block mr-2 mt-2" style="margin-left: 5px; margin-top:11px; font-weight:bold; color: white;">
-            <span class="imgtgl font-weight-bold mr-2 mt-2" id='tanggal'>
-                &nbsp;
-            </span>
-          </li>
-
-          <li class="nav-item d-none d-sm-inline-block mr-5 mt-2" style="margin-left: 5px; margin-top:11px; font-weight:bold; color: white;">
-              <span class="imgjam font-weight-bold mr-3 mt-2" id='jam'>
-                  &nbsp;
-              </span>
-          </li>-->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               @if(Auth::user()->gambar != "")
@@ -130,23 +198,35 @@
               @else
                 <img src="{{ url('/assets/dist/img/logo.jpg') }}" class="user-image" alt="User Image">
               @endif
-              <span class="hidden-xs">{{ Auth::user()->nama }}</span>
+              <span class="hidden-xs font-semibold">{{ Auth::user()->nama }}</span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="user-header" style="background-color: #542c0e !important;">
+            <ul class="dropdown-menu shadow-xl border border-slate-200 rounded-xl overflow-hidden">
+              <li class="user-header" style="background-color: #0f172a !important; border-bottom: 1px solid #1e293b;">
                 @if(Auth::user()->gambar)
-                  <img src="{{ url('/assets/img/user/'.Auth::user()->gambar) }}" class="img-circle" alt="User Image">
+                  <img src="{{ url('/assets/img/user/'.Auth::user()->gambar) }}" class="img-circle border-2 border-indigo-500" alt="User Image">
                 @else
-                  <img src="{{ url('/assets/dist/img/logo.jpg') }}" class="img-circle" alt="User Image">
+                  <img src="{{ url('/assets/dist/img/logo.jpg') }}" class="img-circle border-2 border-indigo-500" alt="User Image">
                 @endif
 
-                <p>
+                <p class="text-white font-bold text-base mt-2">
                   {{ Auth::user()->nama }}
+                  <small class="text-slate-400 mt-1">
+                    @if($user->status == 'A')
+                      Administrator
+                    @elseif($user->status == 'G')
+                      Guru / Instruktur
+                    @else
+                      Siswa / Peserta Ujian
+                    @endif
+                  </small>
                 </p>
               </li>
-              <li class="user-footer">
+              <li class="user-footer bg-slate-50 p-3 flex justify-between items-center">
+                <div class="pull-left">
+                  <a href="{{ url('/pengaturan') }}" class="btn btn-default btn-sm text-slate-700 font-medium">Pengaturan</a>
+                </div>
                 <div class="pull-right">
-                  <a href="/logout" class="btn btn-default btn-flat">Logout</a>
+                  <a href="{{ route('logout') }}" class="btn btn-danger btn-sm font-medium">Keluar</a>
                 </div>
               </li>
             </ul>
@@ -157,47 +237,31 @@
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
-      {{-- <div class="user-panel" style="margin-top: 10px">
-        <div class="pull-left image">
-          @if(Auth::user()->gambar != "")
-            <img src="{{ url('/assets/img/user/'.Auth::user()->gambar) }}" class="img-circle" alt="User Image">
-          @else
-            <img src="{{ url('/assets/dist/img/logo.png') }}" class="img-circle" alt="User Image">
-          @endif
-        </div>
-        <div class="pull-left info">
-          <p>{{ Auth::user()->nama }}</p>
-        </div>
-      </div> --}}
-      <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" style="margin-top: 10px">
-        <li class="header">MAIN NAVIGATION</li>
-        <li class="{{ Request::is('/') == true || Request::is('home*') == true  ? 'active' : '' }}"><a href="{{ url('/home') }}"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+        <li class="header">NAVIGASI UTAMA</li>
+        <li class="{{ Request::is('/') == true || Request::is('home*') == true  ? 'active' : '' }}"><a href="{{ url('/home') }}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
         @if($user->status == 'G' or $user->status == 'A')
         <li class="treeview {{ Request::is('elearning*') == true  ? 'active' : '' }}">
           <a href="#">
-            <i class="fa fa-graduation-cap"></i> <span>Try Out</span>
+            <i class="fa fa-graduation-cap"></i> <span>Bank Soal CBT</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="{{ Request::is('elearning/soal*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/soal') }}"><i class="fa fa-circle-o"></i> Soal</a></li>
-            <li class="{{Request::is('elearning/laporan*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/laporan') }}"><i class="fa fa-circle-o"></i> Laporan</a></li>
+            <li class="{{ Request::is('elearning/soal*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/soal') }}"><i class="fa fa-circle-o"></i> Manajemen Soal</a></li>
+            <li class="{{ Request::is('elearning/laporan*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/laporan') }}"><i class="fa fa-circle-o"></i> Rapor &amp; Laporan</a></li>
           </ul>
         </li>
-        <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Vouchers</span></a></li>
+        <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
         @elseif($user->status == 'S')
-        <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-list"></i> <span>Ujian</span></a></li>
+        <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Paket Ujian Saya</span></a></li>
         @endif
-        <li class="{{ Request::is('pengaturan*') == true ? 'active' : '' }}"><a href="{{ url('/pengaturan') }}"><i class="fa fa-cog"></i> <span>Pengaturan</span></a></li>
-        <li class=""><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span>Logout</span></a></li>
+        <li class="{{ Request::is('pengaturan*') == true ? 'active' : '' }}"><a href="{{ url('/pengaturan') }}"><i class="fa fa-cog"></i> <span>Pengaturan Akun</span></a></li>
+        <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
       </ul>
     </section>
-    <!-- /.sidebar -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -217,39 +281,27 @@
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 1.3.5
+    <div class="pull-right hidden-xs text-slate-400">
+      <b>Sistem CBT Latihan Soal Abdi Praja</b> &bull; Versi 1.3.5
     </div>
-    <strong>Copyright &copy; {{ date('Y') }} <a href="//abdipraja.co.id" target="_blank">Abdi Praja Edukasi</a>.</strong> All rights
-    reserved.
+    <strong>Hak Cipta &copy; {{ date('Y') }} <a href="//abdipraja.co.id" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-semibold">Latihan Soal Abdi Praja</a>.</strong> Seluruh hak cipta dilindungi.
   </footer>
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<!-- <script src="{{ url('/assets/plugins/jQuery/jquery-2.2.3.min.js') }}"></script> -->
+<!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<!-- jQuery UI 1.11.4 -->
 <script src="{{ url('/js/jquery-ui.min.js') }}"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button);
 </script>
-<!-- Bootstrap 3.3.6 -->
 <script src="{{ url('/assets/bootstrap/js/bootstrap.min.js') }}"></script>
-
 <script src="{{ url('/assets/dist/js/moment.min.js') }}"></script>
 <script src="{{ url('/assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<!-- datepicker -->
 <script src="{{ url('/assets/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
-<!-- Bootstrap Sweetalert -->
-<!-- <script src="{{ url('/assets/plugins/sweetalert-master/dist/sweetalert.min.js') }}"></script> -->
 <script src="{{ url('assets/plugins/sweetalert2-1.0.5/dist/sweetalert2.min.js') }}"></script>
-<!-- Slimscroll -->
 <script src="{{ url('/assets/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
-<!-- FastClick -->
 <script src="{{ url('/assets/plugins/fastclick/fastclick.js') }}"></script>
-<!-- AdminLTE App -->
 <script src="{{ url('/assets/dist/js/app.min.js') }}"></script>
 
 <script>
@@ -270,32 +322,6 @@
     }
   });
 </script>
-<!--<script type='text/javascript'>
-  var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober',
-      'November', 'Desember'
-  ];
-  var myDays = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum&#39;at', 'Sabtu'];
-  var date = new Date();
-  var day = date.getDate();
-  var month = date.getMonth();
-  var thisDay = date.getDay(),
-      thisDay = myDays[thisDay];
-  var yy = date.getYear();
-  var year = (yy < 1000) ? yy + 1900 : yy;
-  document.getElementById("tanggal").innerHTML = thisDay + ', ' + day + ' ' + months[month] + ' ' + year;
-</script>
-<script type="text/javascript">
-  // 1 detik = 1000
-  window.setTimeout("waktu()", 1000);
-
-  function waktu() {
-      var tanggal = new Date();
-      var minutes = tanggal.getMinutes() < 10 ? '0' + tanggal.getMinutes() : tanggal.getMinutes();
-      var seconds = tanggal.getSeconds() < 10 ? '0' + tanggal.getSeconds() : tanggal.getSeconds();
-      setTimeout("waktu()", 1000);
-      document.getElementById("jam").innerHTML = tanggal.getHours() + ":" + minutes + ":" + seconds + " WIB";
-  }
-</script>-->
 @stack('scripts')
 </body>
 </html>
