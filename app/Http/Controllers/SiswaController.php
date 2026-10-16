@@ -76,6 +76,9 @@ class SiswaController extends Controller
             return 'Perempuan';
           }
         })
+        ->addColumn('kelas', function ($siswas) {
+          return $siswas->getKelas ? $siswas->getKelas->nama : '-';
+        })
         ->addColumn('action', function ($siswas) {
           return '<div style="text-align:center"><a href="siswa/detail/' . $siswas->id . '" class="btn btn-xs btn-success">Detail</a></div>';
         })
@@ -88,6 +91,9 @@ class SiswaController extends Controller
           } else {
             return 'Perempuan';
           }
+        })
+        ->addColumn('kelas', function ($siswas) {
+          return $siswas->getKelas ? $siswas->getKelas->nama : '-';
         })
         ->addColumn('action', function ($siswas) {
           return '<div style="text-align:center">

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Data Siswa - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="px-4 py-2">
+  <div class="max-w-7xl mx-auto py-2">
     <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Master Data &bull; Administrasi</div>
     <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Kelola Data Siswa &amp; Peserta</h1>
   </div>
@@ -217,7 +217,8 @@ $(document).ready(function() {
         data: 'kelas',
         name: 'kelas',
         orderable: false,
-        searchable: false
+        searchable: false,
+        defaultContent: '-'
       },
       {
         data: 'action',

@@ -27,4 +27,8 @@ class User extends Authenticatable
     'password', 'remember_token',
   ];
 
+  public function getKelas()
+  {
+    return $this->belongsTo(\App\Models\Kelas::class, 'id_kelas', 'id');
+  }
 }

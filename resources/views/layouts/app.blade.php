@@ -30,6 +30,13 @@
   <link rel="stylesheet" type="text/css" href="{{ url('/assets/plugins/sweetalert2-1.0.5/dist/sweetalert2.min.css') }}">
   <link rel="icon" href="{{ url('/assets/img/favicon.jpg') }}" type="image/x-icon"/>
   <style type="text/css">
+    html, body {
+        width: 100% !important;
+        min-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden;
+    }
     body {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         font-size: 15px !important;
@@ -37,6 +44,13 @@
         color: #1e293b;
         background-color: #f8fafc;
         -webkit-font-smoothing: antialiased;
+    }
+    .wrapper {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        position: relative;
     }
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
@@ -84,8 +98,46 @@
         border-left-color: #6366f1 !important;
     }
     .content-wrapper {
+        width: calc(100% - 230px) !important;
+        min-width: calc(100% - 230px) !important;
+        margin-left: 230px !important;
+        float: right !important;
         background-color: #f8fafc !important;
         min-height: calc(100vh - 105px) !important;
+    }
+    .sidebar-collapse .content-wrapper {
+        width: calc(100% - 50px) !important;
+        min-width: calc(100% - 50px) !important;
+        margin-left: 50px !important;
+    }
+    @media (max-width: 767px) {
+        .content-wrapper {
+            width: 100% !important;
+            min-width: 100% !important;
+            margin-left: 0 !important;
+            float: none !important;
+        }
+    }
+    .main-footer {
+        width: calc(100% - 230px) !important;
+        margin-left: 230px !important;
+        float: right !important;
+    }
+    .sidebar-collapse .main-footer {
+        width: calc(100% - 50px) !important;
+        margin-left: 50px !important;
+    }
+    @media (max-width: 767px) {
+        .main-footer {
+            width: 100% !important;
+            margin-left: 0 !important;
+            float: none !important;
+        }
+    }
+    .content > .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
     }
     .content-header {
         padding: 20px 24px 8px 24px !important;
