@@ -62,59 +62,59 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: Siswa -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl shrink-0">
+          <div class="w-14 h-14 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl shrink-0">
             <i class="fa fa-users"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Jumlah Siswa</div>
-            <div class="text-2xl font-black text-slate-900 mt-0.5">{{ number_format($siswas) }} <span class="text-xs font-semibold text-slate-500">siswa</span></div>
-            <div class="text-xs text-slate-500 mt-0.5">Peserta terdaftar aktif</div>
+            <div class="text-sm font-bold text-slate-500 uppercase tracking-wider">Jumlah Siswa</div>
+            <div class="text-3xl font-black text-slate-900 mt-0.5">{{ number_format($siswas) }} <span class="text-sm font-semibold text-slate-500">siswa</span></div>
+            <div class="text-sm text-slate-500 mt-0.5">Peserta terdaftar aktif</div>
           </div>
         </div>
 
         <!-- Card 2: Paket Soal -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+          <div class="w-14 h-14 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-2xl shrink-0">
             <i class="fa fa-book"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Paket Soal</div>
-            <div class="text-2xl font-black text-slate-900 mt-0.5">{{ number_format($pakets) }} <span class="text-xs font-semibold text-slate-500">paket</span></div>
-            <div class="text-xs text-slate-500 mt-0.5">SKD &amp; UTBK-SNBT</div>
+            <div class="text-sm font-bold text-slate-500 uppercase tracking-wider">Paket Soal</div>
+            <div class="text-3xl font-black text-slate-900 mt-0.5">{{ number_format($pakets) }} <span class="text-sm font-semibold text-slate-500">paket</span></div>
+            <div class="text-sm text-slate-500 mt-0.5">SKD &amp; UTBK-SNBT</div>
           </div>
         </div>
 
         <!-- Card 3: Butir Soal -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+          <div class="w-14 h-14 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-2xl shrink-0">
             <i class="fa fa-check-square-o"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Butir Soal</div>
-            <div class="text-2xl font-black text-slate-900 mt-0.5">{{ number_format($soals) }} <span class="text-xs font-semibold text-slate-500">butir</span></div>
-            <div class="text-xs text-slate-500 mt-0.5">Trik cepat &amp; konsep</div>
+            <div class="text-sm font-bold text-slate-500 uppercase tracking-wider">Butir Soal</div>
+            <div class="text-3xl font-black text-slate-900 mt-0.5">{{ number_format($soals) }} <span class="text-sm font-semibold text-slate-500">butir</span></div>
+            <div class="text-sm text-slate-500 mt-0.5">Trik cepat &amp; konsep</div>
           </div>
         </div>
 
         <!-- Card 4: Status Voucher -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-xl shrink-0">
+          <div class="w-14 h-14 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-2xl shrink-0">
             <i class="fa fa-id-card"></i>
           </div>
           <div class="min-w-0 flex-1">
-            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Status Lisensi</div>
+            <div class="text-sm font-bold text-slate-500 uppercase tracking-wider">Status Lisensi</div>
             @if(Auth::user()->status == 'A' || Auth::user()->status == 'G')
-              <div class="text-lg font-black text-slate-900 mt-0.5">Akses Penuh</div>
-              <div class="text-xs text-emerald-600 font-semibold mt-0.5">Admin / Guru</div>
+              <div class="text-xl font-black text-slate-900 mt-0.5">Akses Penuh</div>
+              <div class="text-sm text-emerald-600 font-bold mt-0.5">Admin / Guru</div>
             @else
               @if(!empty($voucher["expiry_date"]))
-                <div class="text-base font-black text-slate-900 mt-0.5">{{ date("d-m-Y", strtotime($voucher["expiry_date"])) }}</div>
-                <div class="text-xs {{ $voucher['status'] == 1 ? 'text-emerald-600 font-semibold' : 'text-red-500 font-semibold' }} mt-0.5">
+                <div class="text-lg font-black text-slate-900 mt-0.5">{{ date("d-m-Y", strtotime($voucher["expiry_date"])) }}</div>
+                <div class="text-sm {{ $voucher['status'] == 1 ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold' }} mt-0.5">
                   {{ $voucher['status'] == 1 ? 'Lisensi Aktif' : 'Lisensi Berakhir' }}
                 </div>
               @else
-                <div class="text-base font-black text-amber-700 mt-0.5">Belum Aktif</div>
-                <div class="text-xs text-slate-500 mt-0.5">Aktivasi voucher</div>
+                <div class="text-lg font-black text-amber-700 mt-0.5">Belum Aktif</div>
+                <div class="text-sm text-slate-500 mt-0.5">Aktivasi voucher</div>
               @endif
             @endif
           </div>
@@ -124,8 +124,8 @@
       <!-- Card Akses Cepat (3 Grand Action Cards) -->
       <div>
         <div class="mb-4">
-          <h3 class="text-lg font-bold text-slate-900">Akses Cepat Pembelajaran &amp; Ujian</h3>
-          <p class="text-sm text-slate-500">Pilih modul simulasi untuk mulai menguji pemahaman dan kecepatan berpikir Anda.</p>
+          <h3 class="text-xl font-bold text-slate-900">Akses Cepat Pembelajaran &amp; Ujian</h3>
+          <p class="text-base text-slate-500">Pilih modul simulasi untuk mulai menguji pemahaman dan kecepatan berpikir Anda.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -133,26 +133,26 @@
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-300 hover:shadow-md transition">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
+                <span class="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl">
                   <i class="fa fa-shield"></i>
                 </span>
-                <span class="px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">SKD CAT</span>
+                <span class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">SKD CAT</span>
               </div>
-              <h4 class="text-lg font-bold text-slate-900">Mulai Latihan SKD Kedinasan</h4>
-              <p class="text-sm text-slate-500 leading-relaxed">
+              <h4 class="text-xl font-bold text-slate-900">Mulai Latihan SKD Kedinasan</h4>
+              <p class="text-base text-slate-600 leading-relaxed">
                 Latihan soal TWK, TIU, dan TKP sesuai kisi-kisi resmi BKN untuk seleksi IPDN, STAN, Poltekip, Poltekim, STIS, dan Sekolah Kedinasan.
               </p>
             </div>
             <div class="pt-5 mt-4 border-t border-slate-100">
               @if(Auth::user()->status == 'S')
-                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition shadow-sm">
                   <span>Mulai Latihan SKD</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @else
-                <a href="{{ url('/elearning/soal') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/elearning/soal') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition shadow-sm">
                   <span>Kelola Soal SKD</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @endif
             </div>
@@ -162,26 +162,26 @@
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:border-emerald-300 hover:shadow-md transition">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-lg">
+                <span class="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
                   <i class="fa fa-graduation-cap"></i>
                 </span>
-                <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">UTBK SNBT</span>
+                <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">UTBK SNBT</span>
               </div>
-              <h4 class="text-lg font-bold text-slate-900">Mulai Latihan UTBK-SNBT</h4>
-              <p class="text-sm text-slate-500 leading-relaxed">
+              <h4 class="text-xl font-bold text-slate-900">Mulai Latihan UTBK-SNBT</h4>
+              <p class="text-base text-slate-600 leading-relaxed">
                 Simulasi Tes Potensi Skolastik (TPS), Literasi Bahasa Indonesia, Literasi Bahasa Inggris, serta Penalaran Matematika mutakhir.
               </p>
             </div>
             <div class="pt-5 mt-4 border-t border-slate-100">
               @if(Auth::user()->status == 'S')
-                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition shadow-sm">
                   <span>Mulai Latihan UTBK</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @else
-                <a href="{{ url('/elearning/soal') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/elearning/soal') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition shadow-sm">
                   <span>Kelola Soal UTBK</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @endif
             </div>
@@ -191,26 +191,26 @@
           <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-300 hover:shadow-md transition">
             <div class="space-y-3">
               <div class="flex items-center justify-between">
-                <span class="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-lg">
+                <span class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl">
                   <i class="fa fa-line-chart"></i>
                 </span>
-                <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider">Evaluasi</span>
+                <span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider">Evaluasi</span>
               </div>
-              <h4 class="text-lg font-bold text-slate-900">Lihat Rapor Nilai</h4>
-              <p class="text-sm text-slate-500 leading-relaxed">
+              <h4 class="text-xl font-bold text-slate-900">Lihat Rapor Nilai</h4>
+              <p class="text-base text-slate-600 leading-relaxed">
                 Evaluasi capaian skor per materi ujian, rincian jawaban benar/salah, serta tinjauan trik praktis dan solusi konseptual.
               </p>
             </div>
             <div class="pt-5 mt-4 border-t border-slate-100">
               @if(Auth::user()->status == 'S')
-                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/siswa/ujian') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition shadow-sm">
                   <span>Lihat Riwayat &amp; Rapor</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @else
-                <a href="{{ url('/elearning/laporan') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition shadow-sm">
+                <a href="{{ url('/elearning/laporan') }}" class="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base transition shadow-sm">
                   <span>Rekapitulasi Nilai Siswa</span>
-                  <i class="fa fa-arrow-right text-xs"></i>
+                  <i class="fa fa-arrow-right text-sm"></i>
                 </a>
               @endif
             </div>

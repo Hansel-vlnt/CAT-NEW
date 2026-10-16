@@ -133,13 +133,13 @@
       <div class="table-responsive">
         <table id="tabel_siswa" class="table table-hover table-striped" style="width: 100%;">
           <thead>
-            <tr class="text-slate-600 text-xs font-bold uppercase tracking-wider bg-slate-50">
-              <th style="padding: 14px 16px;">Nama Lengkap</th>
-              <th style="padding: 14px 16px;">NIS / ID</th>
-              <th style="padding: 14px 16px;">NISN</th>
-              <th style="padding: 14px 16px;">Gender</th>
-              <th style="padding: 14px 16px;">Kelas</th>
-              <th style="padding: 14px 16px; width: 160px; text-align: center;">Aksi</th>
+            <tr class="text-slate-700 text-sm font-bold uppercase tracking-wider bg-slate-50">
+              <th style="padding: 16px 18px;">Nama Lengkap</th>
+              <th style="padding: 16px 18px;">NIS / ID</th>
+              <th style="padding: 16px 18px;">NISN</th>
+              <th style="padding: 16px 18px;">Gender</th>
+              <th style="padding: 16px 18px;">Kelas</th>
+              <th style="padding: 16px 18px; width: 180px; text-align: center;">Aksi</th>
             </tr>
           </thead>
         </table>
@@ -191,8 +191,8 @@ $(document).ready(function() {
         orderable: true,
         searchable: true,
         render: function(data, type, row) {
-          return '<div class="font-bold text-slate-900 text-sm">' + (data || '-') + '</div>' +
-                 '<div class="text-xs text-slate-400">' + (row.email || '') + '</div>';
+          return '<div class="font-bold text-slate-900 text-base">' + (data || '-') + '</div>' +
+                 '<div class="text-sm text-slate-500 font-mono">' + (row.email || '') + '</div>';
         }
       },
       {

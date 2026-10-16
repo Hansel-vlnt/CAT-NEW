@@ -39,11 +39,12 @@
     }
     body {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-        font-size: 15px !important;
-        line-height: 1.6 !important;
+        font-size: 18px !important;
+        line-height: 1.65 !important;
         color: #1e293b;
         background-color: #f8fafc;
         -webkit-font-smoothing: antialiased;
+        position: relative !important;
     }
     .wrapper {
         width: 100% !important;
@@ -58,10 +59,49 @@
         font-weight: 700;
         letter-spacing: -0.015em;
     }
+    h1 { font-size: 32px !important; font-weight: 800 !important; }
+    h2 { font-size: 26px !important; font-weight: 800 !important; }
+    h3 { font-size: 22px !important; font-weight: 700 !important; }
+    h4 { font-size: 19px !important; font-weight: 700 !important; }
+
+    /* Elevated Typography Utility Overrides - Menjamin tulisan besar, jelas, dan sangat terbaca */
+    .text-\[10px\], .text-\[11px\], .text-xs {
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+    }
+    .text-sm {
+        font-size: 16.5px !important;
+        line-height: 1.55 !important;
+    }
+    .text-base {
+        font-size: 18.5px !important;
+        line-height: 1.6 !important;
+    }
+    .text-lg {
+        font-size: 21px !important;
+        line-height: 1.45 !important;
+    }
+    .text-xl {
+        font-size: 25px !important;
+        line-height: 1.35 !important;
+    }
+    .text-2xl {
+        font-size: 30px !important;
+        line-height: 1.3 !important;
+    }
+    .text-3xl {
+        font-size: 38px !important;
+        line-height: 1.25 !important;
+    }
+    .text-4xl {
+        font-size: 44px !important;
+        line-height: 1.2 !important;
+    }
+
     .main-header .navbar {
         background-color: #0f172a !important;
         border-bottom: 1px solid #1e293b;
-        min-height: 54px;
+        min-height: 56px;
     }
     .main-header .logo {
         background-color: #090d16 !important;
@@ -69,8 +109,8 @@
         font-weight: 800;
         letter-spacing: -0.02em;
         border-bottom: 1px solid #1e293b;
-        height: 54px;
-        line-height: 54px;
+        height: 56px;
+        line-height: 56px;
     }
     .main-sidebar, .left-side {
         background-color: #0f172a !important;
@@ -80,22 +120,26 @@
         color: #64748b !important;
         background: #090d16 !important;
         font-weight: 700;
-        letter-spacing: 0.06em;
-        font-size: 11px;
-        padding: 12px 20px 8px 20px;
+        letter-spacing: 0.08em;
+        font-size: 13.5px !important;
+        padding: 16px 20px 8px 20px;
     }
     .sidebar-menu > li > a {
         color: #94a3b8 !important;
         border-left: 3px solid transparent;
         font-weight: 600;
-        font-size: 14px;
-        padding: 12px 18px;
+        font-size: 16.5px !important;
+        padding: 14px 20px;
         transition: all 0.15s ease-in-out;
     }
     .sidebar-menu > li:hover > a, .sidebar-menu > li.active > a {
         color: #ffffff !important;
         background: #1e293b !important;
         border-left-color: #6366f1 !important;
+    }
+    .sidebar-menu .treeview-menu > li > a {
+        font-size: 15.5px !important;
+        padding: 11px 18px 11px 24px;
     }
     .content-wrapper {
         width: calc(100% - 230px) !important;
@@ -122,6 +166,11 @@
         width: calc(100% - 230px) !important;
         margin-left: 230px !important;
         float: right !important;
+        background-color: #ffffff !important;
+        border-top: 1px solid #e2e8f0 !important;
+        color: #64748b !important;
+        font-size: 15px !important;
+        padding: 16px 24px !important;
     }
     .sidebar-collapse .main-footer {
         width: calc(100% - 50px) !important;
@@ -140,17 +189,17 @@
         width: 100% !important;
     }
     .content-header {
-        padding: 20px 24px 8px 24px !important;
+        padding: 24px 28px 10px 28px !important;
     }
     .content-header > h1 {
-        font-size: 24px !important;
+        font-size: 30px !important;
         font-weight: 800 !important;
         color: #0f172a !important;
         letter-spacing: -0.02em;
         margin: 0;
     }
     .content {
-        padding: 16px 24px 32px 24px !important;
+        padding: 16px 28px 36px 28px !important;
     }
     .box {
         border-radius: 16px !important;
@@ -166,19 +215,19 @@
     }
     .box-header.with-border {
         border-bottom: 1px solid #f1f5f9 !important;
-        padding: 16px 20px !important;
+        padding: 18px 24px !important;
     }
     .box-title {
-        font-size: 17px !important;
+        font-size: 21px !important;
         font-weight: 700 !important;
         color: #0f172a !important;
     }
     .form-control {
-        border-radius: 10px !important;
+        border-radius: 12px !important;
         border: 1px solid #cbd5e1 !important;
-        font-size: 15px !important;
-        height: 48px !important;
-        padding: 10px 14px !important;
+        font-size: 17.5px !important;
+        height: 54px !important;
+        padding: 12px 18px !important;
         color: #1e293b !important;
         box-shadow: none !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -187,13 +236,29 @@
         border-color: #4f46e5 !important;
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
     }
+    label {
+        font-size: 16.5px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        margin-bottom: 8px !important;
+    }
     .btn {
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        font-size: 14px !important;
-        padding: 10px 18px !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        font-size: 16.5px !important;
+        padding: 12px 24px !important;
         letter-spacing: 0.01em;
         transition: all 0.15s ease-in-out;
+    }
+    .btn-xs {
+        font-size: 14px !important;
+        padding: 6px 14px !important;
+        border-radius: 8px !important;
+    }
+    .btn-sm {
+        font-size: 15px !important;
+        padding: 9px 18px !important;
+        border-radius: 10px !important;
     }
     .btn-primary {
         background-color: #4f46e5 !important;
@@ -204,21 +269,25 @@
         background-color: #4338ca !important;
         border-color: #4338ca !important;
     }
-    .dataTable td {
-        font-size: 14px !important;
-        vertical-align: middle !important;
+    .table th, .dataTable th {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        padding: 16px 18px !important;
     }
-    .main-footer {
-        background-color: #ffffff !important;
-        border-top: 1px solid #e2e8f0 !important;
-        color: #64748b !important;
-        font-size: 13px !important;
-        padding: 16px 24px !important;
+    .table td, .dataTable td {
+        font-size: 16.5px !important;
+        vertical-align: middle !important;
+        padding: 16px 18px !important;
+        color: #1e293b !important;
+    }
+    .dataTables_info, .dataTables_paginate, .dataTables_length, .dataTables_filter {
+        font-size: 16px !important;
     }
   </style>
   @stack('css')
 </head>
-<body class="hold-transition skin-blue fixed sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
   <?php
     $user = App\User::findorfail(Auth::user()->id);
@@ -229,9 +298,9 @@
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini font-black text-indigo-400">AP</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-extrabold text-xs inline-flex shadow-sm">AP</span>
-        <span class="font-bold tracking-tight text-white text-base">Latihan Soal Abdi Praja</span>
+      <span class="logo-lg flex items-center gap-2" style="padding-top: 10px;">
+        <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-extrabold text-xs inline-flex shadow-sm shrink-0">AP</span>
+        <span style="font-weight: 800; font-size: 14.5px; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap;">Latihan Soal Abdi Praja</span>
       </span>
     </a>
     <!-- Header Navbar -->
