@@ -155,14 +155,13 @@ class SiswaController extends Controller
     }
   }
 
-  public function passwordUjian(Request $req)
+  public function passwordUjian(Request $req, $id = null)
   {
-    $id         = $req->id;
+    $id         = $id ?: ($req->id ?: $req->route('id'));
     $password   = $req->password;
     $kunciSoal  = hash("sha256", $password.Auth::user()->id);
 
     return redirect('/siswa/ujian/detail/'.$id.'/'.$kunciSoal);
-   
   }
 
   public function getSoal(Request $req)

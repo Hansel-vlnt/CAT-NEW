@@ -29,6 +29,7 @@
       <!-- Verification Form -->
       <form method="post" id="password_soal" class="space-y-5">
         {{ csrf_field() }}
+        <input type="hidden" name="id" value="{{ Request::segment(4) }}">
 
         <div>
           <label for="password" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2 text-center">

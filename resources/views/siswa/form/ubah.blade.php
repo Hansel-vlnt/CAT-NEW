@@ -1,202 +1,174 @@
 @extends('layouts.app')
-@section('title', 'Data siswa')
+@section('title', 'Ubah Siswa: ' . $siswa->nama . ' - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <h1>Master Data</h1>
+  <div class="px-4 py-2">
+    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Master Data &bull; Siswa</div>
+    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Ubah Data Akun Siswa</h1>
+  </div>
 @endsection
 @section('content')
-  <?php include(app_path().'/functions/myconf.php'); ?>
-  <div class="col-md-8">
-    <div class="box box-primary">
-      <div class="box-header with-border">
-        <h3 class="box-title">Ubah Data Siswa</h3>
+<?php include(app_path().'/functions/myconf.php'); ?>
+<div class="col-md-12">
+  <div class="max-w-4xl mx-auto space-y-6">
+
+    <!-- HERO HEADER -->
+    <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
+            Edit Profil Siswa
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">{{ $siswa->nama }}</h2>
+          <p class="text-slate-300 text-xs sm:text-sm mt-1">
+            Perbarui informasi identitas, kelas, foto profil, dan kata sandi siswa.
+          </p>
+        </div>
+        <div>
+          <button onclick="self.history.back()" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/20 transition flex items-center gap-2">
+            <i class="fa fa-arrow-left"></i> Kembali
+          </button>
+        </div>
       </div>
-      <div class="box-body">
-      	<form class="form-horizontal" id="form-siswa">
-          <div class="box-body">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">&nbsp;</label>
-              <div class="col-sm-10">
-                <img src="{{ $siswa->gambar ? url('assets/img/user/'.$siswa->gambar) : url('assets/img/siswa.png') }}" id="wrap-img" class="img img-thumbnail" style="width: 30%"><br>
-                <input type="file" class="upload_url_img" id="upload_url_img" name="upload_url_img" />
-                <label for="upload_url_img">
-                  <i class="fas fa-cloud-upload-alt"></i>
-                  Pilih Foto
-                </label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="nama" class="col-sm-2 control-label">Nama</label>
-              <div class="col-sm-10">
-                <input type="hidden" name="id" value="{{ $siswa->id }}">
-                <input type="text" class="form-control" id="nama" name="nama" placeholder="Nama" value="{{ $siswa->nama }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="no_induk" class="col-sm-2 control-label">NIS</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="no_induk" name="no_induk" placeholder="NIS" value="{{ $siswa->no_induk }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="nisn" class="col-sm-2 control-label">NISN</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="nisn" name="nisn" placeholder="NISN" value="{{ $siswa->nisn }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="email" class="col-sm-2 control-label">Email</label>
-              <div class="col-sm-10">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ $siswa->email }}">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="password" class="col-sm-2 control-label">Password</label>
-              <div class="col-sm-10">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="kelas" class="col-sm-2 control-label">Kelas</label>
-              <div class="col-sm-10">
-                <select class="form-control select2Class" id="kelas" name="kelas">
-                	<option value="@if($siswa->getKelas) {{ $siswa->getKelas->id }} @else Pilih kelas @endif">@if($siswa->getKelas) {{ $siswa->getKelas->nama }} @else Pilih kelas @endif</option>
-                	@if($kelas->count())
-                	@foreach($kelas as $data_kelas)
-                		<option value="{{ $data_kelas->id }}">{{ $data_kelas->nama }}</option>
-                	@endforeach
-                	@endif
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Jenis kelamin</label>
-              <div class="col-sm-10">
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="jk" id="l" value="L" @if($siswa->jk == 'L') checked @endif> Laki-laki
-                  </label>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <label>
-                    <input type="radio" name="jk" id="p" value="P" @if($siswa->jk == 'P') checked @endif> Perempuan
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-group" style="margin-top: 15px">
-              <label for="kelas" class="col-sm-2 control-label">&nbsp;</label>
-              <div class="col-sm-10">
-  	            <div id="notif" style="display: none;"></div>
-                <img src="{{ url('/assets/images/facebook.gif') }}" style="display: none;" id="loading">
-                <div id="wrap-btn">
-  	              <button type="button" class="btn btn-success" id="simpan">Simpan</button>
-                  <button type="button" class="btn btn-danger" onclick="self.history.back()">Kembali</button>
-                </div>
-              </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <form id="form-siswa" class="space-y-6">
+        <input type="hidden" name="id" value="{{ $siswa->id }}">
+
+        <!-- FOTO PROFIL SECTION -->
+        <div class="pb-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center gap-6">
+          <img src="{{ $siswa->gambar ? url('assets/img/user/'.$siswa->gambar) : url('assets/img/siswa.png') }}" id="wrap-img" class="w-20 h-20 rounded-2xl object-cover border-2 border-slate-200 shadow-sm shrink-0">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Foto Profil</label>
+            <input type="file" class="upload_url_img hidden" id="upload_url_img" name="upload_url_img" />
+            <label for="upload_url_img" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer border border-slate-200">
+              <i class="fa fa-camera"></i> Pilih Foto Baru
+            </label>
+            <div id="message" class="text-xs text-slate-500 mt-1"></div>
+          </div>
+        </div>
+
+        <!-- FORM INPUTS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div class="sm:col-span-2">
+            <label for="nama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+            <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="nama" name="nama" value="{{ $siswa->nama }}">
+          </div>
+
+          <div>
+            <label for="email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Alamat Email</label>
+            <input type="email" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="email" name="email" value="{{ $siswa->email }}">
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password Baru (Opsional)</label>
+            <input type="password" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="password" name="password" placeholder="Kosongkan jika tidak diubah">
+          </div>
+
+          <div>
+            <label for="no_induk" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nomor Induk Siswa (NIS)</label>
+            <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="no_induk" name="no_induk" value="{{ $siswa->no_induk }}">
+          </div>
+
+          <div>
+            <label for="nisn" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">NISN</label>
+            <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="nisn" name="nisn" value="{{ $siswa->nisn }}">
+          </div>
+
+          <div>
+            <label for="kelas" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kelas / Rombel</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition select2Class" id="kelas" name="kelas">
+              <option value="@if($siswa->getKelas) {{ $siswa->getKelas->id }} @else Pilih kelas @endif">@if($siswa->getKelas) {{ $siswa->getKelas->nama }} @else Pilih kelas @endif</option>
+              @if($kelas->count())
+                @foreach($kelas as $data_kelas)
+                  <option value="{{ $data_kelas->id }}">{{ $data_kelas->nama }}</option>
+                @endforeach
+              @endif
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Jenis Kelamin</label>
+            <div class="flex items-center gap-6 pt-3">
+              <label class="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+                <input type="radio" name="jk" id="l" value="L" @if($siswa->jk == 'L') checked @endif class="text-blue-600 focus:ring-blue-500">
+                Laki-laki
+              </label>
+              <label class="flex items-center gap-2 text-sm font-medium text-slate-700 cursor-pointer">
+                <input type="radio" name="jk" id="p" value="P" @if($siswa->jk == 'P') checked @endif class="text-blue-600 focus:ring-blue-500">
+                Perempuan
+              </label>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+
+        <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
+
+        <div class="pt-6 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
+          <button type="button" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="simpan">
+            Simpan Perubahan
+          </button>
+          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition" onclick="self.history.back()">
+            Batal &amp; Kembali
+          </button>
+        </div>
+      </form>
     </div>
+
   </div>
-  <div class="col-md-4">
-    <div class="box box-warning">
-      <div class="box-header with-border">
-        <h3 class="box-title" style="color: darkorange"><i class="fa fa-info-circle"></i> Informasi</h3>
-      </div>
-      <div class="box-body">
-        <p>Silahkan validasi data siswa dengan melakukan perubahan data pada form.</p>
-        <p>Perubahan data akan berdampak pada data yang membutuhkan/berkaitan dengan data siswa ini (nilai/hasil ujian, absensi, dll).</p>
-      </div>
-    </div>
-  </div>
+</div>
 @endsection
-@push('css')
-  <style type="text/css">
-    .upload_url_img, .upload_url_bg {
-      width: 0.1px;
-      height: 0.1px;
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      z-index: -1;
-    }
-
-    .upload_url_img + label, .upload_url_bg + label {
-      margin-top: 5px;
-      font-size: 11pt;
-      font-weight: 700;
-      color: white;
-      background-color: #178bcc;
-      display: inline-block;
-      padding: 5px 10px;
-      text-align: center;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 30%;
-    }
-
-    .upload_url_img:focus + label,
-    .upload_url_img + label:hover,
-    .upload_url_bg:focus + label,
-    .upload_url_bg + label:hover {
-      outline: 1px dotted #000;
-      outline: -webkit-focus-ring-color auto 5px;
-    }
-  </style>
-@endpush
 @push('scripts')
-  <script>
-    $(document).ready(function (){
-      $('#upload_url_img').change(function(){
-        var input = this;
-        var url = $(this).val();
-        var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
-        if (input.files && input.files[0] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            $('#wrap-img').attr('src', e.target.result);
-          }
-          reader.readAsDataURL(input.files[0]);
-          $('#form-siswa').trigger('submit');
-        }
-      });
+<script>
+$(document).ready(function (){
+  $('#upload_url_img').change(function(){
+    var input = this;
+    var url = $(this).val();
+    var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+    if (input.files && input.files[0] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $('#wrap-img').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+      $('#form-siswa').trigger('submit');
+    }
+  });
 
-      $('#form-siswa').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-          url: "{{ url('crud/update-img-siswa') }}",
-          type: "POST",
-          data: new FormData(this),
-          contentType: false,
-          cache: false,
-          processData:false,
-          success: function(data)
-          {
-            $('#loading').hide();
-            $("#message").html(data);
-          }
-        });
-      });
-
-    	$("#simpan").click(function() {
-        $("#wrap-btn").hide();
-        $("#loading").show();
-        var dataString = $("#form-siswa").serialize();
-        $.ajax({
-          type: "POST",
-          url: "{{ url('/crud/update-siswa') }}",
-          data: dataString,
-          success: function(data){
-            $("#loading").hide();
-            $("#wrap-btn").show();
-            if (data == 'ok') {
-              $("#notif").removeClass('alert alert-danger').addClass('alert alert-info').html("Data siswa berhasil diupdate.").show();
-              window.location.href = "{{ url('master/siswa/detail/'.$siswa->id) }}";
-            }else{
-              $("#notif").removeClass('alert alert-info').addClass('alert alert-danger').html(data).show();
-            }
-          }
-        })
-      });
+  $('#form-siswa').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: "{{ url('crud/update-img-siswa') }}",
+      type: "POST",
+      data: new FormData(this),
+      contentType: false,
+      cache: false,
+      processData:false,
+      success: function(data) {
+        $("#message").html('<span class="text-emerald-600 font-bold">✓ Foto profil berhasil diunggah.</span>');
+      }
     });
-  </script>
+  });
+
+  $("#simpan").click(function() {
+    var dataString = $("#form-siswa").serialize();
+    $.ajax({
+      type: "POST",
+      url: "{{ url('/crud/update-siswa') }}",
+      data: dataString,
+      success: function(data){
+        if (data == 'ok') {
+          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("Data siswa berhasil diupdate.").show();
+          setTimeout(function() {
+            window.location.href = "{{ url('master/siswa/detail/'.$siswa->id) }}";
+          }, 600);
+        } else {
+          $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(data).show();
+        }
+      }
+    });
+  });
+});
+</script>
 @endpush

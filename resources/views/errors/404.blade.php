@@ -1,25 +1,36 @@
 @extends('layouts.app')
-@section('title', 'Error 404 - Halaman tidak ditemukan')
+@section('title', '404 - Halaman Tidak Ditemukan - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <h1>Error 404 - Halaman tidak ditemukan</h1>
+  <div class="px-4 py-2">
+    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Navigasi Platform</div>
+    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Halaman Tidak Ditemukan</h1>
+  </div>
 @endsection
 @section('content')
-	<div class="col-md-12">
-	  <div class="box box-default">
-	    <div class="box-body">
-	    	<div class="error-page">
-	        <h2 class="headline text-yellow"> 404</h2>
+<div class="col-md-12">
+  <div class="max-w-xl mx-auto space-y-6 py-6 sm:py-12">
 
-	        <div class="error-content">
-	          <h3><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
+    <!-- 404 CARD -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm text-center">
+      <div class="w-20 h-20 rounded-3xl bg-amber-50 text-amber-500 flex items-center justify-center font-black text-3xl mx-auto mb-6 border border-amber-200 shadow-sm">
+        404
+      </div>
 
-	          <p>Kami tidak menemukan halaman yang Anda cari disini. Sementara itu, anda bisa <a href="{{ url('/') }}">kembali ke dashboard</a> atau kembali ke halaman sebelumnya.</p>
-	          <p>Kemungkinan juga halaman ini belum selesai disiapkan/development. Silahkan hubungi operator aplikasi untuk mendapatkan informasi selengkapnya.</p>
+      <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Halaman Tidak Ditemukan</h2>
+      <p class="text-sm text-slate-500 leading-relaxed max-w-md mx-auto mb-8">
+        Halaman atau modul latihan yang Anda tuju mungkin telah dipindahkan, sedang dalam persiapan, atau alamat URL yang Anda masukkan kurang tepat.
+      </p>
 
-	        </div>
-	        <!-- /.error-content -->
-	      </div>
-	    </div>
-	  </div>
-	</div>
+      <div class="flex items-center justify-center gap-3 flex-wrap">
+        <a href="{{ url('/') }}" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2">
+          <i class="fa fa-home"></i> Kembali ke Beranda
+        </a>
+        <button onclick="self.history.back()" class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2">
+          <i class="fa fa-arrow-left"></i> Halaman Sebelumnya
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
 @endsection

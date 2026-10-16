@@ -244,7 +244,7 @@
         @if($user->status == 'G' or $user->status == 'A')
         <li class="treeview {{ Request::is('elearning*') == true  ? 'active' : '' }}">
           <a href="#">
-            <i class="fa fa-graduation-cap"></i> <span>Bank Soal CBT</span>
+            <i class="fa fa-graduation-cap"></i> <span>Bank Soal &amp; Laporan</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -254,9 +254,10 @@
             <li class="{{ Request::is('elearning/laporan*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/laporan') }}"><i class="fa fa-circle-o"></i> Rapor &amp; Laporan</a></li>
           </ul>
         </li>
+        <li class="{{ Request::is('master/siswa*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-users"></i> <span>Data Siswa</span></a></li>
         <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
         @elseif($user->status == 'S')
-        <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Paket Ujian Saya</span></a></li>
+        <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Katalog Latihan Soal</span></a></li>
         @endif
         <li class="{{ Request::is('pengaturan*') == true ? 'active' : '' }}"><a href="{{ url('/pengaturan') }}"><i class="fa fa-cog"></i> <span>Pengaturan Akun</span></a></li>
         <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
@@ -282,7 +283,7 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right hidden-xs text-slate-400">
-      <b>Sistem CBT Latihan Soal Abdi Praja</b> &bull; Versi 1.3.5
+      <b>Latihan Soal Abdi Praja</b> &bull; Versi 2.0 (Modern Bimbel)
     </div>
     <strong>Hak Cipta &copy; {{ date('Y') }} <a href="//abdipraja.co.id" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-semibold">Latihan Soal Abdi Praja</a>.</strong> Seluruh hak cipta dilindungi.
   </footer>

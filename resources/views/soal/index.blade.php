@@ -1,191 +1,166 @@
 @extends('layouts.app')
-@section('title', 'Data Soal')
+@section('title', 'Data Bank Soal - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <h1>Data Soal</h1>
+  <div class="px-4 py-2">
+    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Manajemen Kurikulum &bull; Bank Soal</div>
+    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Kelola Paket Latihan Soal</h1>
+  </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="box box-primary">
-    <div class="box-header with-border">
-      <h3 class="box-title">Paket Soal</h3>
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+  <div class="max-w-7xl mx-auto space-y-6">
+
+    <!-- HERO HEADER -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
+            Manajemen Soal
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Katalog Paket Latihan &amp; Tryout</h2>
+          <p class="text-slate-300 text-xs sm:text-sm mt-1">
+            Buat paket soal baru (Kedinasan / UTBK SMA), atur durasi pengerjaan, dan kelola butir pertanyaan.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" id="btn-soal" class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2">
+            <i class="fa fa-plus-circle"></i> Buat Paket Soal Baru
+          </button>
+        </div>
       </div>
     </div>
-    <div class="box-body">
-    	<button type="button" id="btn-soal" class="btn btn-primary btn-md"><i class="fa fa-pencil-square-o"></i> &nbsp;Buat Paket Soal</button>
-    	<!--<a href="{{ url('/download-file-format/soal') }}" class="btn btn-success btn-md"><i class="fa fa-file-excel-o"></i> &nbsp;Download Format Excel</a>
-    	<button type="button" id="btn-upload-soal" class="btn btn-info btn-md"><i class="fa fa-cloud-upload"></i> &nbsp;Upload Excel</button>-->
-      <div class="well" style="margin-top: 15px; display: none;" id="wrap-soal">
-        <form class="form-horizontal" id="formSoal">
-          {{ csrf_field() }}
-          <input type="hidden" name="id" value="N">
-          <div class="box-body">
-            <div class="form-group">
-              <label for="paket" class="col-sm-2 control-label">Paket</label>
-              <div class="col-sm-8">
-                <input id="paket" type="text" class="form-control" name="paket" placeholder="Try Out">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="deskripsi" class="col-sm-2 control-label">Deskripsi</label>
-              <div class="col-sm-8">
-                <textarea id="deskripsi" name="deskripsi" class="form-control" placeholder="Deskripsi"></textarea>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="kategori_utama" class="col-sm-2 control-label">Kategori Utama</label>
-              <div class="col-sm-4">
-                <select id="kategori_utama" class="form-control" name="kategori_utama">
-                  <option value="Kedinasan & Polri (SKD BKN/Akademik)" selected>Kedinasan & Polri (SKD BKN/Akademik)</option>
-                  <option value="SMA & UTBK (SNBT)">SMA & UTBK (SNBT)</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="sub_kategori" class="col-sm-2 control-label">Sub Kategori</label>
-              <div class="col-sm-4">
-                <input id="sub_kategori" type="text" class="form-control" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif, Penalaran">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="waktu" class="col-sm-2 control-label">Waktu (<small>Detik</small>)</label>
-              <div class="col-sm-2">
-                <input id="waktu" type="text" class="form-control numOnly" data-toggle="tooltip" title="Masukkan waktu ujian dalam satuan detik" name="waktu" placeholder="60">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="tipe_waktu" class="col-sm-2 control-label">Jenis Soal</label>
-              <div class="col-sm-2">
-                <select id="jenis" class="form-control" data-toggle="tooltip" name="jenis">
-                  <option value="0" selected>Normal</option>
-                  <option value="1">Cerdas Cermat</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="password" class="col-sm-2 control-label">Password</label>
-              <div class="col-sm-2">
-                <input id="password" type="text" class="form-control" data-toggle="tooltip" title="Masukkan password untuk soal" name="password" placeholder="Password Soal">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <div id="wrap-btn">
-                  <button type="button" class="btn btn-danger" id="btnbatal">Batal</button>
-                  <button type="button" class="btn btn-info" id="btnSimpan">Simpan</button>
-                </div>
-                <div id="notif" style="display: none; margin-top: 15px""></div>
-              </div>
-            </div>
-            <div class="overlay" id="loading" style="display: none;"><i class="fa fa-refresh fa-spin" ></i></div>
-          </div>
-        </form>
+
+    <!-- FORM BUAT PAKET BARU (COLLAPSIBLE) -->
+    <div style="display: none;" id="wrap-soal" class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="pb-4 border-b border-slate-100 mb-6 flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Formulir Paket Latihan Baru</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Lengkapi identitas paket latihan soal sebelum menambahkan butir soal.</p>
+        </div>
+        <button type="button" id="btnbatal" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕ Tutup</button>
       </div>
-      <div class="well" style="margin-top: 15px; display: none;" id="wrap-upload-soal">
-        <form class="form-horizontal" action="{{ url('/crud/simpan-detail-soal-via-excel') }}" enctype="multipart/form-data" method="POST">
-          {{ csrf_field() }}
-          <div class="box-body">
-            <div class="form-group">
-              <input type="file" name="file" id="file" class="inputfile" />
-              <label for="file"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Pilih file excel</label>
-              <p class="help-block">Silahkan pilih file format soal dalam bentuk excel yang telah diisi dengan benar.</p>
-            </div>
-            <div class="box-footer">
-              <input class="btn btn-danger" id="batal-upload" type="button" value="Batal" />
-              <input class="btn btn-primary" name="upload" type="submit" value="Import" />
-            </div>
+
+      <form id="formSoal" class="space-y-5 max-w-3xl">
+        {{ csrf_field() }}
+        <input type="hidden" name="id" value="N">
+
+        <div>
+          <label for="paket" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Paket Soal</label>
+          <input id="paket" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="paket" placeholder="Contoh: Tryout SKD Kedinasan Paket 01">
+        </div>
+
+        <div>
+          <label for="deskripsi" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Deskripsi Singkat</label>
+          <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" placeholder="Tuliskan materi yang diujikan dalam paket ini"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="kategori_utama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Utama</label>
+            <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="kategori_utama">
+              <option value="Kedinasan & Polri (SKD BKN/Akademik)" selected>Kedinasan &amp; Polri (SKD BKN/Akademik)</option>
+              <option value="SMA & UTBK (SNBT)">SMA &amp; UTBK (SNBT)</option>
+            </select>
           </div>
-        </form>
+
+          <div>
+            <label for="sub_kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Sub Kategori</label>
+            <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label for="waktu" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Durasi Waktu (Detik)</label>
+            <input id="waktu" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition numOnly" name="waktu" placeholder="Contoh: 6000 (100 Menit)">
+          </div>
+
+          <div>
+            <label for="jenis" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Model Waktu</label>
+            <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="jenis">
+              <option value="0" selected>Normal (Total Paket)</option>
+              <option value="1">Cerdas Cermat (Per Nomor)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password Token (Opsional)</label>
+            <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token">
+          </div>
+        </div>
+
+        <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
+          <button type="button" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="btnSimpan">
+            Simpan &amp; Buat Paket
+          </button>
+          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition" onclick="$('#wrap-soal').slideUp();">
+            Batal
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- MAIN TABLE CARD -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Daftar Paket Latihan</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Kelola butir soal, atur kunci jawaban dan pembahasan pada setiap paket.</p>
+        </div>
       </div>
-    	<hr style="margin: 10px 0 15px 0">
-      <table class="table table-hover table-striped" id="table_soal">
-      	@if (Auth::user()->status == 'G')
-	        <caption>Data paket soal yang Anda buat</caption>
-        @else
-        	<caption>Data paket soal</caption>
-        @endif
-        <thead>
-          <tr>
-            <th>ID Soal</th>
-            <th>Nama Paket</th>
-            <th>Deskripsi</th>
-            <th style="text-align: center; width: 70px">Waktu</th>
-            <th style="text-align: center; width: 100px">Jenis Soal</th>
-            <th style="text-align: center; width: 70px">Password</th>
-            <th style="text-align: center; width: 150px">Aksi</th>
-          </tr>
-        </thead>
-      </table>
+
+      <div class="table-responsive">
+        <table class="table table-hover table-striped" id="table_soal" style="width: 100%;">
+          <thead>
+            <tr class="text-slate-600 text-xs font-bold uppercase tracking-wider bg-slate-50">
+              <th style="padding: 14px 16px; width: 60px;">ID</th>
+              <th style="padding: 14px 16px;">Nama Paket</th>
+              <th style="padding: 14px 16px;">Deskripsi</th>
+              <th style="padding: 14px 16px; text-align: center; width: 90px;">Waktu</th>
+              <th style="padding: 14px 16px; text-align: center; width: 110px;">Model</th>
+              <th style="padding: 14px 16px; text-align: center; width: 90px;">Token</th>
+              <th style="padding: 14px 16px; text-align: center; width: 150px;">Aksi</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL HAPUS SOAL -->
+<div class="modal fade" id="del-soal">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+      <div class="modal-header" style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 18px 24px;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight: 700; color: #0f172a;">Konfirmasi Hapus Paket Soal</h4>
+      </div>
+      <div class="modal-body" style="padding: 24px;">
+        <form role="form" id="delete" action="{{ route('soal.paket.hapus') }}" method="post">
+          @csrf
+          @method('delete')
+          <input type="hidden" id="id_soal" name="id_soal">
+        </form>
+        <p class="text-sm text-slate-600">
+          Apakah Anda yakin ingin menghapus paket soal <b id="paket_soal" class="text-slate-900"></b> beserta seluruh butir soal di dalamnya?
+        </p>
+      </div>
+      <div class="modal-footer" style="background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 16px 24px;">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+        <button id="button-delete" type="button" class="btn btn-danger" onclick="$('#delete').submit();">Ya, Hapus Paket</button>
+      </div>
     </div>
   </div>
 </div>
-<div class="modal fade" id="del-soal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="blue bigger">Hapus Paket Soal</h4>
-          </div>
-            <div class="modal-body">
-                <form role="form" id="delete" action="{{ route('soal.paket.hapus') }}" method="post">
-                    @csrf
-                    @method('delete')
-                    <input type="hidden" id="id_soal" name="id_soal">
-                </form>
-                <div>
-                    <p>Anda yakin ingin menghapus paket soal <b><span id="paket_soal" class="bolder"></span></b>?</p>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
-                <button id="button-delete" type="button" class="btn btn-danger" onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 @push('css')
-  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/media/css/dataTables.bootstrap.css')}}">
-  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.css')}}">
-  <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/css/fixedHeader.bootstrap.css')}}">
-  <style type="text/css">
-    .panel {
-      margin-bottom: 5px !important;
-    }
-    .form-group {
-      margin-bottom: 5px;
-    }
-    .inputfile {
-      width: 0.1px;
-      height: 0.1px;
-      opacity: 0;
-      overflow: hidden;
-      position: absolute;
-      z-index: -1;
-    }
-    .inputfile + label {
-      font-size: 1.25em;
-      font-weight: 700;
-      color: white;
-      background-color: green;
-      display: inline-block;
-      padding: 10px;
-    }
-    .inputfile:focus + label,.inputfile + label:hover {
-      background-color: darkgreen;
-    }
-    .inputfile + label {
-      cursor: pointer;
-    }
-    .inputfile:focus + label {
-      outline: 1px dotted #000;
-      outline: -webkit-focus-ring-color auto 5px;
-    }
-    .inputfile + label * {
-      pointer-events: none;
-    }
-  </style>
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/media/css/dataTables.bootstrap.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/css/fixedHeader.bootstrap.css')}}">
 @endpush
 @push('scripts')
 <script src="{{URL::asset('assets/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
@@ -199,72 +174,64 @@ $(document).ready(function (){
     serverSide: true,
     responsive: true,
     lengthChange: true,
+    pageLength: 10,
+    language: {
+      search: "Cari paket:",
+      lengthMenu: "Tampilkan _MENU_ per halaman",
+      info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ paket",
+      paginate: {
+        first: "Awal",
+        last: "Akhir",
+        next: "Lanjut",
+        previous: "Sebelum"
+      }
+    },
     ajax: {
       url: '{!! route('elearning.get-soal') !!}',
-      
     },
     columns: [
-      {data: 'id', name: 'id', orderable: true, searchable: true },
-      {data: 'paket', name: 'paket', orderable: true, searchable: true },
-      {data: 'deskripsi', name: 'deskripsi', orderable: true, searchable: true },
-      {data: 'waktu', name: 'waktu', orderable: true, searchable: true },
-      {data: 'jenis', name: 'jenis', orderable: true, searchable: true },
-      {data: 'password', name: 'password', orderable: true, searchable: true },
-      {data: 'action', name: 'action', orderable: false, searchable: false, },
+      {data: 'id', name: 'id', orderable: true, searchable: true, className: "font-mono font-bold text-slate-500" },
+      {data: 'paket', name: 'paket', orderable: true, searchable: true, className: "font-bold text-slate-900 text-sm" },
+      {data: 'deskripsi', name: 'deskripsi', orderable: true, searchable: true, className: "text-xs text-slate-500" },
+      {data: 'waktu', name: 'waktu', orderable: true, searchable: true, className: "text-center font-bold text-xs" },
+      {data: 'jenis', name: 'jenis', orderable: true, searchable: true, className: "text-center text-xs" },
+      {data: 'password', name: 'password', orderable: true, searchable: true, className: "text-center text-xs font-mono font-bold" },
+      {data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center" },
     ],
-    "drawCallback": function (setting) {}
+    drawCallback: function (setting) {}
   });
-  $("#btn-upload-soal").click(function() {
-    $("#wrap-soal").hide();
-    $("#wrap-upload-soal").slideToggle();
-  })
-  $("#batal-upload").click(function() {
-    $("#wrap-upload-soal").slideToggle();
-  })
+
   $("#btn-soal").click(function() {
-    $("#wrap-upload-soal").hide();
     $("#wrap-soal").slideToggle();
-  })
+  });
+
   $("#btnbatal").click(function() {
-    $("#wrap-soal").slideToggle();
-  })
+    $("#wrap-soal").slideUp();
+  });
+
   $("#btnSimpan").click(function(){
-    $("#wrap-btn").hide();
-    $("#loading").show();
     var dataString = $("#formSoal").serialize();
     $.ajax({
       type: "POST",
       url: "{{ url('/crud/simpan-soal') }}",
       data: dataString,
       success: function(data){
-        console.log(data);
         if (data == 'ok') {
-          $("#loading").hide();
-          $("#wrap-btn").show();
-          $("#notif").removeClass('alert alert-danger').addClass('alert alert-info').html("<i class='fa fa-info-circle'></i> Data berhasil disimpan.").fadeIn(350);
-          window.location.href = "{{ url('/elearning/soal') }}";
-        }else{
-          $("#loading").hide();
-          $("#wrap-btn").show();
-          $("#notif").removeClass('alert alert-info').addClass('alert alert-danger').html(data).fadeIn(350);
+          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ Paket soal berhasil dibuat.").show();
+          setTimeout(function() {
+            window.location.reload();
+          }, 600);
+        } else {
+          $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(data).show();
         }
       }
-    })
+    });
   });
 });
+
 function deleteSoal(id_soal, paketSoal) {
   $("#id_soal").val(id_soal);
   $("#paket_soal").text(paketSoal);
 }
 </script>
-@if(Session::has('success'))
-  <script>
-    swal("", '{!! Session::get("success") !!}', "success");
-  </script>
-@endif
-@if(Session::has('error'))
-  <script>
-    swal("", '{!! Session::get("error") !!}', "error");
-  </script>
-@endif
 @endpush

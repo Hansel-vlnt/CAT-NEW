@@ -17,50 +17,73 @@
 <h1>Detail Soal Ujian</h1>
 @endsection
 @section('content')
-<div class="col-md-12">
-	<div class="box box-primary">
-		<div class="box-header with-border">
-			<h3 class="box-title">{{ $soal->paket }}</h3>
-		</div>
-		<div class="box-body">
-			<div class="row">
-				<div class="col-sm-12">
-					<div id="fsstatus" style="font-size: 14pt; margin: 0 0 20px 0; color: #888c8e"></div>
-					<div style="border: dotted #0723e8; padding: 10px; margin-bottom: 15px;">
-						<table class="table table-striped">
-							<tr>
-								<td style="width: 220px">Deskripsi</td>
-								<td style="width: 15px">:</td>
-								<td>{{ $soal->deskripsi }}</td>
-							</tr>
-							<tr>
-								<td>Jumlah Soal Pilihan Ganda</td>
-								<td>:</td>
-								<td>{{ $soal->detailSoal ? number_format($soal->detailSoal->count()) : '0' }}</td>
-							</tr>
-							<tr>
-								<td>Waktu</td>
-								<td>:</td>
-								<td>{{ $soal->waktu.' Detik' }}</td>
-							</tr>
-						</table>
-						<button class="btn btn-success btn-lg btn-block" id="start-exam" onclick="$('#specialstuff').fullScreen(true)">Mulai</button>
-					</div>
-					<div style="padding:  10px; border: double #fff 15px; color: #fff; background: #b90000;">
-						<p style="font-weight: bold;">Silahkan kerjakan soal yang telah disiapkan. Harap dipatuhi peraturan berikut ini!</p>
-						<ul>
-							<li>Jangan mereload/refresh browser, karena jawaban akan hilang!</li>
-							<li>Jangan keluar dari mode fullscreen (jika ujian menggunakan PC/Laptop) atau berpindah ke aplikasi lain (jika menggunakan smartphone), karena ujian akan dianggap selesai dan jawaban akan otomatis dikirimkan.</li>
-							<li>Jangan menekan tombol selesai saat mengerjakan soal, kecuali jika Anda telah menyelesaikan seluruh soal.</li>
-							<li>Perhatikan sisa waktu ujian, sistem akan mengumpulkan jawaban saat waktu sudah habis.</li>
-							<li>Waktu ujian akan dimulai saat tombol "<b>Mulai</b>" diklik.</li>
-						</ul>
-					</div>
-					<!-- <div class="alert alert-success">Silahkan kerjakan soal yang telah disediakan.</div> -->
-				</div>
-			</div>
-		</div>
-	</div>
+<div class="col-md-12" id="pre-exam-box">
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- HERO BRIEFING CARD -->
+    <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
+          Persiapan Latihan
+        </span>
+        <span class="px-3 py-1 rounded-full bg-white/10 text-slate-200 text-xs font-medium">
+          {{ $soal->kategori_utama ?? 'Kedinasan / UTBK' }}
+        </span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">{{ $soal->paket }}</h2>
+      <p class="text-slate-300 text-xs sm:text-sm mt-1">
+        {{ $soal->deskripsi ?: 'Simulasi latihan soal dengan timer real-time dan evaluasi kunci jawaban.' }}
+      </p>
+
+      <!-- SPECS GRID -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
+        <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+          <div class="text-xs text-slate-300 font-medium">Jumlah Butir</div>
+          <div class="text-2xl font-black text-amber-400 mt-0.5">
+            {{ $soal->detailSoal ? number_format($soal->detailSoal->count()) : '0' }} Soal
+          </div>
+        </div>
+        <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+          <div class="text-xs text-slate-300 font-medium">Durasi Pengerjaan</div>
+          <div class="text-2xl font-black text-amber-400 mt-0.5">
+            {{ round($soal->waktu / 60) }} Menit
+          </div>
+        </div>
+        <div class="bg-white/5 rounded-2xl p-4 border border-white/10 col-span-2 sm:col-span-1">
+          <div class="text-xs text-slate-300 font-medium">Target Passing Grade</div>
+          <div class="text-2xl font-black text-emerald-400 mt-0.5">
+            KKM {{ $soal->kkm ?? 70 }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PETUNJUK PENGERJAAN -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
+      <h3 class="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
+        <i class="fa fa-shield text-blue-600"></i> Petunjuk &amp; Peraturan Pengerjaan
+      </h3>
+
+      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-2">
+        <div class="font-bold flex items-center gap-1.5 text-amber-800">
+          <i class="fa fa-exclamation-triangle"></i> Harap Dipatuhi Selama Latihan Berlangsung:
+        </div>
+        <ul class="list-disc pl-5 space-y-1 text-slate-700">
+          <li>Jangan me-refresh atau menutup browser saat pengerjaan agar progres jawaban tidak hilang.</li>
+          <li>Waktu hitung mundur berjalan otomatis sejak Anda menekan tombol <b>Mulai Latihan Sekarang</b>.</li>
+          <li>Gunakan panel nomor soal di sebelah kanan untuk melompat antar nomor secara bebas.</li>
+          <li>Setelah waktu habis atau Anda menekan tombol Selesai, nilai dan <b>pembahasan trik cepat</b> akan otomatis ditampilkan.</li>
+        </ul>
+      </div>
+
+      <div class="pt-2">
+        <button class="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base shadow-lg transition tracking-wide flex items-center justify-center gap-2" id="start-exam" onclick="$('#specialstuff').fullScreen(true)">
+          <i class="fa fa-play-circle"></i> Mulai Latihan Sekarang &rarr;
+        </button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- tampilkan soal disini -->
