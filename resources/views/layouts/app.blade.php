@@ -353,21 +353,7 @@
             <li class="{{ Request::is('elearning/laporan*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/laporan') }}"><i class="fa fa-circle-o"></i> Rapor &amp; Laporan</a></li>
           </ul>
         </li>
-        <li class="treeview {{ Request::is('master*') == true  ? 'active' : '' }}">
-          <a href="#">
-            <i class="fa fa-database"></i> <span>Master Data</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="{{ Request::is('master/siswa*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-circle-o"></i> Data Siswa</a></li>
-            <li class="{{ Request::is('master/kelas*') == true ? 'active' : '' }}"><a href="{{ url('/master/kelas') }}"><i class="fa fa-circle-o"></i> Data Kelas</a></li>
-            @if($user->status == 'A')
-            <li class="{{ Request::is('master/guru*') == true ? 'active' : '' }}"><a href="{{ url('/master/guru') }}"><i class="fa fa-circle-o"></i> Data Instruktur / Guru</a></li>
-            @endif
-          </ul>
-        </li>
+        <li class="{{ Request::is('master*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-users"></i> <span>Data Siswa</span></a></li>
         <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
         @elseif($user->status == 'S')
         <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Katalog Latihan Soal</span></a></li>

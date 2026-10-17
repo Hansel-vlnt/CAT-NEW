@@ -14,11 +14,12 @@ test.describe('Audit Findings #01 - #19 Verification Suite', () => {
     const metaViewport = await page.locator('meta[name="viewport"]').getAttribute('content');
     expect(metaViewport).toContain('user-scalable=yes');
 
-    // Verify #03 Sidebar navigation links in DOM
+    // Verify Sidebar navigation links in DOM (Materi & Siswa present; Kelas & Guru removed per user request)
     const sidebar = page.locator('.sidebar-menu');
     await expect(sidebar.locator('a[href*="/elearning/materi"]')).toBeAttached();
-    await expect(sidebar.locator('a[href*="/master/kelas"]')).toBeAttached();
-    await expect(sidebar.locator('a[href*="/master/guru"]')).toBeAttached();
+    await expect(sidebar.locator('a[href*="/master/siswa"]')).toBeAttached();
+    await expect(sidebar.locator('a[href*="/master/kelas"]')).toHaveCount(0);
+    await expect(sidebar.locator('a[href*="/master/guru"]')).toHaveCount(0);
   });
 
   test('Audit #04, #15, #16: Bank Soal Index & Detail Modernization', async ({ page }) => {

@@ -26,7 +26,6 @@ Route::group(['prefix' => 'crud'], function () {
 	Route::post('hapus-gambar-materi', 'CrudController@hapusGambarMateri');
 	Route::post('simpan-gambar-user', 'CrudController@simpanGambarUser');
 	Route::post('update-profil-sekolah', 'CrudController@updateProfilSekolah');
-	Route::post('simpan-guru', 'GuruController@simpanGuru');
 	Route::post('simpan-siswa', 'CrudController@simpanSiswa');
 	Route::post('update-siswa', 'CrudController@updateSiswa');
 	Route::post('simpan-siswa-via-excel', 'CrudController@simpanSiswaViaExcel');
@@ -45,19 +44,20 @@ Route::group(['prefix' => 'pengaturan'], function () {
 });
 
 Route::group(['prefix' => 'master'], function () {
-	// route master guru
-	Route::group(['prefix' => 'guru'], function () {
-		Route::get('/', 'GuruController@index')->name('master.guru');
-		Route::get('data-guru', 'GuruController@dataGuru')->name('master.data_guru');
-		Route::get('detail/{id}', 'GuruController@detailGuru');
-		Route::get('ubah/{id}', 'GuruController@ubahGuru');
+	// Safe redirects for deprecated guru & kelas endpoints
+	Route::any('guru{any?}', function () {
+		return redirect()->route('siswa');
+	})->where('any', '.*');
+	Route::any('kelas{any?}', function () {
+		return redirect()->route('siswa');
+	})->where('any', '.*');
+	Route::any('data-kelas', function () {
+		return redirect()->route('siswa');
 	});
-	// route master kelas
-	Route::get('kelas', 'KelasController@index')->name('master.kelas');
-	Route::get('data-kelas', 'KelasController@dataKelas')->name('master.data_kelas');
-	Route::get('kelas/detail/{id}', 'KelasController@detailKelas')->name('master.detail_kelas');
-	Route::get('detail-kelas/', 'KelasController@detailKelasSiswa')->name('master.detail_kelas_siswa');
-	Route::get('kelas/ubah/{id}', 'KelasController@ubahKelas')->name('master.ubah_kelas');
+	Route::any('detail-kelas{any?}', function () {
+		return redirect()->route('siswa');
+	})->where('any', '.*');
+
 	// route master siswa
 	Route::group(['prefix' => 'siswa'], function () {
 		Route::get('/', 'SiswaController@index')->name('siswa');
