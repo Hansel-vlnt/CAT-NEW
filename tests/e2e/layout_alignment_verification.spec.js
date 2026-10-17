@@ -22,11 +22,14 @@ test.describe('Layout Alignment Verification Suite - Centered Content & Top-Left
 
       console.log(`[Admin-${pageName}] Header X: ${breadcrumbBox.x.toFixed(1)}px, Content X: ${contentCardBox.x.toFixed(1)}px`);
 
-      // 1. Header is left-anchored at standard sidebar line (~258px on desktop)
-      expect(breadcrumbBox.x).toBeCloseTo(258, 0);
-
-      // 2. Content card is centered horizontally via mx-auto (X significantly greater than 258px)
-      expect(contentCardBox.x).toBeGreaterThan(280);
+      // 1. Header is left-anchored at standard sidebar line (~258px on desktop, ~28px on mobile)
+      const viewport = page.viewportSize();
+      if (viewport && viewport.width > 768) {
+        expect(breadcrumbBox.x).toBeCloseTo(258, 0);
+        expect(contentCardBox.x).toBeGreaterThan(280);
+      } else {
+        expect(breadcrumbBox.x).toBeLessThan(50);
+      }
 
       // 3. No subtitle paragraph below h1 in header
       const subtitleParagraph = page.locator('.content-header p');
@@ -66,10 +69,13 @@ test.describe('Layout Alignment Verification Suite - Centered Content & Top-Left
       console.log(`[Siswa-${pageName}] Header X: ${breadcrumbBox.x.toFixed(1)}px, Content X: ${contentCardBox.x.toFixed(1)}px`);
 
       // 1. Header is left-anchored
-      expect(breadcrumbBox.x).toBeCloseTo(258, 0);
-
-      // 2. Content card is centered horizontally
-      expect(contentCardBox.x).toBeGreaterThan(280);
+      const viewport = page.viewportSize();
+      if (viewport && viewport.width > 768) {
+        expect(breadcrumbBox.x).toBeCloseTo(258, 0);
+        expect(contentCardBox.x).toBeGreaterThan(280);
+      } else {
+        expect(breadcrumbBox.x).toBeLessThan(50);
+      }
 
       // 3. No subtitle paragraph in header
       const subtitleParagraph = page.locator('.content-header p');

@@ -52,9 +52,9 @@
           </div>
         </div>
         <div class="bg-white/10 rounded-2xl p-4 sm:p-5 border border-white/15 col-span-2 sm:col-span-1">
-          <div class="text-xs sm:text-sm text-slate-300 font-medium">Target Passing Grade</div>
+          <div class="text-xs sm:text-sm text-slate-300 font-medium">Target KKM</div>
           <div class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">
-            KKM {{ $soal->kkm ?? 70 }}
+            {{ $soal->kkm ?? 70 }}
           </div>
         </div>
       </div>

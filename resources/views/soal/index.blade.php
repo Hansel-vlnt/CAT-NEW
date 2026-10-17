@@ -14,7 +14,7 @@
       <div>
         <h2 class="text-2xl font-black text-slate-900 tracking-tight">Katalog Paket Latihan &amp; Tryout</h2>
         <p class="text-sm text-slate-500 mt-1">
-          Kelola paket soal (Kedinasan / UTBK SMA), atur durasi pengerjaan, KKM passing grade, dan butir pertanyaan.
+          Kelola paket soal (Kedinasan / UTBK SMA), atur durasi pengerjaan, KKM, dan butir pertanyaan.
         </p>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
@@ -34,7 +34,7 @@
         <button type="button" id="btnbatal" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕ Tutup</button>
       </div>
 
-      <form id="formSoal" class="space-y-5 max-w-3xl">
+      <form id="formSoal" class="space-y-5 w-full">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="N">
 
@@ -63,35 +63,35 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
           <div>
-            <label for="waktu_menit" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Durasi Waktu</label>
+            <label for="waktu_menit" class="block text-sm font-bold text-slate-700 mb-1.5 whitespace-nowrap">Durasi Waktu</label>
             <div class="relative">
-              <input id="waktu_menit" type="number" min="1" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Contoh: 90" value="90">
+              <input id="waktu_menit" type="number" min="1" class="w-full px-4 py-2.5 sm:py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition h-[46px]" placeholder="Contoh: 90" value="90">
               <input type="hidden" name="waktu" id="waktu" value="5400">
             </div>
             <p class="text-xs text-slate-500 mt-1" id="waktu-detik-info">Menit (= 5.400 detik)</p>
           </div>
 
           <div>
-            <label for="kkm" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Passing Grade (KKM)</label>
-            <input id="kkm" type="number" min="0" max="100" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kkm" value="70" placeholder="Contoh: 70">
-            <span class="text-xs text-slate-500 mt-1 block">Batas nilai (0 - 100)</span>
+            <label for="kkm" class="block text-sm font-bold text-slate-700 mb-1.5 whitespace-nowrap">KKM</label>
+            <input id="kkm" type="number" min="0" max="100" class="w-full px-4 py-2.5 sm:py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition h-[46px]" name="kkm" value="70" placeholder="Contoh: 70">
+            <p class="text-xs text-slate-500 mt-1">Batas nilai (0 - 100)</p>
           </div>
 
           <div>
-            <label for="jenis" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Model Waktu Ujian</label>
-            <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="jenis">
+            <label for="jenis" class="block text-sm font-bold text-slate-700 mb-1.5 whitespace-nowrap">Waktu Ujian</label>
+            <select id="jenis" class="w-full px-4 py-2.5 sm:py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition h-[46px] bg-white" name="jenis">
               <option value="0" selected>Total Waktu Paket</option>
               <option value="1">Waktu Per Nomor</option>
             </select>
-            <span class="text-xs text-slate-500 mt-1 block">Hitungan timer</span>
+            <p class="text-xs text-slate-500 mt-1">Hitungan timer</p>
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Password Token</label>
-            <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token">
-            <span class="text-xs text-slate-500 mt-1 block">Opsional proteksi</span>
+            <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5 whitespace-nowrap">Password Token</label>
+            <input id="password" type="text" class="w-full px-4 py-2.5 sm:py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition h-[46px]" name="password" placeholder="Kosongkan jika tanpa token">
+            <p class="text-xs text-slate-500 mt-1">Opsional proteksi</p>
           </div>
         </div>
 
@@ -105,8 +105,6 @@
             Batal
           </button>
         </div>
-      </form>
-    </div>
       </form>
     </div>
 

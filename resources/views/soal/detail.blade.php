@@ -60,13 +60,13 @@
         </div>
 
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
-          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Passing Grade (KKM)</div>
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">KKM</div>
           <div class="text-lg font-bold text-emerald-600 mt-0.5">{{ $soal->kkm ?? 70 }} Poin</div>
           <div class="text-xs text-slate-400">Standar kelulusan</div>
         </div>
 
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
-          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Model Waktu</div>
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Waktu Ujian</div>
           <div class="text-lg font-bold text-slate-900 mt-0.5">{{ $soal->jenis_soal == 0 ? 'Total Paket' : 'Per Nomor' }}</div>
           <div class="text-xs text-slate-400">Mode pengerjaan CBT</div>
         </div>

@@ -134,7 +134,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                   <i class="fa fa-check-square-o text-slate-400 text-base w-5"></i>
-                  <span>Passing Grade / KKM: <b>{{ $paket_soal->kkm ?? 70 }}</b></span>
+                  <span>KKM: <b>{{ $paket_soal->kkm ?? 70 }}</b></span>
                 </div>
               </div>
             </div>
