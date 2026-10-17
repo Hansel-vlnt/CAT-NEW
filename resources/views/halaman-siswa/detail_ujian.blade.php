@@ -18,40 +18,40 @@
 @endsection
 @section('content')
 <div class="col-md-12" id="pre-exam-box">
-  <div class="max-w-3xl mx-auto space-y-6">
+  <div class="max-w-4xl mx-auto space-y-6">
 
     <!-- HERO BRIEFING CARD -->
-    <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
+    <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-9 shadow-xl">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="px-3.5 py-1.5 rounded-full bg-blue-600 text-white text-xs sm:text-sm font-bold uppercase tracking-wider">
           Persiapan Latihan
         </span>
-        <span class="px-3 py-1 rounded-full bg-white/10 text-slate-200 text-xs font-medium">
+        <span class="px-3.5 py-1.5 rounded-full bg-white/10 text-slate-200 text-xs sm:text-sm font-medium">
           {{ $soal->kategori_utama ?? 'Kedinasan / UTBK' }}
         </span>
       </div>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">{{ $soal->paket }}</h2>
-      <p class="text-slate-300 text-xs sm:text-sm mt-1">
+      <h2 class="text-2xl sm:text-4xl font-extrabold text-white mt-2 leading-tight">{{ $soal->paket }}</h2>
+      <p class="text-slate-200 text-sm sm:text-base mt-2.5 leading-relaxed">
         {{ $soal->deskripsi ?: 'Simulasi latihan soal dengan timer real-time dan evaluasi kunci jawaban.' }}
       </p>
 
       <!-- SPECS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/10">
-        <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-          <div class="text-xs text-slate-300 font-medium">Jumlah Butir</div>
-          <div class="text-2xl font-black text-amber-400 mt-0.5">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-7 pt-7 border-t border-white/15">
+        <div class="bg-white/10 rounded-2xl p-4 sm:p-5 border border-white/15">
+          <div class="text-xs sm:text-sm text-slate-300 font-medium">Jumlah Butir</div>
+          <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1">
             {{ $soal->detailSoal ? number_format($soal->detailSoal->count()) : '0' }} Soal
           </div>
         </div>
-        <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
-          <div class="text-xs text-slate-300 font-medium">Durasi Pengerjaan</div>
-          <div class="text-2xl font-black text-amber-400 mt-0.5">
+        <div class="bg-white/10 rounded-2xl p-4 sm:p-5 border border-white/15">
+          <div class="text-xs sm:text-sm text-slate-300 font-medium">Durasi Pengerjaan</div>
+          <div class="text-2xl sm:text-3xl font-black text-amber-400 mt-1">
             {{ round($soal->waktu / 60) }} Menit
           </div>
         </div>
-        <div class="bg-white/5 rounded-2xl p-4 border border-white/10 col-span-2 sm:col-span-1">
-          <div class="text-xs text-slate-300 font-medium">Target Passing Grade</div>
-          <div class="text-2xl font-black text-emerald-400 mt-0.5">
+        <div class="bg-white/10 rounded-2xl p-4 sm:p-5 border border-white/15 col-span-2 sm:col-span-1">
+          <div class="text-xs sm:text-sm text-slate-300 font-medium">Target Passing Grade</div>
+          <div class="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">
             KKM {{ $soal->kkm ?? 70 }}
           </div>
         </div>
@@ -59,26 +59,26 @@
     </div>
 
     <!-- PETUNJUK PENGERJAAN -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-      <h3 class="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
-        <i class="fa fa-shield text-blue-600"></i> Petunjuk &amp; Peraturan Pengerjaan
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-9 shadow-sm space-y-6">
+      <h3 class="text-xl sm:text-2xl font-black text-slate-900 pb-4 border-b border-slate-200 flex items-center gap-3">
+        <i class="fa fa-shield text-blue-600 text-2xl"></i> Petunjuk &amp; Peraturan Pengerjaan
       </h3>
 
-      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-2">
-        <div class="font-bold flex items-center gap-1.5 text-amber-800">
-          <i class="fa fa-exclamation-triangle"></i> Harap Dipatuhi Selama Latihan Berlangsung:
+      <div class="p-6 rounded-2xl bg-amber-50/90 border-2 border-amber-300 text-slate-900 leading-relaxed space-y-3.5 shadow-sm">
+        <div class="font-bold text-base sm:text-lg flex items-center gap-2.5 text-amber-950">
+          <i class="fa fa-exclamation-triangle text-amber-600 text-xl"></i> Harap Dipatuhi Selama Latihan Berlangsung:
         </div>
-        <ul class="list-disc pl-5 space-y-1 text-slate-700">
-          <li>Jangan me-refresh atau menutup browser saat pengerjaan agar progres jawaban tidak hilang.</li>
+        <ul class="list-disc pl-6 space-y-3 text-sm sm:text-base font-medium text-slate-800 leading-relaxed">
           <li>Waktu hitung mundur berjalan otomatis sejak Anda menekan tombol <b>Mulai Latihan Sekarang</b>.</li>
-          <li>Gunakan panel nomor soal di sebelah kanan untuk melompat antar nomor secara bebas.</li>
-          <li>Setelah waktu habis atau Anda menekan tombol Selesai, nilai dan <b>pembahasan trik cepat</b> akan otomatis ditampilkan.</li>
+          <li>Sesi latihan dan jawaban Anda tersimpan otomatis. Jika halaman tidak sengaja termuat ulang (refresh), ujian akan langsung melanjutkan tanpa keluar.</li>
+          <li>Gunakan panel nomor soal di sebelah kanan untuk berpindah antar nomor dengan mudah.</li>
+          <li>Setelah waktu habis atau Anda menekan tombol <b>Selesai</b>, nilai dan <b>pembahasan trik cepat</b> akan otomatis ditampilkan.</li>
         </ul>
       </div>
 
       <div class="pt-2">
-        <button class="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base shadow-lg transition tracking-wide flex items-center justify-center gap-2" id="start-exam" onclick="$('#specialstuff').fullScreen(true)">
-          <i class="fa fa-play-circle"></i> Mulai Latihan Sekarang &rarr;
+        <button class="w-full py-4.5 sm:py-5 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-black text-lg sm:text-xl shadow-lg hover:shadow-xl transition tracking-wide flex items-center justify-center gap-3" id="start-exam">
+          <i class="fa fa-play-circle text-2xl"></i> Mulai Latihan Sekarang &rarr;
         </button>
       </div>
     </div>
@@ -122,28 +122,28 @@
 						?>
 						<span class="detail_soal_id" id="detail_soal_id" style="display: none;">{{ $data->id }}</span>
 
-						<div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+						<div style="margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
 							@if($data->tipe_soal == 'multi')
-								<span class="label label-warning" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+								<span class="label label-warning" style="font-size: 13px; padding: 5px 10px; border-radius: 6px; font-weight: 600;">
 									<i class="fa fa-check-square-o"></i> Pilihan Ganda Kompleks (Bisa pilih lebih dari 1 jawaban)
 								</span>
 							@elseif($data->tipe_soal == 'tkp')
-								<span class="label label-info" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+								<span class="label label-info" style="font-size: 13px; padding: 5px 10px; border-radius: 6px; font-weight: 600;">
 									<i class="fa fa-sliders"></i> Soal TKP (Skala Skor 1 - 5)
 								</span>
 							@else
-								<span class="label label-default" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+								<span class="label label-default" style="font-size: 13px; padding: 5px 10px; border-radius: 6px; font-weight: 600;">
 									<i class="fa fa-dot-circle-o"></i> Pilihan Ganda (Pilih 1 jawaban terbaik)
 								</span>
 							@endif
-							<span style="font-size: 12px; font-weight: 600; color: #64748b;">Bobot: {{ $data->score }} Poin</span>
+							<span style="font-size: 13px; font-weight: 700; color: #475569;">Bobot: {{ $data->score }} Poin</span>
 						</div>
 
-						<div class="soal" style="font-size: 16px; line-height: 1.7; color: #0f172a; margin-bottom: 20px;">
+						<div class="soal" style="font-size: 17px; line-height: 1.7; color: #0f172a; margin-bottom: 22px; font-weight: 500;">
 							{!! $data->soal !!}
 						</div>
 
-						<div class="opsi-container" data-tipe="{{ $data->tipe_soal ?? 'single' }}" style="display: flex; flex-direction: column; gap: 10px;">
+						<div class="opsi-container" data-tipe="{{ $data->tipe_soal ?? 'single' }}" style="display: flex; flex-direction: column; gap: 12px;">
 							<?php
 								$opsi = [
 									'A' => $data->pila,
@@ -172,9 +172,9 @@
 										<table width="100%">
 											<tr>
 												<td width="36px" valign="top">
-													<span class="huruf-opsi">{{ $huruf }}.</span>
+													<span class="huruf-opsi" style="font-size: 16px; font-weight: 700; color: #1e293b;">{{ $huruf }}.</span>
 												</td>
-												<td valign="top" class="pilihan" style="padding-top: 1px;">
+												<td valign="top" class="pilihan" style="padding-top: 1px; font-size: 16px; line-height: 1.6; color: #1e293b;">
 													{!! $teks !!}
 												</td>
 											</tr>
@@ -268,28 +268,34 @@
 @endsection
 @push('css')
 <style>
+	#specialstuff {
+		background-color: #f8fafc;
+		min-height: 100vh;
+	}
+
 	.soal {
-		font-size: 16px;
-		line-height: 1.6;
+		font-size: 17px;
+		line-height: 1.7;
 		color: #0f172a;
-		margin-bottom: 20px;
+		margin-bottom: 22px;
 		font-weight: 500;
 	}
 
 	.jawab {
 		cursor: pointer;
 		margin-bottom: 12px;
-		padding: 14px 18px;
+		padding: 16px 20px;
 		border-radius: 14px;
-		border: 1.5px solid #e2e8f0;
+		border: 1.5px solid #cbd5e1;
 		background: #ffffff;
 		transition: all 0.15s ease-in-out;
-		font-size: 15px;
+		font-size: 16px;
+		line-height: 1.6;
 		user-select: none;
 	}
 
 	.jawab:hover {
-		border-color: #94a3b8;
+		border-color: #64748b;
 		background: #f8fafc;
 	}
 
@@ -305,10 +311,22 @@
 		color: #1e3a8a !important;
 	}
 
+	.huruf-opsi {
+		font-size: 16px;
+		font-weight: 700;
+		color: #1e293b;
+	}
+
+	.pilihan {
+		font-size: 16px;
+		line-height: 1.6;
+		color: #1e293b;
+	}
+
 	.timer {
 		border: 1px solid #334155 !important;
-		padding: 6px 16px !important;
-		font-size: 15pt !important;
+		padding: 8px 18px !important;
+		font-size: 16pt !important;
 		font-weight: 800 !important;
 		color: #f59e0b !important;
 		background: #0f172a !important;
@@ -328,9 +346,10 @@
 	.no_soal a {
 		border-radius: 10px !important;
 		font-weight: 700 !important;
-		min-width: 44px !important;
-		height: 38px !important;
-		line-height: 26px !important;
+		min-width: 48px !important;
+		height: 42px !important;
+		line-height: 30px !important;
+		font-size: 15px !important;
 		transition: all 0.15s ease-in-out;
 	}
 
@@ -363,43 +382,71 @@
 <script src="{{ url('js/jquery.fullscreen-min.js') }}"></script>
 <script src="{{ url('assets/dist/js/sweetalert2.all.min.js') }}"></script>
 <script>
-	var mulaiUjian	= false;
+	var mulaiUjian = false;
 	var submitJawaban = false;
+	var isUnloading = false;
+	var hasEnteredFullscreen = false;
 	var violationStrikes = 0;
+	var timerInterval = null;
 
-	function mulaiTimer(){
-		if(mulaiUjian == false){
-			mulaiUjian = true;
-			var waktuUjian	= "<?php echo $soal->waktu; ?>";
-			var	count		= waktuUjian;
+	var activeKey = 'cbt_exam_active_{{ $soal->id }}';
+	var endKey = 'cbt_exam_end_{{ $soal->id }}';
+	var currentNoKey = 'cbt_exam_current_no_{{ $soal->id }}';
 
-			var x = setInterval(function() {
-				count = count - 1;
-				if (count == -1) {
-					clearInterval(x);
-					kirimJawaban();
-				}
+	function clearExamStorage() {
+		localStorage.removeItem(activeKey);
+		localStorage.removeItem(endKey);
+		localStorage.removeItem(currentNoKey);
+	}
 
-				var seconds = Math.floor(count);
-				var minutes = Math.floor(seconds / 60);
-				var hours = Math.floor(minutes / 60);
-				seconds %= 60;
-				minutes %= 60;
-				hours %= 60;
-
-				var formattedTime = hours.toString().padStart(2, '0') + " Jam " + 
-                                minutes.toString().padStart(2, '0') + " Menit " +
-                                seconds.toString().padStart(2, '0') + " Detik";
-
-            	$("#timer").html(formattedTime);
-				checkPrevNext();
-			}, 1000);
+	function mulaiTimer(remainingDuration) {
+		mulaiUjian = true;
+		if (timerInterval) {
+			clearInterval(timerInterval);
 		}
+
+		var storedEndTime = parseInt(localStorage.getItem(endKey), 10);
+		if (!storedEndTime || isNaN(storedEndTime)) {
+			var duration = (remainingDuration !== undefined && remainingDuration !== null) ? remainingDuration : parseInt("{{ $soal->waktu }}", 10);
+			storedEndTime = Date.now() + (duration * 1000);
+			localStorage.setItem(endKey, storedEndTime.toString());
+		}
+
+		function updateTimer() {
+			var now = Date.now();
+			var remaining = Math.max(0, Math.floor((storedEndTime - now) / 1000));
+
+			if (remaining <= 0) {
+				clearInterval(timerInterval);
+				timerInterval = null;
+				$("#timer").html("00 Jam 00 Menit 00 Detik");
+				kirimJawaban();
+				return;
+			}
+
+			var seconds = remaining;
+			var minutes = Math.floor(seconds / 60);
+			var hours = Math.floor(minutes / 60);
+			seconds %= 60;
+			minutes %= 60;
+			hours %= 60;
+
+			var formattedTime = hours.toString().padStart(2, '0') + " Jam " + 
+								minutes.toString().padStart(2, '0') + " Menit " +
+								seconds.toString().padStart(2, '0') + " Detik";
+
+			$("#timer").html(formattedTime);
+			checkPrevNext();
+		}
+
+		updateTimer();
+		timerInterval = setInterval(updateTimer, 1000);
 	}
 
 	function kirimJawaban(){
 		var id_soal = "<?php echo $soal->id; ?>";
 		submitJawaban = true;
+		clearExamStorage();
 		$.ajax({
 			type: "POST",
 			url: "{{ url('siswa/ujian/kirim-jawaban') }}",
@@ -409,14 +456,17 @@
 			},
 			success: function(data) {
 				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
+			},
+			error: function() {
+				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
 			}
 		});
 	}
 
 	function checkPrevNext(){
-		var current		= parseInt($("#no_soal_detail").text());
-		var jumlah_soal = parseInt($("#jumlah_soal").text());
-		if(current-1 != 0){
+		var current = parseInt($("#no_soal_detail").text()) || 1;
+		var jumlah_soal = parseInt($("#jumlah_soal").text()) || 1;
+		if(current-1 > 0){
 			$("#prev").show();
 		} else {
 			$("#prev").hide();
@@ -431,6 +481,8 @@
 
 	function batalUjian(){
 		var id_soal = "<?php echo $soal->id; ?>";
+		submitJawaban = true;
+		clearExamStorage();
 		$.ajax({
 			type: "POST",
 			url: "{{ url('siswa/ujian/hapus-jawaban') }}",
@@ -438,15 +490,16 @@
 				id_soal: id_soal
 			},
 			success: function(data) {
-				if(data == 1){
-					window.location.reload();
-				}	
+				window.location.reload();
+			},
+			error: function() {
+				window.location.reload();
 			}
 		});
 	}
 
 	function handleViolation(reason) {
-		if (submitJawaban || !mulaiUjian) return;
+		if (isUnloading || submitJawaban || !mulaiUjian) return;
 		violationStrikes++;
 		if (violationStrikes === 1) {
 			if (typeof Swal !== 'undefined') {
@@ -457,7 +510,9 @@
 					confirmButtonColor: '#2563eb',
 					confirmButtonText: 'Kembali Latihan'
 				}).then(function() {
-					$("#specialstuff").fullScreen(true);
+					try {
+						$("#specialstuff").fullScreen(true);
+					} catch (err) {}
 				});
 			} else {
 				alert('Peringatan: Harap tetap berada di layar ujian!');
@@ -467,6 +522,16 @@
 			$("#specialstuff").hide();
 		}
 	}
+
+	window.addEventListener('beforeunload', function(e) {
+		if (mulaiUjian && !submitJawaban) {
+			isUnloading = true;
+			var msg = 'Ujian sedang berlangsung! Waktu pengerjaan akan tetap berjalan. Apakah Anda yakin ingin memuat ulang halaman?';
+			e.preventDefault();
+			e.returnValue = msg;
+			return msg;
+		}
+	});
 
 	$("#keluar").click(function(){
 		if (typeof Swal !== 'undefined') {
@@ -482,23 +547,29 @@
 			}).then(function(result) {
 				if (result.isConfirmed) {
 					batalUjian();
-					$("#specialstuff").fullScreen(false);
+					try {
+						$("#specialstuff").fullScreen(false);
+					} catch(e) {}
 				}
 			});
 		} else if (confirm('Apakah Anda yakin ingin membatalkan ujian? Semua jawaban sementara akan dihapus.')) {
 			batalUjian();
-			$("#specialstuff").fullScreen(false);
+			try {
+				$("#specialstuff").fullScreen(false);
+			} catch(e) {}
 		}
 	});
 
 	$(document).bind("fullscreenchange", function(e) {
-		if (!$(document).fullScreen() && mulaiUjian && !submitJawaban) {
+		if ($(document).fullScreen()) {
+			hasEnteredFullscreen = true;
+		} else if (hasEnteredFullscreen && mulaiUjian && !submitJawaban && !isUnloading) {
 			handleViolation('keluar dari mode fullscreen');
 		}
 	});
 
 	$(document).on('visibilitychange', function(){
-		if (document.hidden && mulaiUjian && !submitJawaban) {
+		if (document.hidden && mulaiUjian && !submitJawaban && !isUnloading) {
 			handleViolation('berpindah tab / aplikasi');
 		}
 	});
@@ -527,6 +598,49 @@
 	$(document).ready(function() {
 		refreshRaguState();
 		updateActiveNav(1);
+
+		// Periksa apakah ujian sedang aktif (misalnya setelah reload halaman)
+		var isExamActive = localStorage.getItem(activeKey) === '1';
+		var storedEndTime = parseInt(localStorage.getItem(endKey), 10);
+
+		if (isExamActive && storedEndTime) {
+			var now = Date.now();
+			var remaining = Math.floor((storedEndTime - now) / 1000);
+			if (remaining > 0) {
+				// Pulihkan tampilan ujian langsung tanpa keluar
+				$("#pre-exam-box").hide();
+				$("#specialstuff").show();
+				mulaiTimer(remaining);
+
+				var savedNo = parseInt(localStorage.getItem(currentNoKey), 10);
+				if (savedNo && savedNo > 1) {
+					var targetNav = $("*[data-no='" + savedNo + "']");
+					if (targetNav.length) {
+						targetNav.click();
+					}
+				}
+			} else {
+				// Waktu habis saat offline / reload
+				$("#pre-exam-box").hide();
+				$("#specialstuff").show();
+				kirimJawaban();
+			}
+		}
+
+		$("#start-exam").click(function() {
+			var waktuUjian = parseInt("<?php echo $soal->waktu; ?>", 10) || 3600;
+			localStorage.setItem(activeKey, '1');
+			localStorage.setItem(endKey, (Date.now() + (waktuUjian * 1000)).toString());
+			localStorage.setItem(currentNoKey, '1');
+
+			$("#pre-exam-box").hide();
+			$("#specialstuff").show();
+			try {
+				$("#specialstuff").fullScreen(true);
+				hasEnteredFullscreen = true;
+			} catch (e) {}
+			mulaiTimer(waktuUjian);
+		});
 
 		$("#btn-ragu").click(function() {
 			var curNo = parseInt($("#no_soal_detail").text()) || 1;
@@ -558,6 +672,7 @@
 		$('.no_soal').click(function() {
 			var $this = $(this);
 			var no = $this.attr('data-no');
+			localStorage.setItem(currentNoKey, no);
 			$('#wrap-soal').html('<center><i class="fa fa-spinner fa-spin" style="font-size: 30pt; color: #12b9cc; margin: 15px;" aria-hidden="true"></i></center>');
 			$('#no_soal_detail').html(no);
 			updateActiveNav(no);
@@ -587,12 +702,17 @@
 
 		$('#prev').click(function() {
 			var prev = parseInt($("#no_soal_detail").text()) - 1;
-			$("*[data-no='" + prev + "']").click();
+			if (prev > 0) {
+				$("*[data-no='" + prev + "']").click();
+			}
 		});
 
 		$('#next').click(function() {
 			var next = parseInt($("#no_soal_detail").text()) + 1;
-			$("*[data-no='" + next + "']").click();
+			var jumlah_soal = parseInt($("#jumlah_soal").text()) || 1;
+			if (next <= jumlah_soal) {
+				$("*[data-no='" + next + "']").click();
+			}
 		});
 
 		$('#kirim').click(function() {
@@ -608,23 +728,7 @@
 		});
 
 		$(document).on('click', '#kirim-jawaban', function() {
-			var id_soal = "<?php echo $soal->id; ?>";
-			$.ajax({
-				type: "POST",
-				url: "{{ url('siswa/ujian/kirim-jawaban') }}",
-				data: {
-					id_soal: id_soal
-				},
-				success: function(data) {
-					window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
-				}
-			});
-		});
-
-		$("#start-exam").click(function() {
-			$("#specialstuff").show();
-			mulaiTimer();
-			mulaiUjian = true;
+			kirimJawaban();
 		});
 
 		$(document).on('click', ".jawab", function() {

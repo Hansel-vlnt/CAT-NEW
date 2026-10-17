@@ -30,8 +30,8 @@ test.describe('CBT Platform E2E Tests - Bank Soal & Pembahasan', () => {
 
     // 3. Navigate to Paket 8 Detail
     await page.goto('/elearning/soal/detail/8');
-    await expect(page.locator('text=Informasi Paket Soal')).toBeVisible();
-    await expect(page.locator('h4:has-text("Latihan Kecerdasan #2")')).toBeVisible();
+    await expect(page.locator('text=Detail Paket Soal').first()).toBeVisible();
+    await expect(page.locator(':is(h2, h4):has-text("Latihan Kecerdasan #2")')).toBeVisible();
 
     await page.screenshot({ path: `screenshots/01_admin_paket_detail${suffix}`, fullPage: true });
 

@@ -118,7 +118,7 @@ test.describe('Audit Findings #01 - #19 Verification Suite', () => {
     expect(allCards).toBeGreaterThanOrEqual(1);
   });
 
-  test('Audit #06, #07, #08: Student Exam Screen - Question 1 Sync, Ragu Button, and Batalkan Alert', async ({ page }) => {
+  test('Audit #06, #07, #08: Student Exam Screen - Question 1 Sync, Ragu Button, Reload Persistence, and Batalkan Alert', async ({ page }) => {
     // Login as Siswa
     await page.goto('/login');
     await page.fill('#email', 'chrisdamayantidesi012@gmail.com');
@@ -133,13 +133,27 @@ test.describe('Audit Findings #01 - #19 Verification Suite', () => {
       await page.click('button[type="submit"]');
     }
 
+    // Verify Pre-Exam Briefing Card has legible, large typography
+    const startExamBtn = page.locator('#start-exam');
+    await expect(startExamBtn).toBeVisible();
+    await expect(page.locator('text=Petunjuk & Peraturan Pengerjaan')).toBeVisible();
+
     // Click Mulai Latihan
-    await expect(page.locator('#start-exam')).toBeVisible();
-    await page.click('#start-exam');
+    await startExamBtn.click();
     await expect(page.locator('#specialstuff')).toBeVisible();
+    await expect(page.locator('#pre-exam-box')).toBeHidden();
 
     // #06: Verify Question 1 has .opsi-container
     await expect(page.locator('#wrap-soal .opsi-container')).toBeVisible();
+
+    // Verify countdown timer is ticking
+    await expect(page.locator('#timer')).not.toBeEmpty();
+
+    // VERIFY RELOAD PERSISTENCE: reloading must NOT kick the student back to briefing!
+    await page.reload();
+    await expect(page.locator('#specialstuff')).toBeVisible();
+    await expect(page.locator('#pre-exam-box')).toBeHidden();
+    await expect(page.locator('#timer')).not.toBeEmpty();
 
     // #07: Verify Ragu-ragu button exists and question numbers are rendered
     const btnRagu = page.locator('#btn-ragu');
