@@ -36,8 +36,8 @@
       <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
         <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
           <div>
-            <h3 class="text-lg font-bold text-slate-900">Materi &amp; Panduan Belajar</h3>
-            <p class="text-xs text-slate-500 mt-0.5">Pilih salah satu judul materi untuk membaca modul lengkap.</p>
+            <h3 class="text-xl font-bold text-slate-900 tracking-tight">Materi &amp; Panduan Belajar</h3>
+            <p class="text-sm text-slate-500 mt-1">Pilih salah satu judul materi untuk membaca modul lengkap.</p>
           </div>
         </div>
 
@@ -53,48 +53,40 @@
         </div>
       </div>
 
-      <!-- RIGHT: SHORTCUTS & TIPS (1 SPAN) -->
-      <div class="space-y-6">
-        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
-          <h4 class="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center gap-2">
-            <i class="fa fa-compass text-blue-600"></i> Menu Cepat Siswa
+      <!-- RIGHT: SHORTCUTS (1 SPAN) -->
+      <div>
+        <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-sm space-y-5">
+          <h4 class="flex items-center gap-2.5 pb-4 border-b border-slate-100" style="font-size: 20px !important; font-weight: 800 !important; color: #0f172a !important; margin: 0;">
+            <i class="fa fa-compass text-indigo-600" style="font-size: 22px;"></i>
+            <span>Menu Cepat Siswa</span>
           </h4>
-          <div class="space-y-2.5">
-            <a href="{{ url('siswa/ujian') }}" class="p-3.5 rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition flex items-center justify-between group">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">
+          <div class="space-y-4">
+            <a href="{{ url('siswa/ujian') }}" class="rounded-2xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 hover:shadow-sm transition flex items-center justify-between group" style="padding: 16px 18px !important; text-decoration: none !important;">
+              <div class="flex items-center gap-4">
+                <div class="rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition" style="width: 52px; height: 52px; font-size: 22px;">
                   <i class="fa fa-pencil"></i>
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">Katalog Latihan Soal</div>
-                  <div class="text-[11px] text-slate-400">Kerjakan paket tryout</div>
+                  <div class="group-hover:text-indigo-600 transition tracking-tight" style="font-size: 17px !important; font-weight: 800 !important; color: #0f172a; line-height: 1.3;">Katalog Latihan Soal</div>
+                  <div style="font-size: 14px !important; font-weight: 500 !important; color: #64748b; margin-top: 3px;">Kerjakan paket tryout</div>
                 </div>
               </div>
-              <i class="fa fa-chevron-right text-xs text-slate-300 group-hover:text-blue-600 transition"></i>
+              <i class="fa fa-chevron-right text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition" style="font-size: 16px;"></i>
             </a>
 
-            <a href="{{ url('/pengaturan') }}" class="p-3.5 rounded-2xl border border-slate-100 hover:border-blue-200 hover:bg-blue-50/40 transition flex items-center justify-between group">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm">
+            <a href="{{ url('/pengaturan') }}" class="rounded-2xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 hover:shadow-sm transition flex items-center justify-between group" style="padding: 16px 18px !important; text-decoration: none !important;">
+              <div class="flex items-center gap-4">
+                <div class="rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition" style="width: 52px; height: 52px; font-size: 22px;">
                   <i class="fa fa-user"></i>
                 </div>
                 <div>
-                  <div class="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">Profil &amp; Akun</div>
-                  <div class="text-[11px] text-slate-400">Pengaturan data kamu</div>
+                  <div class="group-hover:text-emerald-600 transition tracking-tight" style="font-size: 17px !important; font-weight: 800 !important; color: #0f172a; line-height: 1.3;">Profil &amp; Akun</div>
+                  <div style="font-size: 14px !important; font-weight: 500 !important; color: #64748b; margin-top: 3px;">Pengaturan data kamu</div>
                 </div>
               </div>
-              <i class="fa fa-chevron-right text-xs text-slate-300 group-hover:text-blue-600 transition"></i>
+              <i class="fa fa-chevron-right text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition" style="font-size: 16px;"></i>
             </a>
           </div>
-        </div>
-
-        <div class="p-5 rounded-3xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 space-y-2">
-          <div class="font-bold flex items-center gap-1.5 text-amber-800">
-            <i class="fa fa-lightbulb-o"></i> Tips Belajar Abdi Praja
-          </div>
-          <p class="leading-relaxed text-amber-900/90">
-            Setelah menyelesaikan latihan, jangan lupa baca bagian <b>Trik Cepat</b> dan <b>Pembahasan Konsep</b> pada lembar pembahasan untuk meningkatkan kecepatan pengerjaan soal.
-          </p>
         </div>
       </div>
 
