@@ -55,6 +55,7 @@
         min-width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
+        min-height: 100vh !important;
         position: relative;
     }
     h1, h2, h3, h4, h5, h6 {
@@ -159,7 +160,7 @@
         margin-left: 230px !important;
         float: right !important;
         background-color: #f8fafc !important;
-        min-height: calc(100vh - 105px) !important;
+        min-height: calc(100vh - 57px) !important;
     }
     .sidebar-collapse .content-wrapper {
         width: calc(100% - 50px) !important;
@@ -172,6 +173,7 @@
             min-width: 100% !important;
             margin-left: 0 !important;
             float: none !important;
+            min-height: calc(100vh - 81px) !important;
         }
     }
     .main-footer {
@@ -518,6 +520,18 @@
   }).on("input", function() {
     this.value = this.value.replace(/[^0-9.]/g, '');
   });
+
+  // Ensure zero gap below footer on all pages
+  function fixFooterGap() {
+    var footer = document.querySelector('.main-footer');
+    var content = document.querySelector('.content-wrapper');
+    if (footer && content) {
+      var footerHeight = footer.offsetHeight || 57;
+      content.style.setProperty('min-height', 'calc(100vh - ' + footerHeight + 'px)', 'important');
+    }
+  }
+  $(document).ready(fixFooterGap);
+  $(window).on('resize orientationchange', fixFooterGap);
 </script>
 @stack('scripts')
 </body>
