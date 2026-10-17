@@ -109,48 +109,80 @@
 						@if($soals->count())
 						@foreach($soals as $key=>$data)
 						@if($key == 0)
+						<?php
+							$jawab_siswa = '';
+							$multi_jawabs = [];
+							if ($data->checkJawab) {
+								$jawab_siswa = $data->checkJawab->pilihan;
+								if ($data->tipe_soal == 'multi') {
+									$decoded = json_decode($data->checkJawab->jawaban_multi, true);
+									$multi_jawabs = is_array($decoded) ? $decoded : explode(',', $jawab_siswa);
+								}
+							}
+						?>
 						<span class="detail_soal_id" id="detail_soal_id" style="display: none;">{{ $data->id }}</span>
-						<div class="soal">{!! $data->soal !!}</div>
-						{!! $data->pila ? '<div class="jawab" soal-id="'.$data->id_soal.'" data-id="'.$data->id.'" data-jawab="A/'.$data->id.'/'.Auth::user()->id.'">
-							<table width="100%">
-								<tr>
-									<td width="15px" valign="top"><span>A.</span></td>
-									<td valign="top" class="pilihan">'.$data->pila.'</td>
-								</tr>
-							</table>
-						</div>' : '' !!}
-						{!! $data->pilb ? '<div class="jawab" soal-id="'.$data->id_soal.'" data-id="'.$data->id.'" data-jawab="B/'.$data->id.'/'.Auth::user()->id.'">
-							<table width="100%">
-								<tr>
-									<td width="15px" valign="top"><span>B.</span></td>
-									<td valign="top" class="pilihan">'.$data->pilb.'</td>
-								</tr>
-							</table>
-						</div>' : '' !!}
-						{!! $data->pilc ? '<div class="jawab" soal-id="'.$data->id_soal.'" data-id="'.$data->id.'" data-jawab="C/'.$data->id.'/'.Auth::user()->id.'">
-							<table width="100%">
-								<tr>
-									<td width="15px" valign="top"><span>C.</span></td>
-									<td valign="top" class="pilihan">'.$data->pilc.'</td>
-								</tr>
-							</table>
-						</div>' : '' !!}
-						{!! $data->pild ? '<div class="jawab" soal-id="'.$data->id_soal.'" data-id="'.$data->id.'" data-jawab="D/'.$data->id.'/'.Auth::user()->id.'">
-							<table width="100%">
-								<tr>
-									<td width="15px" valign="top"><span>D.</span></td>
-									<td valign="top" class="pilihan">'.$data->pild.'</td>
-								</tr>
-							</table>
-						</div>' : '' !!}
-						{!! $data->pile ? '<div class="jawab" soal-id="'.$data->id_soal.'" data-id="'.$data->id.'" data-jawab="E/'.$data->id.'/'.Auth::user()->id.'">
-							<table width="100%">
-								<tr>
-									<td width="15px" valign="top"><span>E.</span></td>
-									<td valign="top" class="pilihan">'.$data->pile.'</td>
-								</tr>
-							</table>
-						</div>' : '' !!}
+
+						<div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+							@if($data->tipe_soal == 'multi')
+								<span class="label label-warning" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+									<i class="fa fa-check-square-o"></i> Pilihan Ganda Kompleks (Bisa pilih lebih dari 1 jawaban)
+								</span>
+							@elseif($data->tipe_soal == 'tkp')
+								<span class="label label-info" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+									<i class="fa fa-sliders"></i> Soal TKP (Skala Skor 1 - 5)
+								</span>
+							@else
+								<span class="label label-default" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">
+									<i class="fa fa-dot-circle-o"></i> Pilihan Ganda (Pilih 1 jawaban terbaik)
+								</span>
+							@endif
+							<span style="font-size: 12px; font-weight: 600; color: #64748b;">Bobot: {{ $data->score }} Poin</span>
+						</div>
+
+						<div class="soal" style="font-size: 16px; line-height: 1.7; color: #0f172a; margin-bottom: 20px;">
+							{!! $data->soal !!}
+						</div>
+
+						<div class="opsi-container" data-tipe="{{ $data->tipe_soal ?? 'single' }}" style="display: flex; flex-direction: column; gap: 10px;">
+							<?php
+								$opsi = [
+									'A' => $data->pila,
+									'B' => $data->pilb,
+									'C' => $data->pilc,
+									'D' => $data->pild,
+									'E' => $data->pile,
+								];
+							?>
+
+							@foreach($opsi as $huruf => $teks)
+								@if(!empty($teks))
+									<?php
+										$is_selected = false;
+										if ($data->tipe_soal == 'multi') {
+											$is_selected = in_array($huruf, $multi_jawabs);
+										} else {
+											$is_selected = ($jawab_siswa == $huruf);
+										}
+									?>
+									<div class="jawab {{ $is_selected ? 'dijawab' : '' }}"
+										soal-id="{{ $data->id_soal }}"
+										data-id="{{ $data->id }}"
+										data-opsi="{{ $huruf }}"
+										data-jawab="{{ $huruf.'/'.$data->id.'/'.Auth::user()->id }}">
+										<table width="100%">
+											<tr>
+												<td width="36px" valign="top">
+													<span class="huruf-opsi">{{ $huruf }}.</span>
+												</td>
+												<td valign="top" class="pilihan" style="padding-top: 1px;">
+													{!! $teks !!}
+												</td>
+											</tr>
+										</table>
+									</div>
+								@endif
+							@endforeach
+						</div>
 						@endif
 						@endforeach
 						@endif
@@ -161,12 +193,13 @@
 						<div id="confirm" style="display: none; margin: 15px 0; border: solid thin #aaa; padding: 10px;"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-12 text-center">
-							<div class="col-md-6" style="padding: 3px;">
+						<div class="col-md-12" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+							<div style="display: flex; gap: 8px; flex-wrap: wrap;">
 								<button type="button" class="btn btn-primary" id="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i> Sebelumnya</button>
+								<button type="button" class="btn btn-warning" id="btn-ragu"><i class="fa fa-flag-o" aria-hidden="true"></i> Ragu-ragu</button>
 								<button type="button" class="btn btn-primary" id="next"><i class="fa fa-arrow-right" aria-hidden="true"></i> Selanjutnya</button>
 							</div>
-							<div class="col-md-6" style="padding: 3px;">
+							<div style="display: flex; gap: 8px; flex-wrap: wrap;">
 								<button type="button" class="btn btn-danger" id="keluar"><i class="fa fa-times-circle" aria-hidden="true"></i> Batalkan Ujian</button>
 								<button type="button" class="btn btn-success" id="kirim"><i class="fa fa-paper-plane" aria-hidden="true"></i> Selesai</button>
 							</div>
@@ -183,16 +216,26 @@
 					<div class="box box-success color-palette-box">
 						<div class="box-body">
 							@if($soals->count())
-							<!--<span><u><b>Pilihan Ganda</b></u></span>-->
+							<div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+								<span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Navigasi Nomor Soal</span>
+								<div class="flex items-center gap-2 text-xs">
+									<span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Terjawab</span>
+									<span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span> Ragu</span>
+									<span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-slate-200 inline-block border"></span> Kosong</span>
+								</div>
+							</div>
 							<nav aria-label="Page navigation">
-								<div style="min-height: calc(100vh - 40px);max-height: calc(100vh - 40px);overflow-y:scroll;">
+								<div style="min-height: calc(100vh - 80px);max-height: calc(100vh - 80px);overflow-y:scroll;">
 								@foreach($soals as $key_number=>$data_number)
+									<?php
+										$sudah_dijawab = ($data_number->checkJawab && !empty($data_number->checkJawab->pilihan));
+									?>
 									@if ($key_number % 6 == 0)
 										<div class="row">
 											<div class="col-sm-12 text-center">
 									@endif
 												<span class="no_soal" id="{{ 'nav'.$data_number->id }}" data-id="{{ $data_number->id }}" data-no="{{ $key_number+1 }}">
-													<a class="btn btn-danger" href="#" style="margin:2px;min-width:50px !important;max-width:50px !important;">{{ $key_number+1 }}</a>
+													<a class="btn {{ $sudah_dijawab ? 'btn-success' : 'btn-default' }} num-btn {{ $key_number == 0 ? 'active-num' : '' }}" href="#" style="margin:2px;min-width:46px !important;max-width:46px !important; font-weight:bold;">{{ $key_number+1 }}</a>
 												</span>
 									@if (($key_number+1) % 6 == 0)
 											</div>
@@ -203,24 +246,8 @@
 									</div>
 								@endif
 								</div>
-								<!--<ul class="pagination" style="margin-top: 5px !important;">
-									@foreach($soals as $key_number=>$data_number)
-									<li class="no_soal" id="{{ 'nav'.$data_number->id }}" data-id="{{ $data_number->id }}" data-no="{{ $key_number+1 }}"><a href="#" style="width: auto !important;">{{ $key_number+1 }}</a></li>
-									@endforeach
-								</ul>-->
 							</nav>
 							@endif
-
-							<!--@if($soal->detail_soal_essays->count())
-							<span><u><b>Essay</b></u></span>
-							<nav aria-label="Page navigation">
-								<ul class="pagination" style="margin-top: 5px !important;">
-									@foreach($soal->detail_soal_essays as $key_number => $data_number)
-									<li class="no_soal_essay" id="{{ 'nav'.$data_number->id }}" data-id="{{ $data_number->id }}" data-no="{{ $key_number+1 }}"><a href="#" style="width: auto !important;">{{ $key_number+1 }}</a></li>
-									@endforeach
-								</ul>
-							</nav>
-							@endif-->
 						</div>
 					</div>
 				</div>
@@ -306,14 +333,40 @@
 		line-height: 26px !important;
 		transition: all 0.15s ease-in-out;
 	}
+
+	.no_soal a.btn-default {
+		background: #f8fafc !important;
+		border: 1.5px solid #cbd5e1 !important;
+		color: #334155 !important;
+	}
+	.no_soal a.btn-default:hover {
+		background: #e2e8f0 !important;
+		border-color: #94a3b8 !important;
+	}
+	.no_soal a.btn-success {
+		background: #10b981 !important;
+		border: 1.5px solid #059669 !important;
+		color: #ffffff !important;
+	}
+	.no_soal a.btn-warning {
+		background: #f59e0b !important;
+		border: 1.5px solid #d97706 !important;
+		color: #ffffff !important;
+	}
+	.no_soal a.active-num {
+		box-shadow: 0 0 0 3px #2563eb !important;
+		border-color: #2563eb !important;
+	}
 </style>
 @endpush
 @push('scripts')
 <script src="{{ url('js/jquery.fullscreen-min.js') }}"></script>
-<!-- <script src="{{ url('assets/dist/js/sweetalert2.all.min.js') }}"></script> -->
+<script src="{{ url('assets/dist/js/sweetalert2.all.min.js') }}"></script>
 <script>
 	var mulaiUjian	= false;
 	var submitJawaban = false;
+	var violationStrikes = 0;
+
 	function mulaiTimer(){
 		if(mulaiUjian == false){
 			mulaiUjian = true;
@@ -334,7 +387,6 @@
 				minutes %= 60;
 				hours %= 60;
 
-				//$("#timer").html(hours + " Jam " + minutes + " Menit " + seconds + " Detik");
 				var formattedTime = hours.toString().padStart(2, '0') + " Jam " + 
                                 minutes.toString().padStart(2, '0') + " Menit " +
                                 seconds.toString().padStart(2, '0') + " Detik";
@@ -358,7 +410,7 @@
 			success: function(data) {
 				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
 			}
-		})
+		});
 	}
 
 	function checkPrevNext(){
@@ -390,115 +442,164 @@
 					window.location.reload();
 				}	
 			}
-		})
+		});
 	}
 
+	function handleViolation(reason) {
+		if (submitJawaban || !mulaiUjian) return;
+		violationStrikes++;
+		if (violationStrikes === 1) {
+			if (typeof Swal !== 'undefined') {
+				Swal.fire({
+					title: 'Peringatan Integritas!',
+					text: 'Terdeteksi ' + reason + '. Harap tetap berada di tampilan ujian. Pelanggaran berikutnya akan otomatis mengirim lembar ujian.',
+					icon: 'warning',
+					confirmButtonColor: '#2563eb',
+					confirmButtonText: 'Kembali Latihan'
+				}).then(function() {
+					$("#specialstuff").fullScreen(true);
+				});
+			} else {
+				alert('Peringatan: Harap tetap berada di layar ujian!');
+			}
+		} else {
+			kirimJawaban();
+			$("#specialstuff").hide();
+		}
+	}
 
 	$("#keluar").click(function(){
-		batalUjian();
-		$("#specialstuff").fullScreen(false);
-		
+		if (typeof Swal !== 'undefined') {
+			Swal.fire({
+				title: 'Batalkan Latihan Soal?',
+				text: 'Seluruh progres dan jawaban yang belum dikirim akan dibatalkan. Apakah Anda yakin?',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#ef4444',
+				cancelButtonColor: '#64748b',
+				confirmButtonText: 'Ya, Batalkan Latihan',
+				cancelButtonText: 'Lanjutkan Latihan'
+			}).then(function(result) {
+				if (result.isConfirmed) {
+					batalUjian();
+					$("#specialstuff").fullScreen(false);
+				}
+			});
+		} else if (confirm('Apakah Anda yakin ingin membatalkan ujian? Semua jawaban sementara akan dihapus.')) {
+			batalUjian();
+			$("#specialstuff").fullScreen(false);
+		}
 	});
 
 	$(document).bind("fullscreenchange", function(e) {
-		if ($(document).fullScreen()) {
-		} else {
-			if(submitJawaban == false){
-				kirimJawaban();
-			}
-			$("#specialstuff").hide();
+		if (!$(document).fullScreen() && mulaiUjian && !submitJawaban) {
+			handleViolation('keluar dari mode fullscreen');
 		}
 	});
 
 	$(document).on('visibilitychange', function(){
-		if(document.hidden) {
-			if(submitJawaban == false && mulaiUjian == true){
-				kirimJawaban();
-			}
+		if (document.hidden && mulaiUjian && !submitJawaban) {
+			handleViolation('berpindah tab / aplikasi');
 		}
 	});
 
-	//var countdownTimer = setInterval('timer()', 1000);
-	$(document).ready(function() {
-
-		if (typeof(Storage) !== "undefined") {
-			// console.log('browser support localstorage');
-		} else {
-			// swal(
-			// 	'Update Browser!',
-			// 	'Browser tidak support untuk proses ujian ini!',
-			// 	'warning'
-			// )
-		}
-
-		$(document).on('click', '.no_soal_essay', function() {
-			const id_soal_esay = $(this).data('id');
-			$.ajax({
-				url: "{{ url('siswa/ujian/get-detail-essay') }}",
-				type: "GET",
-				data: {
-					id_soal_esay: id_soal_esay
-				},
-				success: function(data) {
-					$("#wrap-soal").html(data);
-				}
-			});
+	function refreshRaguState() {
+		$('.no_soal').each(function() {
+			var id = $(this).attr('data-id');
+			if (localStorage.getItem('ragu_{{$soal->id}}_' + id) === '1') {
+				$(this).find('a').removeClass('btn-default btn-success').addClass('btn-warning');
+			}
 		});
+	}
 
-		$(document).on('click', '#simpan-essay', function() {
-			const jawab_essay = $("#jawab_essay").val();
-			const id_soal_esay = $(this).data('id');
-			$.ajax({
-				type: "GET",
-				url: "{{ url('siswa/ujian/simpan-jawaban-essay') }}",
-				data: {
-					jawab_essay: jawab_essay,
-					id_soal_esay: id_soal_esay
-				},
-				success: function(data) {
-					console.log(data);
-					if (data == 1) {
-						$("#notif-essay").html('Jawaban berhasil disimpan.').show();
-					}
+	function updateActiveNav(num) {
+		$('.no_soal a').removeClass('active-num');
+		var navSpan = $("*[data-no='" + num + "']");
+		navSpan.find('a').addClass('active-num');
+		var curId = navSpan.attr('data-id');
+		if (curId && localStorage.getItem('ragu_{{$soal->id}}_' + curId) === '1') {
+			$("#btn-ragu").html('<i class="fa fa-flag"></i> Hapus Ragu');
+		} else {
+			$("#btn-ragu").html('<i class="fa fa-flag-o"></i> Ragu-ragu');
+		}
+	}
+
+	$(document).ready(function() {
+		refreshRaguState();
+		updateActiveNav(1);
+
+		$("#btn-ragu").click(function() {
+			var curNo = parseInt($("#no_soal_detail").text()) || 1;
+			var navSpan = $("*[data-no='" + curNo + "']");
+			var curId = navSpan.attr('data-id');
+			if (!curId) return;
+
+			var key = 'ragu_{{$soal->id}}_' + curId;
+			var isRagu = localStorage.getItem(key) === '1';
+			var navBtn = navSpan.find('a');
+			var isAnswered = $('.jawab.dijawab').length > 0;
+
+			if (isRagu) {
+				localStorage.removeItem(key);
+				navBtn.removeClass('btn-warning');
+				if (isAnswered) {
+					navBtn.addClass('btn-success');
+				} else {
+					navBtn.addClass('btn-default');
 				}
-			})
+				$(this).html('<i class="fa fa-flag-o"></i> Ragu-ragu');
+			} else {
+				localStorage.setItem(key, '1');
+				navBtn.removeClass('btn-default btn-success').addClass('btn-warning');
+				$(this).html('<i class="fa fa-flag"></i> Hapus Ragu');
+			}
 		});
 
 		$('.no_soal').click(function() {
 			var $this = $(this);
+			var no = $this.attr('data-no');
 			$('#wrap-soal').html('<center><i class="fa fa-spinner fa-spin" style="font-size: 30pt; color: #12b9cc; margin: 15px;" aria-hidden="true"></i></center>');
-			$('#no_soal_detail').html($this.attr('data-no'));
+			$('#no_soal_detail').html(no);
+			updateActiveNav(no);
 			var id_soal = $this.attr('data-id');
 			var id_soal2 = "<?php echo $soal->id; ?>";
 			$.ajax({
 				type: "POST",
 				url: "{{ url('siswa/ujian/get-soal') }}",
 				data: {
-					id:id_soal,
+					id: id_soal,
 					id_soal: id_soal2
 				},
 				success: function(data) {
 					$('#wrap-soal').html(data);
+					if (typeof renderMathInElement === 'function') {
+						renderMathInElement(document.getElementById('wrap-soal'), {
+							delimiters: [
+								{left: '$$', right: '$$', display: true},
+								{left: '$', right: '$', display: false}
+							],
+							throwOnError: false
+						});
+					}
 				}
-			})
+			});
 		});
 
 		$('#prev').click(function() {
-			var prev = parseInt($("#no_soal_detail").text())-1;
-			$("*[data-no='"+prev+"']").click();
+			var prev = parseInt($("#no_soal_detail").text()) - 1;
+			$("*[data-no='" + prev + "']").click();
 		});
 
 		$('#next').click(function() {
-			var next = parseInt($("#no_soal_detail").text())+1;
-			$("*[data-no='"+next+"']").click();
+			var next = parseInt($("#no_soal_detail").text()) + 1;
+			$("*[data-no='" + next + "']").click();
 		});
 
-		// ubah status jawab soal
 		$('#kirim').click(function() {
 			$('#confirm').html(`
-				<p>Setelah mengirimkan jawaban, Anda tidak bisa kembali memeriksa jawaban. Apakah Anda yakin?</p>
-  			<button type="button" class="btn btn-danger" id="batal"><i class="fa fa-ban" aria-hidden="true"></i> Tidak! Saya Mau Cek Lagi</button>
-  			<button type="button" class="btn btn-success" id="kirim-jawaban" data-id="{{ $soal->id }}"><i class="fa fa-check-circle" aria-hidden="true"></i> Ya! Kirimkan Jawaban</button>
+				<p class="font-bold text-slate-800 mb-2">Setelah mengirimkan jawaban, latihan selesai dan nilai langsung keluar. Apakah Anda yakin?</p>
+  			<button type="button" class="btn btn-default" id="batal"><i class="fa fa-arrow-left"></i> Cek Kembali</button>
+  			<button type="button" class="btn btn-success" id="kirim-jawaban" data-id="{{ $soal->id }}"><i class="fa fa-check-circle"></i> Ya, Kumpulkan Jawaban</button>
 			`).show();
 		});
 
@@ -517,11 +618,8 @@
 				success: function(data) {
 					window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
 				}
-			})
+			});
 		});
-
-		var jawab = [];
-		var detail_soal_id = [];
 
 		$("#start-exam").click(function() {
 			$("#specialstuff").show();
@@ -539,15 +637,21 @@
 			if (tipe === 'multi') {
 				$this.toggleClass('dijawab');
 				var anySelected = container.find('.jawab.dijawab').length > 0;
-				if (anySelected) {
-					$('#nav' + id_soal).find('a').removeClass("btn-danger").addClass("btn-success");
-				} else {
-					$('#nav' + id_soal).find('a').removeClass("btn-success").addClass("btn-danger");
+				var isRagu = localStorage.getItem('ragu_{{$soal->id}}_' + id_soal) === '1';
+				if (!isRagu) {
+					if (anySelected) {
+						$('#nav' + id_soal).find('a').removeClass("btn-default btn-danger").addClass("btn-success");
+					} else {
+						$('#nav' + id_soal).find('a').removeClass("btn-success btn-danger").addClass("btn-default");
+					}
 				}
 			} else {
 				$(".jawab").removeClass('dijawab');
 				$this.addClass('dijawab');
-				$('#nav' + id_soal).find('a').removeClass("btn-danger").addClass("btn-success");
+				var isRagu = localStorage.getItem('ragu_{{$soal->id}}_' + id_soal) === '1';
+				if (!isRagu) {
+					$('#nav' + id_soal).find('a').removeClass("btn-default btn-danger").addClass("btn-success");
+				}
 			}
 
 			$.ajax({

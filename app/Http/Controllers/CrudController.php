@@ -274,24 +274,21 @@ class CrudController extends Controller
   {
     if ($request->nama == "") {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Nama tidak boleh kosong.";
-    } elseif ($request->id_kelas == "") {
-      return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Kelas tidak boleh kosong.";
-    } elseif ($request->no_induk == "") {
-      return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> NIS tidak boleh kosong.";
-    } elseif ($request->jk == "") {
-      return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Jenis kelamin tidak boleh kosong.";
     } elseif ($request->email == "") {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Email tidak boleh kosong.";
     } elseif (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Email tidak valid.";
     }
 
+    $id_kelas = !empty($request->id_kelas) ? $request->id_kelas : (\App\Models\Kelas::first() ? \App\Models\Kelas::first()->id : 1);
+    $no_induk = !empty($request->no_induk) ? $request->no_induk : ('AP' . date('ymd') . rand(100, 999));
+
     $query = new User;
-    $query->id_kelas = $request->id_kelas;
+    $query->id_kelas = $id_kelas;
     $query->nama = $request->nama;
-    $query->no_induk = $request->no_induk;
-    $query->nisn = $request->nisn;
-    $query->jk = $request->jk;
+    $query->no_induk = $no_induk;
+    $query->nisn = $request->nisn ?: '-';
+    $query->jk = $request->jk ?: 'L';
     $query->status = 'S';
     $query->status_sekolah = 'Y';
     $query->email = $request->email;

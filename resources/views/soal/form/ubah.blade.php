@@ -120,6 +120,25 @@
             </div>
           </div>
 
+          <?php
+            $saved_bobot = !empty($soal->bobot_opsi) ? (is_array(json_decode($soal->bobot_opsi, true)) ? json_decode($soal->bobot_opsi, true) : []) : [];
+            $default_bobots = ['A' => 5, 'B' => 4, 'C' => 3, 'D' => 2, 'E' => 1];
+          ?>
+          <div class="form-group" id="wrap-kunci-tkp" style="{{ $soal->tipe_soal == 'tkp' ? '' : 'display:none;' }}">
+            <label class="col-sm-2 control-label">Bobot Opsi TKP (1 - 5 Poin)</label>
+            <div class="col-sm-10">
+              <div class="row" style="margin-left: -5px; margin-right: -5px;">
+                @foreach(['A','B','C','D','E'] as $huruf)
+                  <div class="col-xs-6 col-sm-2" style="padding: 0 5px; margin-bottom: 8px;">
+                    <label style="font-size: 12px; margin-bottom: 2px;">Opsi <b>{{ $huruf }}</b></label>
+                    <input type="number" min="0" max="10" name="bobot_opsi[{{ $huruf }}]" value="{{ isset($saved_bobot[$huruf]) ? $saved_bobot[$huruf] : (isset($default_bobots[$huruf]) ? $default_bobots[$huruf] : 1) }}" class="form-control input-sm numOnly" style="text-align: center; font-weight: bold;">
+                  </div>
+                @endforeach
+              </div>
+              <small class="text-muted">Tentukan nilai poin untuk setiap opsi jawaban (1-5 poin).</small>
+            </div>
+          </div>
+
           <!-- Bobot Score & Status -->
           <div class="form-group" style="margin-top: 15px">
             <label class="col-sm-2 control-label">Bobot Score</label>
@@ -150,7 +169,7 @@
               <span class="text-success"><i class="fa fa-bolt"></i> Trik Cepat / Solusi Praktis</span>
             </label>
             <div class="col-sm-10">
-              <textarea class="form-control textarea" name="pembahasan_cepat" placeholder="Tuliskan trik cepat 30 detik, kata kunci eliminasi opsi, atau rumus ringkas...">{{ $soal->pembahasan_cepat }}</textarea>
+              <textarea class="form-control textarea-main" name="pembahasan_cepat" placeholder="Tuliskan trik cepat 30 detik, kata kunci eliminasi opsi, atau rumus ringkas...">{{ $soal->pembahasan_cepat }}</textarea>
               <small class="text-muted">Trik cepat membantu siswa menyelesaikan soal secara efisien saat latihan berbatas waktu.</small>
             </div>
           </div>
@@ -161,7 +180,7 @@
               <span class="text-primary"><i class="fa fa-book"></i> Pembahasan Konseptual</span>
             </label>
             <div class="col-sm-10">
-              <textarea class="form-control textarea" name="pembahasan_konsep" placeholder="Tuliskan uraian konsep mendalam, asal mula rumus, atau teori dasar yang mendasari soal...">{{ $soal->pembahasan_konsep }}</textarea>
+              <textarea class="form-control textarea-main" name="pembahasan_konsep" placeholder="Tuliskan uraian konsep mendalam, asal mula rumus, atau teori dasar yang mendasari soal...">{{ $soal->pembahasan_konsep }}</textarea>
               <small class="text-muted">Langkah runtut dan dasar teori komprehensif untuk penguasaan materi jangka panjang.</small>
             </div>
           </div>
@@ -171,9 +190,9 @@
               <div id="notif-soal" style="display: none; margin-bottom: 15px;"></div>
               <img src="{{ url('/assets/images/facebook.gif') }}" style="display: none;" id="loading-soal">
               <div id="wrap-btn">
-                <button type="button" class="btn btn-default" onclick="self.history.back()">
-                  <i class="fa fa-arrow-left"></i> Kembali
-                </button>
+                <a href="{{ url('elearning/soal/detail/'.$soal->id_soal) }}" class="btn btn-default">
+                  <i class="fa fa-arrow-left"></i> Kembali ke Paket
+                </a>
                 <button type="button" class="btn btn-success" id="simpan-soal" style="font-weight: 600; padding: 6px 20px;">
                   <i class="fa fa-check"></i> Simpan Perubahan
                 </button>
@@ -201,16 +220,43 @@
 <script>
 function toggleTipeSoal(tipe) {
   if (tipe === 'multi') {
-    $('#wrap-kunci-single').hide();
-    $('#wrap-kunci-multi').show();
+    $('#wrap-kunci-single').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-tkp').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-multi').show().find('input').prop('disabled', false);
+  } else if (tipe === 'tkp') {
+    $('#wrap-kunci-single').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-multi').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-tkp').show().find('input').prop('disabled', false);
   } else {
-    $('#wrap-kunci-single').show();
-    $('#wrap-kunci-multi').hide();
+    $('#wrap-kunci-multi').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-tkp').hide().find('input').prop('disabled', true);
+    $('#wrap-kunci-single').show().find('input').prop('disabled', false);
   }
 }
 
+function sendFile(file, editor) {
+  var data = new FormData();
+  data.append("image", file);
+  data.append("_token", "{{ csrf_token() }}");
+  $.ajax({
+    data: data,
+    type: "POST",
+    url: "{{ url('/crud/upload-gambar-soal') }}",
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function(url) {
+      if (url) {
+        $(editor).summernote('insertImage', url);
+      }
+    }
+  });
+}
+
 $(document).ready(function (){
-  $('.textarea').summernote({
+  toggleTipeSoal('{{ $soal->tipe_soal ?: "single" }}');
+
+  $('.textarea, .textarea-main').summernote({
     toolbar: [
       ['style', ['style']],
       ['font', ['bold', 'italic', 'underline', 'clear']],
@@ -222,7 +268,12 @@ $(document).ready(function (){
       ['view', ['fullscreen', 'codeview']]
     ],
     height: 120,
-    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82', '150']
+    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48' , '64', '82', '150'],
+    callbacks: {
+      onImageUpload: function(files) {
+        sendFile(files[0], this);
+      }
+    }
   });
 
   $("#simpan-soal").click(function() {
@@ -239,7 +290,7 @@ $(document).ready(function (){
         if (data == 'ok') {
           $("#notif-soal").removeClass('alert alert-danger').addClass('alert alert-info').html("Soal dan pembahasan berhasil diperbarui.").show();
           setTimeout(function(){
-            window.location.href = "{{ url('elearning/soal/detail/data-soal/'.$soal->id) }}";
+            window.location.href = "{{ url('elearning/soal/detail/'.$soal->id_soal) }}";
           }, 800);
         } else {
           $("#notif-soal").removeClass('alert alert-info').addClass('alert alert-danger').html(data).show();

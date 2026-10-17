@@ -21,6 +21,7 @@ Route::group(['prefix' => 'crud'], function () {
 	Route::post('terbit-soal', 'CrudController@terbitSoal');
 	Route::post('simpan-detail-soal', 'SoalController@simpanDetailSoal');
 	Route::post('simpan-detail-soal-via-excel', 'SoalController@simpanDetailSoalExcel');
+	Route::post('upload-gambar-soal', 'SoalController@uploadGambarSoal');
 	Route::post('simpan-gambar-materi', 'CrudController@simpanGambarMateri');
 	Route::post('hapus-gambar-materi', 'CrudController@hapusGambarMateri');
 	Route::post('simpan-gambar-user', 'CrudController@simpanGambarUser');

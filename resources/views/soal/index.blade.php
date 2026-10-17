@@ -10,23 +10,18 @@
 <div class="col-md-12">
   <div class="max-w-7xl mx-auto space-y-6">
 
-    <!-- HERO HEADER -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
-            Manajemen Soal
-          </span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Katalog Paket Latihan &amp; Tryout</h2>
-          <p class="text-slate-300 text-xs sm:text-sm mt-1">
-            Buat paket soal baru (Kedinasan / UTBK SMA), atur durasi pengerjaan, dan kelola butir pertanyaan.
-          </p>
-        </div>
-        <div class="flex items-center gap-2 flex-wrap">
-          <button type="button" id="btn-soal" class="px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2">
-            <i class="fa fa-plus-circle"></i> Buat Paket Soal Baru
-          </button>
-        </div>
+    <!-- COMPACT ACTION HEADER -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">Katalog Paket Latihan &amp; Tryout</h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Kelola paket soal (Kedinasan / UTBK SMA), atur durasi pengerjaan, KKM passing grade, dan butir pertanyaan.
+        </p>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button type="button" id="btn-soal" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition shadow-sm flex items-center gap-2 cursor-pointer">
+          <i class="fa fa-plus-circle"></i> <span>Buat Paket Soal Baru</span>
+        </button>
       </div>
     </div>
 
@@ -37,7 +32,7 @@
           <h3 class="text-lg font-bold text-slate-900">Formulir Paket Latihan Baru</h3>
           <p class="text-xs text-slate-500 mt-0.5">Lengkapi identitas paket latihan soal sebelum menambahkan butir soal.</p>
         </div>
-        <button type="button" id="btnbatal" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕ Tutup</button>
+        <button type="button" id="btnbatal" class="text-slate-400 hover:text-slate-600 text-sm font-bold cursor-pointer">✕ Tutup</button>
       </div>
 
       <form id="formSoal" class="space-y-5 max-w-3xl">
@@ -46,18 +41,18 @@
 
         <div>
           <label for="paket" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Paket Soal</label>
-          <input id="paket" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="paket" placeholder="Contoh: Tryout SKD Kedinasan Paket 01">
+          <input id="paket" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="paket" placeholder="Contoh: Tryout SKD Kedinasan Paket 01">
         </div>
 
         <div>
           <label for="deskripsi" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Deskripsi Singkat</label>
-          <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" placeholder="Tuliskan materi yang diujikan dalam paket ini"></textarea>
+          <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Tuliskan materi yang diujikan dalam paket ini"></textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="kategori_utama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Utama</label>
-            <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="kategori_utama">
+            <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kategori_utama">
               <option value="Kedinasan & Polri (SKD BKN/Akademik)" selected>Kedinasan &amp; Polri (SKD BKN/Akademik)</option>
               <option value="SMA & UTBK (SNBT)">SMA &amp; UTBK (SNBT)</option>
             </select>
@@ -65,19 +60,28 @@
 
           <div>
             <label for="sub_kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Sub Kategori</label>
-            <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif">
+            <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
-            <label for="waktu" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Durasi Waktu (Detik)</label>
-            <input id="waktu" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition numOnly" name="waktu" placeholder="Contoh: 6000 (100 Menit)">
+            <label for="waktu_menit" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Durasi Waktu (Menit)</label>
+            <div class="relative">
+              <input id="waktu_menit" type="number" min="1" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Contoh: 90" value="90">
+              <input type="hidden" name="waktu" id="waktu" value="5400">
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1" id="waktu-detik-info">= 5.400 detik</p>
+          </div>
+
+          <div>
+            <label for="kkm" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Passing Grade / KKM</label>
+            <input id="kkm" type="number" min="0" max="100" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kkm" value="70" placeholder="Contoh: 70">
           </div>
 
           <div>
             <label for="jenis" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Model Waktu</label>
-            <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="jenis">
+            <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="jenis">
               <option value="0" selected>Normal (Total Paket)</option>
               <option value="1">Cerdas Cermat (Per Nomor)</option>
             </select>
@@ -85,20 +89,22 @@
 
           <div>
             <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password Token (Opsional)</label>
-            <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token">
+            <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token">
           </div>
         </div>
 
         <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
-          <button type="button" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="btnSimpan">
+          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer" id="btnSimpan">
             Simpan &amp; Buat Paket
           </button>
-          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition" onclick="$('#wrap-soal').slideUp();">
+          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer" onclick="$('#wrap-soal').slideUp();">
             Batal
           </button>
         </div>
+      </form>
+    </div>
       </form>
     </div>
 
@@ -205,8 +211,11 @@ $(document).ready(function (){
     $("#wrap-soal").slideToggle();
   });
 
-  $("#btnbatal").click(function() {
-    $("#wrap-soal").slideUp();
+  $("#waktu_menit").on("input", function() {
+    var menit = parseInt($(this).val()) || 0;
+    var detik = menit * 60;
+    $("#waktu").val(detik);
+    $("#waktu-detik-info").text("= " + detik.toLocaleString('id-ID') + " detik");
   });
 
   $("#btnSimpan").click(function(){

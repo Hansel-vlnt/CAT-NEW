@@ -11,15 +11,18 @@
 <div class="col-md-12">
   <div class="max-w-7xl mx-auto space-y-6">
 
-    <!-- HERO HEADER -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <!-- COMPACT ACTION HEADER (#04) -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
-            Master Data
-          </span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">Daftar Akun Siswa</h2>
-          <p class="text-slate-300 text-xs sm:text-sm mt-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded-md bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider">
+              Master Data
+            </span>
+            <span class="text-xs text-slate-400 font-medium">&bull; Administrasi Siswa</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Daftar Akun Siswa</h2>
+          <p class="text-slate-500 text-xs sm:text-sm mt-0.5">
             Kelola data akun siswa, import data via Excel, atau buat akun baru untuk simulasi latihan soal.
           </p>
         </div>
@@ -31,10 +34,10 @@
           <button type="button" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2" id="btn-upload">
             <i class="fa fa-file-excel-o"></i> Import Excel
           </button>
-          <a href="{{ url('/download-file-format/siswa') }}" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs border border-white/20 transition flex items-center gap-1.5">
-            <i class="fa fa-download"></i> Template Excel
+          <a href="{{ url('/download-file-format/siswa') }}" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-200 transition flex items-center gap-1.5">
+            <i class="fa fa-download"></i> Template
           </a>
-          <a href="{{ url('master/siswa/delete') }}" class="px-3.5 py-2.5 rounded-xl bg-red-600/80 hover:bg-red-700 text-white font-semibold text-xs transition flex items-center gap-1.5">
+          <a href="{{ url('master/siswa/delete') }}" class="px-3.5 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs border border-red-200 transition flex items-center gap-1.5" onclick="return confirm('Yakin ingin menghapus seluruh data siswa?')">
             <i class="fa fa-trash"></i> Hapus Semua
           </a>
         </div>
@@ -57,6 +60,25 @@
         <input type="hidden" name="id" value="N">
         <input type="hidden" name="status_sekolah" value="Y">
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="no_induk" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nomor Induk / NIS</label>
+            <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="no_induk" name="no_induk" placeholder="Contoh: AP2026001 (Opsional)">
+          </div>
+          <div>
+            <label for="id_kelas" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kelas / Rombel</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="id_kelas" name="id_kelas">
+              @if(isset($kelas) && count($kelas) > 0)
+                @foreach($kelas as $k)
+                  <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                @endforeach
+              @else
+                <option value="1">Kelas Umum / Default</option>
+              @endif
+            </select>
+          </div>
+        </div>
+
         <div>
           <label for="nama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Lengkap Siswa</label>
           <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="nama" name="nama" placeholder="Contoh: Budi Santoso">
@@ -65,7 +87,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="email" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Alamat Email</label>
-            <input type="email" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="email" name="email" placeholder="budi@example.com">
+            <input type="email" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition" id="email" name="email" placeholder="nama.siswa@abdipraja.id">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Jenis Kelamin</label>

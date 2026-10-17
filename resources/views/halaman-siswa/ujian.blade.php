@@ -96,7 +96,8 @@
             $check = App\Models\Jawab::where([['id_soal', $paket_soal->id], ['id_user', Auth::user()->id], ['status', 1]])->first();
             $tryCount = DB::table("jawabs_count")->where([['id_soal', $paket_soal->id], ['id_user', Auth::user()->id]])->first();
             $is_done = ($check && (!empty($tryCount) && $tryCount->try_count >= 3));
-            $kategori = $paket_soal->kategori_utama ?? 'kedinasan';
+            $rawCat = strtolower(($paket_soal->kategori_utama ?? '') . ' ' . ($paket_soal->paket ?? '') . ' ' . ($paket_soal->deskripsi ?? ''));
+            $kategori = (strpos($rawCat, 'sma') !== false || strpos($rawCat, 'utbk') !== false || strpos($rawCat, 'snbt') !== false) ? 'sma' : 'kedinasan';
           ?>
 
           <div class="paket-card bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-sm hover:shadow-md transition flex flex-col justify-between" 
@@ -107,7 +108,7 @@
               <!-- BADGES -->
               <div class="flex items-center justify-between gap-2 mb-3">
                 <span class="px-3 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wider {{ $kategori == 'sma' ? 'bg-blue-50 text-blue-700 border border-blue-200' : 'bg-amber-50 text-amber-800 border border-amber-200' }}">
-                  {{ $kategori == 'sma' ? 'SMA & UTBK' : 'Kedinasan & Polri' }}
+                  {{ $kategori == 'sma' ? 'SMA & UTBK-SNBT' : 'Kedinasan & Polri' }}
                 </span>
 
                 @if($is_done)

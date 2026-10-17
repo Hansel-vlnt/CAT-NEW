@@ -47,7 +47,8 @@ class SiswaController extends Controller
   {
     if (auth()->user()->status == 'G' or auth()->user()->status == 'A') {
       $user = User::where('id', auth()->user()->id)->first();
-      return view('siswa.index', compact('user'));
+      $kelas = \App\Models\Kelas::all();
+      return view('siswa.index', compact('user', 'kelas'));
     } else {
       return redirect()->route('home.index');
     }
@@ -58,7 +59,8 @@ class SiswaController extends Controller
     if (auth()->user()->status == 'G' or auth()->user()->status == 'A') {
       $user = User::where('id', auth()->user()->id)->first();
       $siswa = User::where('id', $request->id)->first();
-      return view('siswa.form.ubah', compact('user', 'siswa'));
+      $kelas = \App\Models\Kelas::all();
+      return view('siswa.form.ubah', compact('user', 'siswa', 'kelas'));
     } else {
       return redirect()->route('home.index');
     }
@@ -122,6 +124,42 @@ class SiswaController extends Controller
     }
   }
 
+  public function materi()
+  {
+    if (auth()->user()->status == 'S') {
+      $user = User::where('id', auth()->user()->id)->first();
+      return view('halaman-siswa.index', compact('user'));
+    } else {
+      return redirect()->route('home.index');
+    }
+  }
+
+  public function dataMateri()
+  {
+    $materis = \App\Models\Materi::where('status', 'Y')->get();
+    return Datatables::of($materis)
+      ->addColumn('action', function ($materis) {
+        return '<div style="text-align:center"><a href="' . url('/siswa/materi/detail/' . $materis->id) . '" class="btn btn-primary btn-xs">Baca Materi &rarr;</a></div>';
+      })
+      ->rawColumns(['action'])
+      ->make(true);
+  }
+
+  public function detailMateri(Request $req)
+  {
+    if (auth()->user()->status == 'S') {
+      $user = User::where('id', auth()->user()->id)->first();
+      $materi = \App\Models\Materi::where('id', $req->id)->first();
+      if ($materi) {
+        $materi->hits = $materi->hits + 1;
+        $materi->save();
+      }
+      return view('halaman-siswa.detail_materi', compact('user', 'materi'));
+    } else {
+      return redirect()->route('home.index');
+    }
+  }
+
   public function ujian()
   {
     if($this->cekVoucher() == true){
@@ -139,10 +177,10 @@ class SiswaController extends Controller
       $id         = $req->id;
       $key        = $req->key;
       $soal       = Soal::with('detail_soal_essays')->where('id', $id)->first();
-      $soals      = $soals = Detailsoal::where('id_soal', $id)->where('status', 'Y')->inRandomOrder()->get();
-      $kunciSoal  = hash("sha256", $soal->password.Auth::user()->id);
+      $soals      = Detailsoal::where('id_soal', $id)->where('status', 'Y')->inRandomOrder()->get();
+      $kunciSoal  = !empty($soal->password) ? hash("sha256", $soal->password.Auth::user()->id) : null;
 
-      if(!empty($key) && $key == $kunciSoal){
+      if(empty($soal->password) || (!empty($key) && $key == $kunciSoal)){
         if($soal->jenis_soal == 0){
           return view('halaman-siswa.detail_ujian', compact('soal', 'soals'));
         } else {
@@ -236,6 +274,15 @@ class SiswaController extends Controller
       } else {
         $jawab->score = 0;
       }
+    } elseif ($detail_soal->tipe_soal == 'tkp') {
+      $jawab->pilihan = $pilihan;
+      $bobot_map = !empty($detail_soal->bobot_opsi) ? json_decode($detail_soal->bobot_opsi, true) : [];
+      if (is_array($bobot_map) && isset($bobot_map[$pilihan])) {
+        $jawab->score = floatval($bobot_map[$pilihan]);
+      } else {
+        $default_map = ['A' => 5, 'B' => 4, 'C' => 3, 'D' => 2, 'E' => 1];
+        $jawab->score = isset($default_map[$pilihan]) ? $default_map[$pilihan] : 0;
+      }
     } else {
       $jawab->pilihan = $pilihan;
       if ($detail_soal->kunci == $pilihan) {
@@ -305,6 +352,8 @@ class SiswaController extends Controller
           } else {
             $salah++;
           }
+        } elseif ($ds->tipe_soal == 'tkp') {
+          $benar++;
         } else {
           if (trim(strtoupper($user_ans)) == trim(strtoupper($ds->kunci))) {
             $benar++;

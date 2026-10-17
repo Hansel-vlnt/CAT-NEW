@@ -1,13 +1,18 @@
 @extends('layouts.app')
 @section('title', 'Detail Paket Soal: ' . $soal->paket)
 @section('breadcrumb')
-  <h1><i class="fa fa-book"></i> Manajemen Bank Soal</h1>
+  <div class="max-w-7xl mx-auto py-2">
+    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Bank Soal &bull; Manajemen Butir</div>
+    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">{{ $soal->paket }}</h1>
+  </div>
 @endsection
 @section('content')
 <?php include(app_path() . '/functions/myconf.php'); ?>
-<div class="row">
-  <!-- Kolom Kiri: Informasi Paket -->
-  <div class="col-md-4">
+<div class="col-md-12">
+  <div class="max-w-7xl mx-auto space-y-6">
+    <div class="row">
+      <!-- Kolom Kiri: Informasi Paket -->
+      <div class="col-md-4">
     <div class="box box-primary" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
       <div class="box-header with-border" style="padding: 16px 20px;">
         <h3 class="box-title" style="font-size: 15px; font-weight: 600;">Informasi Paket Soal</h3>
@@ -75,7 +80,10 @@
     <div class="box box-primary" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
       <div class="box-header with-border" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
         <h3 class="box-title" style="font-size: 15px; font-weight: 600;">Daftar Butir Soal</h3>
-        <div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-import-soal" style="font-weight: 600;">
+            <i class="fa fa-file-excel-o"></i> Import Excel
+          </button>
           <button type="button" id="btn-soal" class="btn btn-primary btn-sm" style="font-weight: 600;">
             <i class="fa fa-plus"></i> Tambah Butir Soal
           </button>
@@ -104,7 +112,7 @@
                   <input type="radio" name="tipe_soal" value="multi" onchange="toggleFormTipeSoal('multi')"> Multi Key (Pilih > 1)
                 </label>
                 <label class="radio-inline" style="font-weight: 500;">
-                  <input type="radio" name="tipe_soal" value="tkp" onchange="toggleFormTipeSoal('tkp')"> TKP Berbobot
+                  <input type="radio" name="tipe_soal" value="tkp" onchange="toggleFormTipeSoal('tkp')"> TKP Berbobot (1-5 Poin)
                 </label>
               </div>
             </div>
@@ -113,7 +121,7 @@
             <div class="form-group">
               <label class="col-sm-3 control-label">Pertanyaan Soal</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="soal" placeholder="Tuliskan pertanyaan soal di sini..."></textarea>
+                <textarea class="form-control textarea-main" name="soal" placeholder="Tuliskan pertanyaan soal di sini..."></textarea>
               </div>
             </div>
 
@@ -121,35 +129,35 @@
             <div class="form-group">
               <label class="col-sm-3 control-label">Pilihan A</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pila" placeholder="Pilihan A"></textarea>
+                <textarea class="form-control textarea-opt" name="pila" placeholder="Pilihan A"></textarea>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Pilihan B</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pilb" placeholder="Pilihan B"></textarea>
+                <textarea class="form-control textarea-opt" name="pilb" placeholder="Pilihan B"></textarea>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Pilihan C</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pilc" placeholder="Pilihan C"></textarea>
+                <textarea class="form-control textarea-opt" name="pilc" placeholder="Pilihan C"></textarea>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Pilihan D</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pild" placeholder="Pilihan D"></textarea>
+                <textarea class="form-control textarea-opt" name="pild" placeholder="Pilihan D"></textarea>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-3 control-label">Pilihan E</label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pile" placeholder="Pilihan E"></textarea>
+                <textarea class="form-control textarea-opt" name="pile" placeholder="Pilihan E"></textarea>
               </div>
             </div>
 
-            <!-- Kunci Jawaban Single vs Multi -->
+            <!-- Kunci Jawaban Single vs Multi vs TKP -->
             <div class="form-group" id="form-wrap-kunci-single">
               <label class="col-sm-3 control-label">Kunci Jawaban</label>
               <div class="col-sm-9">
@@ -177,6 +185,21 @@
               </div>
             </div>
 
+            <div class="form-group" id="form-wrap-kunci-tkp" style="display: none;">
+              <label class="col-sm-3 control-label">Bobot Opsi TKP (1 - 5 Poin)</label>
+              <div class="col-sm-9">
+                <div class="row" style="margin-left: -5px; margin-right: -5px;">
+                  @foreach(['A' => 5, 'B' => 4, 'C' => 3, 'D' => 2, 'E' => 1] as $huruf => $val)
+                    <div class="col-xs-6 col-sm-2" style="padding: 0 5px; margin-bottom: 8px;">
+                      <label style="font-size: 12px; margin-bottom: 2px;">Opsi <b>{{ $huruf }}</b></label>
+                      <input type="number" min="0" max="10" name="bobot_opsi[{{ $huruf }}]" value="{{ $val }}" class="form-control input-sm numOnly" style="text-align: center; font-weight: bold;">
+                    </div>
+                  @endforeach
+                </div>
+                <small class="text-muted">Tentukan poin untuk masing-masing opsi jawaban (standar SKD TKP: 1 sampai 5 poin).</small>
+              </div>
+            </div>
+
             <!-- Skor dan Status -->
             <div class="form-group">
               <label class="col-sm-3 control-label">Score / Poin</label>
@@ -200,7 +223,7 @@
                 <span class="text-success"><i class="fa fa-bolt"></i> Trik Cepat / Solusi Praktis</span>
               </label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pembahasan_cepat" placeholder="Trik ringkas 30 detik atau eliminasi opsi cepat..."></textarea>
+                <textarea class="form-control textarea-main" name="pembahasan_cepat" placeholder="Trik ringkas 30 detik atau eliminasi opsi cepat..."></textarea>
               </div>
             </div>
 
@@ -209,7 +232,7 @@
                 <span class="text-primary"><i class="fa fa-book"></i> Pembahasan Konseptual</span>
               </label>
               <div class="col-sm-9">
-                <textarea class="form-control textarea" name="pembahasan_konsep" placeholder="Pembahasan teoritis komprehensif dan runtut..."></textarea>
+                <textarea class="form-control textarea-main" name="pembahasan_konsep" placeholder="Pembahasan teoritis komprehensif dan runtut..."></textarea>
               </div>
             </div>
 
@@ -253,6 +276,40 @@
   </div>
 </div>
 
+<!-- Modal Import Soal Excel -->
+<div class="modal fade" id="modal-import-soal">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius: 12px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight: 700;"><i class="fa fa-file-excel-o text-success"></i> Import Butir Soal via Excel</h4>
+      </div>
+      <form action="{{ url('/crud/simpan-detail-soal-via-excel') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body" style="padding: 20px;">
+          <input type="hidden" name="id_soal" value="{{ $soal->id }}">
+          <div class="form-group">
+            <label style="font-weight: 600; margin-bottom: 6px;">Pilih File Excel (.xlsx / .xls)</label>
+            <input type="file" name="file" required class="form-control" accept=".xlsx,.xls">
+          </div>
+          <div class="alert alert-info" style="font-size: 12px; margin-bottom: 0;">
+            <i class="fa fa-info-circle"></i> Pastikan format file sesuai dengan template.
+            <div style="margin-top: 6px;">
+              <a href="{{ url('/download-file-format/soal') }}" class="btn btn-default btn-xs" style="font-weight: 600;">
+                <i class="fa fa-download"></i> Unduh Format Soal Excel
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success font-bold"><i class="fa fa-upload"></i> Unggah &amp; Import</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Hapus Soal -->
 <div class="modal fade" id="del-soal">
   <div class="modal-dialog">
@@ -273,6 +330,8 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
         <button id="button-delete" type="button" class="btn btn-danger" onclick="$('#delete').submit();">Ya, Hapus</button>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </div>
@@ -308,15 +367,42 @@
 <script>
 function toggleFormTipeSoal(tipe) {
   if (tipe === 'multi') {
-    $('#form-wrap-kunci-single').hide();
-    $('#form-wrap-kunci-multi').show();
+    $('#form-wrap-kunci-single').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-tkp').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-multi').show().find('input').prop('disabled', false);
+  } else if (tipe === 'tkp') {
+    $('#form-wrap-kunci-single').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-multi').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-tkp').show().find('input').prop('disabled', false);
   } else {
-    $('#form-wrap-kunci-single').show();
-    $('#form-wrap-kunci-multi').hide();
+    $('#form-wrap-kunci-multi').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-tkp').hide().find('input').prop('disabled', true);
+    $('#form-wrap-kunci-single').show().find('input').prop('disabled', false);
   }
 }
 
+function sendFile(file, editor) {
+  var data = new FormData();
+  data.append("image", file);
+  data.append("_token", "{{ csrf_token() }}");
+  $.ajax({
+    data: data,
+    type: "POST",
+    url: "{{ url('/crud/upload-gambar-soal') }}",
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function(url) {
+      if (url) {
+        $(editor).summernote('insertImage', url);
+      }
+    }
+  });
+}
+
 $(document).ready(function() {
+  toggleFormTipeSoal('single');
+
   $("#btn-soal").click(function() {
     $("#wrap-soal").slideToggle();
   });
@@ -324,7 +410,7 @@ $(document).ready(function() {
     $("#wrap-soal").slideToggle();
   });
 
-  $('.textarea').summernote({
+  $('.textarea-main').summernote({
     toolbar: [
       ['style', ['style']],
       ['font', ['bold', 'italic', 'underline', 'clear']],
@@ -335,8 +421,26 @@ $(document).ready(function() {
       ['insert', ['link', 'picture', 'hr']],
       ['view', ['fullscreen', 'codeview']]
     ],
-    height: 100,
-    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '150']
+    height: 120,
+    fontSizes: ['8', '9', '10', '11', '12', '14', '18', '24', '36', '48', '64', '82', '150'],
+    callbacks: {
+      onImageUpload: function(files) {
+        sendFile(files[0], this);
+      }
+    }
+  });
+
+  $('.textarea-opt').summernote({
+    toolbar: [
+      ['font', ['bold', 'italic', 'underline', 'clear']],
+      ['insert', ['picture']]
+    ],
+    height: 75,
+    callbacks: {
+      onImageUpload: function(files) {
+        sendFile(files[0], this);
+      }
+    }
   });
 
   var pathParts = window.location.pathname.split('/');
@@ -380,7 +484,13 @@ $(document).ready(function() {
         $("#wrap-btn").show();
         if (data == 'ok') {
           $("#notif-soal").removeClass('alert alert-danger').addClass('alert alert-info').html("Soal berhasil disimpan.").show();
-          setTimeout(function() { location.reload(); }, 600);
+          $("#form-soal")[0].reset();
+          $('.textarea-main, .textarea-opt').summernote('reset');
+          setTimeout(function() {
+            $("#notif-soal").hide();
+            $("#wrap-soal").slideUp();
+            table_soal.ajax.reload(null, false);
+          }, 800);
         } else {
           $("#notif-soal").removeClass('alert alert-info').addClass('alert alert-danger').html(data).show();
         }

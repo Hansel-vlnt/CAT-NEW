@@ -220,8 +220,9 @@ class SoalController extends Controller
       $query->deskripsi = $request['deskripsi'];
       $query->waktu = $request['waktu'];
       $query->jenis_soal = $request['jenis'];
-      if(!empty($request['password'])){
-        $query->password = $request['password'];
+      $query->password = !empty($request['password']) ? $request['password'] : null;
+      if ($request->has('kkm') && $request['kkm'] !== null) {
+        $query->kkm = $request['kkm'];
       }
       if($request->has('kategori_utama')){
         $query->kategori_utama = $request['kategori_utama'];
@@ -237,7 +238,20 @@ class SoalController extends Controller
   {
     if ($request->soal == "") {
       return "Soal tidak boleh kosong.";
-    } elseif (empty($request->kunci)) {
+    }
+
+    $kunci = $request->kunci;
+    if ($request->tipe_soal == 'tkp' && empty($kunci)) {
+      if ($request->has('bobot_opsi') && is_array($request->bobot_opsi)) {
+        $sorted_bobot = $request->bobot_opsi;
+        arsort($sorted_bobot);
+        $kunci = key($sorted_bobot) ?: 'A';
+      } else {
+        $kunci = 'A';
+      }
+    }
+
+    if (empty($kunci)) {
       return "Kunci jawaban soal tidak boleh kosong.";
     } elseif ($request->score == "") {
       return "Score soal tidak boleh kosong.";
@@ -259,7 +273,7 @@ class SoalController extends Controller
       $query->pilc = $request->pilc;
       $query->pild = $request->pild;
       $query->pile = $request->pile;
-      $query->kunci = is_array($request->kunci) ? json_encode($request->kunci) : $request->kunci;
+      $query->kunci = is_array($kunci) ? json_encode($kunci) : $kunci;
       $query->score = $request->score;
       $query->status = $request->status;
 
@@ -359,6 +373,9 @@ class SoalController extends Controller
           $query->id_user = Auth::user()->id;
           $query->status = 'Y';
           $query->sesi = $sesi;
+          $query->tipe_soal = isset($value->tipe_soal) ? $value->tipe_soal : 'single';
+          $query->pembahasan_cepat = isset($value->pembahasan_cepat) ? $value->pembahasan_cepat : (isset($value->trik_cepat) ? $value->trik_cepat : null);
+          $query->pembahasan_konsep = isset($value->pembahasan_konsep) ? $value->pembahasan_konsep : (isset($value->pembahasan) ? $value->pembahasan : null);
           if ($query->save()) {
             $sukses = $sukses + 1;
           }
@@ -375,6 +392,21 @@ class SoalController extends Controller
     } else {
       return redirect()->route('soal');
     }
+  }
+
+  public function uploadGambarSoal(Request $request)
+  {
+    if ($request->hasFile('image')) {
+      $file = $request->file('image');
+      $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+      $dest = public_path('assets/img/soal');
+      if (!file_exists($dest)) {
+        mkdir($dest, 0777, true);
+      }
+      $file->move($dest, $filename);
+      return url('assets/img/soal/' . $filename);
+    }
+    return '';
   }
 
   public function saveEssay(Request $request)

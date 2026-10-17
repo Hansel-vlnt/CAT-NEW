@@ -13,7 +13,7 @@ use App\Models\Materi;
 
 class MateriController extends Controller
 {
-  public function __controller()
+  public function __construct()
   {
   	$this->middleware('auth');
   }
@@ -44,8 +44,10 @@ class MateriController extends Controller
 	  											return $materis->hits.' kali';
 	  										})
 	  										->addColumn('action', function($materis) {
-	  											return '<div style="text-align:center"><a href="materi/detail/'.$materis->id.'" class="btn btn-primary btn-xs">Detail</a></div>';
-	  										})->make(true);
+	  											return '<div style="text-align:center"><a href="' . url('/elearning/materi/detail/'.$materis->id) . '" class="btn btn-primary btn-xs">Detail</a> <a href="' . url('/elearning/materi/ubah/'.$materis->id) . '" class="btn btn-success btn-xs">Ubah</a></div>';
+	  										})
+	  										->rawColumns(['action', 'status'])
+	  										->make(true);
   }
   public function detail(Request $request)
   {

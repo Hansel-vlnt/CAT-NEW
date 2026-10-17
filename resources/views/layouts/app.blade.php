@@ -6,7 +6,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Portal Belajar') - Latihan Soal Abdi Praja</title>
   <!-- Responsive screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="{{ url('/assets/bootstrap/css/bootstrap.min.css') }}">
   <!-- Font Awesome -->
@@ -22,6 +22,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- KaTeX Formula Support -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if (window.renderMathInElement) { renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]}); }"></script>
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ url('/assets/plugins/iCheck/flat/blue.css') }}">
   <!-- Date Picker -->
@@ -39,8 +43,8 @@
     }
     body {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-        font-size: 18px !important;
-        line-height: 1.65 !important;
+        font-size: 15.5px !important;
+        line-height: 1.6 !important;
         color: #1e293b;
         background-color: #f8fafc;
         -webkit-font-smoothing: antialiased;
@@ -59,44 +63,10 @@
         font-weight: 700;
         letter-spacing: -0.015em;
     }
-    h1 { font-size: 32px !important; font-weight: 800 !important; }
-    h2 { font-size: 26px !important; font-weight: 800 !important; }
-    h3 { font-size: 22px !important; font-weight: 700 !important; }
-    h4 { font-size: 19px !important; font-weight: 700 !important; }
-
-    /* Elevated Typography Utility Overrides - Menjamin tulisan besar, jelas, dan sangat terbaca */
-    .text-\[10px\], .text-\[11px\], .text-xs {
-        font-size: 15px !important;
-        line-height: 1.5 !important;
-    }
-    .text-sm {
-        font-size: 16.5px !important;
-        line-height: 1.55 !important;
-    }
-    .text-base {
-        font-size: 18.5px !important;
-        line-height: 1.6 !important;
-    }
-    .text-lg {
-        font-size: 21px !important;
-        line-height: 1.45 !important;
-    }
-    .text-xl {
-        font-size: 25px !important;
-        line-height: 1.35 !important;
-    }
-    .text-2xl {
-        font-size: 30px !important;
-        line-height: 1.3 !important;
-    }
-    .text-3xl {
-        font-size: 38px !important;
-        line-height: 1.25 !important;
-    }
-    .text-4xl {
-        font-size: 44px !important;
-        line-height: 1.2 !important;
-    }
+    h1 { font-size: 28px !important; font-weight: 800 !important; }
+    h2 { font-size: 23px !important; font-weight: 800 !important; }
+    h3 { font-size: 19px !important; font-weight: 700 !important; }
+    h4 { font-size: 17px !important; font-weight: 700 !important; }
 
     .main-header .navbar {
         background-color: #0f172a !important;
@@ -225,40 +195,47 @@
     .form-control {
         border-radius: 12px !important;
         border: 1px solid #cbd5e1 !important;
-        font-size: 17.5px !important;
-        height: 54px !important;
-        padding: 12px 18px !important;
+        font-size: 15px !important;
+        padding: 10px 16px !important;
         color: #1e293b !important;
         box-shadow: none !important;
         transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    input.form-control, select.form-control {
+        height: 46px !important;
+        min-height: 46px !important;
+    }
+    textarea.form-control {
+        height: auto !important;
+        min-height: 80px;
     }
     .form-control:focus {
         border-color: #4f46e5 !important;
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
     }
     label {
-        font-size: 16.5px !important;
+        font-size: 14.5px !important;
         font-weight: 700 !important;
         color: #334155 !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 6px !important;
     }
     .btn {
         border-radius: 12px !important;
         font-weight: 700 !important;
-        font-size: 16.5px !important;
-        padding: 12px 24px !important;
+        font-size: 15px !important;
+        padding: 10px 20px !important;
         letter-spacing: 0.01em;
         transition: all 0.15s ease-in-out;
     }
     .btn-xs {
-        font-size: 14px !important;
-        padding: 6px 14px !important;
-        border-radius: 8px !important;
+        font-size: 12px !important;
+        padding: 5px 10px !important;
+        border-radius: 6px !important;
     }
     .btn-sm {
-        font-size: 15px !important;
-        padding: 9px 18px !important;
-        border-radius: 10px !important;
+        font-size: 13.5px !important;
+        padding: 7px 14px !important;
+        border-radius: 8px !important;
     }
     .btn-primary {
         background-color: #4f46e5 !important;
@@ -365,20 +342,36 @@
         @if($user->status == 'G' or $user->status == 'A')
         <li class="treeview {{ Request::is('elearning*') == true  ? 'active' : '' }}">
           <a href="#">
-            <i class="fa fa-graduation-cap"></i> <span>Bank Soal &amp; Laporan</span>
+            <i class="fa fa-graduation-cap"></i> <span>Bank Soal &amp; Materi</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
             <li class="{{ Request::is('elearning/soal*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/soal') }}"><i class="fa fa-circle-o"></i> Manajemen Soal</a></li>
+            <li class="{{ Request::is('elearning/materi*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/materi') }}"><i class="fa fa-circle-o"></i> Materi Pembelajaran</a></li>
             <li class="{{ Request::is('elearning/laporan*') == true  ? 'active' : '' }}"><a href="{{ url('/elearning/laporan') }}"><i class="fa fa-circle-o"></i> Rapor &amp; Laporan</a></li>
           </ul>
         </li>
-        <li class="{{ Request::is('master/siswa*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-users"></i> <span>Data Siswa</span></a></li>
+        <li class="treeview {{ Request::is('master*') == true  ? 'active' : '' }}">
+          <a href="#">
+            <i class="fa fa-database"></i> <span>Master Data</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="{{ Request::is('master/siswa*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-circle-o"></i> Data Siswa</a></li>
+            <li class="{{ Request::is('master/kelas*') == true ? 'active' : '' }}"><a href="{{ url('/master/kelas') }}"><i class="fa fa-circle-o"></i> Data Kelas</a></li>
+            @if($user->status == 'A')
+            <li class="{{ Request::is('master/guru*') == true ? 'active' : '' }}"><a href="{{ url('/master/guru') }}"><i class="fa fa-circle-o"></i> Data Instruktur / Guru</a></li>
+            @endif
+          </ul>
+        </li>
         <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
         @elseif($user->status == 'S')
         <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Katalog Latihan Soal</span></a></li>
+        <li class="{{ Request::is('siswa/materi*') == true ? 'active' : '' }}"><a href="{{ url('siswa/materi') }}"><i class="fa fa-file-text-o"></i> <span>Materi Pembelajaran</span></a></li>
         @endif
         <li class="{{ Request::is('pengaturan*') == true ? 'active' : '' }}"><a href="{{ url('/pengaturan') }}"><i class="fa fa-cog"></i> <span>Pengaturan Akun</span></a></li>
         <li><a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> <span>Keluar</span></a></li>
@@ -433,15 +426,17 @@
     }
   });
 
-  $(".numOnly").keydown(function (e) {
+  $(".numOnly").on("keydown", function (e) {
     if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-      (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+      ((e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 88 || e.keyCode === 90) && (e.ctrlKey === true || e.metaKey === true)) || 
       (e.keyCode >= 35 && e.keyCode <= 40)) {
         return;
     }
     if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
       e.preventDefault();
     }
+  }).on("input", function() {
+    this.value = this.value.replace(/[^0-9.]/g, '');
   });
 </script>
 @stack('scripts')
