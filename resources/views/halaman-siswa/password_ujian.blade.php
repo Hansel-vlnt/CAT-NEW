@@ -1,19 +1,19 @@
 @extends('layouts.app')
 @section('title', 'Verifikasi Password Ujian')
 @section('breadcrumb')
-  <div class="max-w-xl mx-auto">
+  <div class="w-full max-w-2xl py-1">
     <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 mb-1">
       <a href="{{ url('/siswa/ujian') }}" class="hover:text-indigo-600 transition">Paket Ujian</a>
       <span>/</span>
       <span class="text-slate-800">Verifikasi Akses</span>
     </div>
-    <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Verifikasi Akses Paket Soal</h1>
+    <h1 class="text-2xl font-black text-slate-900 tracking-tight">Verifikasi Akses Paket Soal</h1>
   </div>
 @endsection
 
 @section('content')
 <div class="col-xs-12">
-  <div class="max-w-xl mx-auto py-4">
+  <div class="w-full max-w-2xl space-y-6">
     <div class="bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-xl">
       <!-- Icon & Header -->
       <div class="text-center mb-8">

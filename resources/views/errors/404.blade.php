@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title', '404 - Halaman Tidak Ditemukan - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="px-4 py-2">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Navigasi Platform</div>
-    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Halaman Tidak Ditemukan</h1>
+  <div class="w-full max-w-xl py-1">
+    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Navigasi Platform</div>
+    <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Halaman Tidak Ditemukan</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="max-w-xl mx-auto space-y-6 py-6 sm:py-12">
+  <div class="w-full max-w-xl space-y-6">
 
     <!-- 404 CARD -->
     <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm text-center">

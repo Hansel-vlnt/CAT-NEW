@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Manajemen Voucher Lisensi')
 @section('breadcrumb')
-  <div class="px-2 py-1">
+  <div class="w-full max-w-7xl">
     <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Aktivasi &amp; Lisensi Siswa</div>
     <h1 class="text-2xl font-black text-slate-900 mt-0.5">Manajemen Voucher Lisensi</h1>
   </div>
@@ -9,7 +9,7 @@
 @section('content')
 @if($user->status == 'A')
 <div class="col-md-12">
-  <div class="max-w-6xl mx-auto space-y-6">
+  <div class="w-full max-w-7xl space-y-6">
 
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">

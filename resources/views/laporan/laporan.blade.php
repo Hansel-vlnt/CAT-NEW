@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Hasil Siswa: ' . $soal->paket . ' - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="px-4 py-2">
+  <div class="w-full max-w-7xl">
     <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Laporan &bull; Paket Soal</div>
     <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">{{ $soal->paket }}</h1>
   </div>
@@ -9,7 +9,7 @@
 @section('content')
 <?php include(app_path().'/functions/myconf.php'); ?>
 <div class="col-md-12">
-  <div class="max-w-6xl mx-auto space-y-6">
+  <div class="w-full max-w-7xl space-y-6">
 
     <!-- HERO HEADER -->
     <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">

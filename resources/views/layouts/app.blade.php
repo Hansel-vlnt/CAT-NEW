@@ -158,6 +158,10 @@
         margin-right: 0 !important;
         width: 100% !important;
     }
+    .content > .row > [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
     .content-header {
         padding: 24px 28px 10px 28px !important;
     }
@@ -313,7 +317,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
   <?php
-    $user = App\User::findorfail(Auth::user()->id);
+    $user = Auth::check() ? (App\User::find(Auth::user()->id) ?? Auth::user()) : null;
   ?>
   <header class="main-header">
     <!-- Logo -->

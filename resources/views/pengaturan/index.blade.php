@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Pengaturan Akun')
 @section('breadcrumb')
-  <div class="max-w-3xl mx-auto">
+  <div class="w-full max-w-4xl">
     <div class="flex items-center gap-2 text-sm font-semibold text-slate-500 mb-1.5">
       <a href="{{ url('/home') }}" class="hover:text-indigo-600 transition">Dashboard</a>
       <span>/</span>
@@ -14,7 +14,7 @@
 
 @section('content')
 <div class="col-xs-12">
-  <div class="max-w-4xl mx-auto py-6">
+  <div class="w-full max-w-4xl py-2">
     <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm relative">
 
       <!-- User Badge Summary Header -->

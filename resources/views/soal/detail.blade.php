@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Detail Paket Soal: ' . $soal->paket)
 @section('breadcrumb')
-  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2">
+  <div class="w-full max-w-7xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
     <div>
       <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Bank Soal &bull; Manajemen Butir</div>
       <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Detail Paket Soal</h1>
@@ -19,7 +19,7 @@
 @section('content')
 <?php include(app_path() . '/functions/myconf.php'); ?>
 <div class="col-md-12">
-  <div class="max-w-7xl mx-auto space-y-6">
+  <div class="w-full max-w-7xl space-y-6">
 
     <!-- Top Action Card: Info Paket & Quick Stats -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Hasil Import Siswa - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="px-4 py-2">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Master Data &bull; Import Excel</div>
-    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Hasil Import Siswa</h1>
+  <div class="w-full max-w-xl py-1">
+    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Master Data &bull; Import Excel</div>
+    <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Hasil Import Siswa</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="max-w-xl mx-auto space-y-6">
+  <div class="w-full max-w-xl space-y-6">
 
     <!-- RESULT CARD -->
     <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center">

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Hasil & Pembahasan: ' . $soal->paket)
 @section('breadcrumb')
-  <div class="px-4 py-2">
+  <div class="w-full max-w-7xl">
     <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Hasil Latihan &bull; Evaluasi Belajar</div>
     <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">{{ $soal->paket }}</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="space-y-6 max-w-6xl mx-auto">
+  <div class="w-full max-w-7xl space-y-6">
     
     <!-- 1. HERO EVALUATION SCORECARD -->
     <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-xl">
