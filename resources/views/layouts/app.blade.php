@@ -86,6 +86,48 @@
         background-color: #0f172a !important;
         border-right: 1px solid #1e293b;
     }
+    /* Fixed Sidebar & Sticky Shell */
+    .fixed .main-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 1030 !important;
+    }
+    .fixed .main-sidebar, .fixed .left-side {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        height: 100vh !important;
+        padding-top: 56px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        scrollbar-width: thin;
+        scrollbar-color: #334155 transparent;
+        z-index: 810 !important;
+    }
+    .fixed .main-sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .fixed .main-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .fixed .main-sidebar::-webkit-scrollbar-thumb {
+        background-color: #334155;
+        border-radius: 4px;
+    }
+    .fixed .content-wrapper, .fixed .right-side {
+        padding-top: 56px !important;
+    }
+    @media (max-width: 767px) {
+        .fixed .main-sidebar, .fixed .left-side {
+            padding-top: 100px !important;
+            z-index: 1050 !important;
+        }
+        .fixed .content-wrapper, .fixed .right-side {
+            padding-top: 100px !important;
+        }
+    }
     .sidebar-menu > li.header {
         color: #64748b !important;
         background: #090d16 !important;
@@ -314,7 +356,7 @@
   </style>
   @stack('css')
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 <div class="wrapper">
   <?php
     $user = Auth::check() ? (App\User::find(Auth::user()->id) ?? Auth::user()) : null;
