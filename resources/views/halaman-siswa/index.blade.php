@@ -29,67 +29,25 @@
       </div>
     </div>
 
-    <!-- MAIN GRID -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-
-      <!-- LEFT: MATERI TABLE CARD (2 SPAN) -->
-      <div class="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-          <div>
-            <h3 class="text-xl font-bold text-slate-900 tracking-tight">Materi &amp; Panduan Belajar</h3>
-            <p class="text-sm text-slate-500 mt-1">Pilih salah satu judul materi untuk membaca modul lengkap.</p>
-          </div>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-striped" id="table_soal" style="width: 100%;">
-            <thead>
-              <tr class="text-slate-600 text-xs font-bold uppercase tracking-wider bg-slate-50">
-                <th style="padding: 14px 16px;">Judul Materi</th>
-                <th style="padding: 14px 16px; text-align: center; width: 130px;">Aksi</th>
-              </tr>
-            </thead>
-          </table>
+    <!-- MATERI TABLE CARD (FULL WIDTH) -->
+    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900 tracking-tight">Materi &amp; Panduan Belajar</h3>
+          <p class="text-sm text-slate-500 mt-1">Pilih salah satu judul materi untuk membaca modul lengkap.</p>
         </div>
       </div>
 
-      <!-- RIGHT: SHORTCUTS (1 SPAN) -->
-      <div>
-        <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-sm space-y-5">
-          <h4 class="flex items-center gap-2.5 pb-4 border-b border-slate-100" style="font-size: 20px !important; font-weight: 800 !important; color: #0f172a !important; margin: 0;">
-            <i class="fa fa-compass text-indigo-600" style="font-size: 22px;"></i>
-            <span>Menu Cepat Siswa</span>
-          </h4>
-          <div class="space-y-4">
-            <a href="{{ url('siswa/ujian') }}" class="rounded-2xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 hover:shadow-sm transition flex items-center justify-between group" style="padding: 16px 18px !important; text-decoration: none !important;">
-              <div class="flex items-center gap-4">
-                <div class="rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center font-bold shrink-0 group-hover:bg-indigo-600 group-hover:text-white transition" style="width: 52px; height: 52px; font-size: 22px;">
-                  <i class="fa fa-pencil"></i>
-                </div>
-                <div>
-                  <div class="group-hover:text-indigo-600 transition tracking-tight" style="font-size: 17px !important; font-weight: 800 !important; color: #0f172a; line-height: 1.3;">Katalog Latihan Soal</div>
-                  <div style="font-size: 14px !important; font-weight: 500 !important; color: #64748b; margin-top: 3px;">Kerjakan paket tryout</div>
-                </div>
-              </div>
-              <i class="fa fa-chevron-right text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-1 transition" style="font-size: 16px;"></i>
-            </a>
-
-            <a href="{{ url('/pengaturan') }}" class="rounded-2xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50 hover:shadow-sm transition flex items-center justify-between group" style="padding: 16px 18px !important; text-decoration: none !important;">
-              <div class="flex items-center gap-4">
-                <div class="rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center font-bold shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition" style="width: 52px; height: 52px; font-size: 22px;">
-                  <i class="fa fa-user"></i>
-                </div>
-                <div>
-                  <div class="group-hover:text-emerald-600 transition tracking-tight" style="font-size: 17px !important; font-weight: 800 !important; color: #0f172a; line-height: 1.3;">Profil &amp; Akun</div>
-                  <div style="font-size: 14px !important; font-weight: 500 !important; color: #64748b; margin-top: 3px;">Pengaturan data kamu</div>
-                </div>
-              </div>
-              <i class="fa fa-chevron-right text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition" style="font-size: 16px;"></i>
-            </a>
-          </div>
-        </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped" id="table_soal" style="width: 100%;">
+          <thead>
+            <tr class="text-slate-600 text-xs font-bold uppercase tracking-wider bg-slate-50">
+              <th style="padding: 14px 16px;">Judul Materi</th>
+              <th style="padding: 14px 16px; text-align: center; width: 130px;">Aksi</th>
+            </tr>
+          </thead>
+        </table>
       </div>
-
     </div>
 
   </div>
