@@ -319,11 +319,13 @@
     <!-- Logo -->
     <a href="{{ url('/') }}" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini font-black text-indigo-400">AP</span>
+      <span class="logo-mini">
+        <img src="{{ url('/assets/dist/img/logo.jpg') }}" alt="Logo Abdi Praja" style="width: 32px; height: 32px; object-fit: contain; border-radius: 8px; display: inline-block; vertical-align: middle; margin-top: -2px;">
+      </span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg flex items-center gap-2" style="padding-top: 10px;">
-        <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-extrabold text-xs inline-flex shadow-sm shrink-0">AP</span>
-        <span style="font-weight: 800; font-size: 14.5px; color: #ffffff; letter-spacing: -0.01em; white-space: nowrap;">Latihan Soal Abdi Praja</span>
+      <span class="logo-lg" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; padding: 0 4px;">
+        <img src="{{ url('/assets/dist/img/logo.jpg') }}" alt="Logo Abdi Praja" style="width: 28px; height: 28px; object-fit: contain; border-radius: 6px; flex-shrink: 0;">
+        <span style="font-weight: 800; font-size: 13.5px; color: #ffffff; letter-spacing: -0.02em; white-space: nowrap;">Latihan Soal Abdi Praja</span>
       </span>
     </a>
     <!-- Header Navbar -->

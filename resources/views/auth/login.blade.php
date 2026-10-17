@@ -39,8 +39,8 @@
 <div class="w-full max-w-xl mx-auto py-6">
   <!-- Brand Header -->
   <div class="text-center mb-8">
-    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-indigo-600 shadow-xl shadow-indigo-500/25 text-white mb-4 border border-indigo-400/30">
-      <i class="fa fa-graduation-cap text-4xl"></i>
+    <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white shadow-2xl p-2.5 mb-4 border border-slate-700/50">
+      <img src="{{ url('/assets/dist/img/logo.jpg') }}" alt="Logo Abdi Praja Edukasi" class="w-full h-full object-contain rounded-2xl">
     </div>
     <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Latihan Soal Abdi Praja</h1>
     <p class="text-base sm:text-lg text-slate-300 mt-2 max-w-md mx-auto leading-relaxed">

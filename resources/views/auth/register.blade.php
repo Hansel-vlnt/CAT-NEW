@@ -28,8 +28,8 @@
 <div class="w-full max-w-xl mx-auto my-auto">
   <!-- Brand Header -->
   <div class="text-center mb-8">
-    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 mb-3 text-2xl font-black">
-      <i class="fa fa-graduation-cap"></i>
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white shadow-xl p-2 mb-3 border border-slate-700/50">
+      <img src="{{ url('/assets/dist/img/logo.jpg') }}" alt="Logo Abdi Praja Edukasi" class="w-full h-full object-contain rounded-xl">
     </div>
     <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Latihan Soal Abdi Praja</h1>
     <p class="text-sm sm:text-base text-slate-400 mt-2">Daftar Akun Baru untuk Memulai Simulasi Ujian CAT &amp; Latihan Soal</p>
