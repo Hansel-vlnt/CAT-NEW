@@ -2,10 +2,9 @@
 @extends('layouts.app')
 @section('title', 'Dashboard')
 @section('breadcrumb')
-  <div class="w-full max-w-7xl flex items-center justify-between">
+  <div class="w-full flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dashboard Utama</h1>
-      <p class="text-sm text-slate-500 mt-0.5">Ringkasan aktivitas, statistik soal, dan akses simulasi CBT.</p>
     </div>
     <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white px-3.5 py-2 rounded-xl border border-slate-200 shadow-sm">
       <i class="fa fa-calendar text-indigo-600"></i>
@@ -17,7 +16,7 @@
 @section('content')
   <?php include(app_path().'/functions/myconf.php'); ?>
   <div class="col-xs-12">
-    <div class="w-full max-w-7xl space-y-6">
+    <div class="max-w-6xl mx-auto space-y-6">
 
       <!-- Hero Sambutan Modern -->
       <div class="relative overflow-hidden rounded-2xl bg-slate-900 text-white p-6 sm:p-8 shadow-sm border border-slate-800">
