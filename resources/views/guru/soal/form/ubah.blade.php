@@ -28,23 +28,23 @@
 
     <!-- FORM CARD -->
     <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
-      <form id="formSoal" class="space-y-5 max-w-2xl">
+      <form id="formSoal" class="space-y-6 w-full">
         {{ csrf_field() }}
         <input type="hidden" name="id" value="{{$soal->id}}">
 
         <div>
-          <label for="paket" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Nama Paket Soal</label>
+          <label for="paket" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Nama Paket Soal</label>
           <input id="paket" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="paket" placeholder="Contoh: Try Out Akbar SKD CPNS 2026" value="{{ $soal->paket }}">
         </div>
 
         <div>
-          <label for="deskripsi" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Deskripsi Singkat</label>
+          <label for="deskripsi" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Deskripsi Singkat</label>
           <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Deskripsi materi cakupan soal">{{ $soal->deskripsi }}</textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label for="kategori_utama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Utama</label>
+            <label for="kategori_utama" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Kategori Utama</label>
             <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kategori_utama">
               <option value="Kedinasan & Polri (SKD BKN/Akademik)" {{ ($soal->kategori_utama == 'Kedinasan & Polri (SKD BKN/Akademik)' || empty($soal->kategori_utama)) ? 'selected' : '' }}>Kedinasan &amp; Polri (SKD BKN/Akademik)</option>
               <option value="SMA & UTBK (SNBT)" {{ ($soal->kategori_utama == 'SMA & UTBK (SNBT)') ? 'selected' : '' }}>SMA &amp; UTBK (SNBT)</option>
@@ -52,44 +52,47 @@
           </div>
 
           <div>
-            <label for="sub_kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Sub Kategori</label>
+            <label for="sub_kategori" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Sub Kategori</label>
             <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif" value="{{ $soal->sub_kategori }}">
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div>
-            <label for="waktu_menit" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Durasi Waktu (Menit)</label>
+            <label for="waktu_menit" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Durasi Waktu</label>
             <div class="relative">
               <input id="waktu_menit" type="number" min="1" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="90" value="{{ round($soal->waktu / 60) }}">
               <input type="hidden" name="waktu" id="waktu" value="{{ $soal->waktu }}">
             </div>
-            <span class="text-[11px] text-slate-500 mt-1 block" id="waktu-detik-info">= {{ number_format($soal->waktu, 0, ',', '.') }} detik</span>
+            <span class="text-xs text-slate-500 mt-1 block" id="waktu-detik-info">Menit (= {{ number_format($soal->waktu, 0, ',', '.') }} detik)</span>
           </div>
 
           <div>
-            <label for="kkm" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Passing Grade / KKM</label>
+            <label for="kkm" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Passing Grade (KKM)</label>
             <input id="kkm" type="number" min="0" max="100" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kkm" value="{{ $soal->kkm ?? 70 }}" placeholder="Contoh: 70">
+            <span class="text-xs text-slate-500 mt-1 block">Skala nilai 0 - 100</span>
           </div>
 
           <div>
-            <label for="jenis" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Model Waktu</label>
+            <label for="jenis" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Model Waktu Ujian</label>
             <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="jenis">
               <option value="0" @if($soal->jenis_soal == 0) selected @endif>Total Waktu Paket</option>
               <option value="1" @if($soal->jenis_soal == 1) selected @endif>Waktu Per Nomor</option>
             </select>
+            <span class="text-xs text-slate-500 mt-1 block">Hitungan timer</span>
           </div>
 
           <div>
-            <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password Token</label>
+            <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Password Token</label>
             <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token" value="{{ $soal->password }}">
+            <span class="text-xs text-slate-500 mt-1 block">Opsional proteksi</span>
           </div>
         </div>
 
         <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
-          <button type="button" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="btnSimpan">
+          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="btnSimpan">
             Simpan Perubahan Paket
           </button>
           <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition" onclick="self.history.back()">

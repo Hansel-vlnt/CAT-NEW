@@ -64,32 +64,35 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div>
-            <label for="waktu_menit" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Durasi Waktu (Menit)</label>
+            <label for="waktu_menit" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Durasi Waktu</label>
             <div class="relative">
               <input id="waktu_menit" type="number" min="1" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Contoh: 90" value="90">
               <input type="hidden" name="waktu" id="waktu" value="5400">
             </div>
-            <p class="text-[11px] text-slate-500 mt-1" id="waktu-detik-info">= 5.400 detik</p>
+            <p class="text-xs text-slate-500 mt-1" id="waktu-detik-info">Menit (= 5.400 detik)</p>
           </div>
 
           <div>
-            <label for="kkm" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Passing Grade / KKM</label>
+            <label for="kkm" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Passing Grade (KKM)</label>
             <input id="kkm" type="number" min="0" max="100" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kkm" value="70" placeholder="Contoh: 70">
+            <span class="text-xs text-slate-500 mt-1 block">Batas nilai (0 - 100)</span>
           </div>
 
           <div>
-            <label for="jenis" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Model Waktu</label>
+            <label for="jenis" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Model Waktu Ujian</label>
             <select id="jenis" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="jenis">
-              <option value="0" selected>Normal (Total Paket)</option>
-              <option value="1">Cerdas Cermat (Per Nomor)</option>
+              <option value="0" selected>Total Waktu Paket</option>
+              <option value="1">Waktu Per Nomor</option>
             </select>
+            <span class="text-xs text-slate-500 mt-1 block">Hitungan timer</span>
           </div>
 
           <div>
-            <label for="password" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Password Token (Opsional)</label>
+            <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Password Token</label>
             <input id="password" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="password" placeholder="Kosongkan jika tanpa token">
+            <span class="text-xs text-slate-500 mt-1 block">Opsional proteksi</span>
           </div>
         </div>
 

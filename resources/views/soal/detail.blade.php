@@ -1,98 +1,96 @@
 @extends('layouts.app')
 @section('title', 'Detail Paket Soal: ' . $soal->paket)
 @section('breadcrumb')
-  <div class="max-w-7xl mx-auto py-2">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Bank Soal &bull; Manajemen Butir</div>
-    <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">{{ $soal->paket }}</h1>
+  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-2">
+    <div>
+      <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Bank Soal &bull; Manajemen Butir</div>
+      <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Detail Paket Soal</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="{{ url('/elearning/soal') }}" class="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
+        <i class="fa fa-arrow-left"></i> Kembali ke Katalog
+      </a>
+      <a href="{{ url('/elearning/soal/ubah/'.$id_soal) }}" class="px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
+        <i class="fa fa-pencil"></i> Edit Info Paket
+      </a>
+    </div>
   </div>
 @endsection
 @section('content')
 <?php include(app_path() . '/functions/myconf.php'); ?>
 <div class="col-md-12">
   <div class="max-w-7xl mx-auto space-y-6">
-    <div class="row">
-      <!-- Kolom Kiri: Informasi Paket -->
-      <div class="col-md-4">
-    <div class="box box-primary" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-      <div class="box-header with-border" style="padding: 16px 20px;">
-        <h3 class="box-title" style="font-size: 15px; font-weight: 600;">Informasi Paket Soal</h3>
-      </div>
-      <div class="box-body" style="padding: 18px 20px;">
-        <div style="margin-bottom: 14px;">
-          <span style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">Nama Paket</span>
-          <h4 style="margin: 4px 0 0 0; font-weight: 700; color: #0f172a;">{{ $soal->paket }}</h4>
+
+    <!-- Top Action Card: Info Paket & Quick Stats -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider">
+              {{ $soal->kategori_utama ?? 'Kedinasan / SKD BKN' }}
+            </span>
+            @if(!empty($soal->sub_kategori))
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
+                {{ $soal->sub_kategori }}
+              </span>
+            @endif
+            <span class="text-xs text-slate-400 font-semibold">ID Paket: #{{ $soal->id }}</span>
+          </div>
+          <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">{{ $soal->paket }}</h2>
+          @if(!empty($soal->deskripsi))
+            <p class="text-sm text-slate-600 max-w-3xl leading-relaxed">{{ $soal->deskripsi }}</p>
+          @endif
         </div>
 
-        <table class="table table-condensed" style="margin-bottom: 16px;">
-          <tbody>
-            <tr>
-              <td style="color: #64748b; font-weight: 500; width: 110px;">ID Paket</td>
-              <td width="10px">:</td>
-              <td style="font-weight: 600; color: #1e293b;">#{{ $soal->id }}</td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Kategori Utama</td>
-              <td>:</td>
-              <td><span class="label label-primary">{{ $soal->kategori_utama ?? 'Kedinasan / SKD BKN' }}</span></td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Sub Kategori</td>
-              <td>:</td>
-              <td style="font-weight: 500;">{{ $soal->sub_kategori ?? 'Umum' }}</td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Deskripsi</td>
-              <td>:</td>
-              <td style="font-size: 13px;">{{ $soal->deskripsi }}</td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Durasi Pengerjaan</td>
-              <td>:</td>
-              <td style="font-weight: 600; color: #0f172a;">{{ round($soal->waktu / 60) }} Menit ({{ $soal->waktu }} Detik)</td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Tipe Tryout</td>
-              <td>:</td>
-              <td>{{ $soal->jenis }}</td>
-            </tr>
-            <tr>
-              <td style="color: #64748b; font-weight: 500;">Token / Password</td>
-              <td>:</td>
-              <td><code style="background: #f1f5f9; color: #0f172a; font-weight: 700;">{{ $soal->password ?: 'Tanpa Token' }}</code></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div style="display: flex; gap: 8px;">
-          <a href="{{ url('/elearning/soal/ubah/'.$id_soal) }}" class="btn btn-default btn-sm" style="flex: 1;">
-            <i class="fa fa-pencil"></i> Edit Info Paket
-          </a>
-          <a href="{{ url('/elearning/soal') }}" class="btn btn-default btn-sm">
-            <i class="fa fa-arrow-left"></i> Kembali
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Kolom Kanan: Butir Soal -->
-  <div class="col-md-8">
-    <div class="box box-primary" style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
-      <div class="box-header with-border" style="padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
-        <h3 class="box-title" style="font-size: 15px; font-weight: 600;">Daftar Butir Soal</h3>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-import-soal" style="font-weight: 600;">
+        <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          <button type="button" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer" data-toggle="modal" data-target="#modal-import-soal">
             <i class="fa fa-file-excel-o"></i> Import Excel
           </button>
-          <button type="button" id="btn-soal" class="btn btn-primary btn-sm" style="font-weight: 600;">
+          <button type="button" id="btn-soal" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer">
             <i class="fa fa-plus"></i> Tambah Butir Soal
           </button>
         </div>
       </div>
 
-      <div class="box-body" style="padding: 20px;">
-        <!-- Form Tambah Soal Baru (Collapsible) -->
-        <div style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px;" id="wrap-soal">
+      <!-- Quick Specs Pills Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Durasi Pengerjaan</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">{{ round($soal->waktu / 60) }} Menit</div>
+          <div class="text-xs text-slate-400">Total: {{ number_format($soal->waktu, 0, ',', '.') }} detik</div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Passing Grade (KKM)</div>
+          <div class="text-lg font-bold text-emerald-600 mt-0.5">{{ $soal->kkm ?? 70 }} Poin</div>
+          <div class="text-xs text-slate-400">Standar kelulusan</div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Model Waktu</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">{{ $soal->jenis_soal == 0 ? 'Total Paket' : 'Per Nomor' }}</div>
+          <div class="text-xs text-slate-400">Mode pengerjaan CBT</div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Token Akses</div>
+          <div class="text-lg font-mono font-bold text-slate-900 mt-0.5">{{ $soal->password ?: 'Bebas Akses' }}</div>
+          <div class="text-xs text-slate-400">{{ $soal->password ? 'Wajib verifikasi token' : 'Tanpa password token' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full-Width Card: Butir Soal Table -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">Daftar Butir Soal</h3>
+          <p class="text-sm text-slate-500 mt-0.5">Kelola butir soal, kunci jawaban, dan bobot skor pada paket ini.</p>
+        </div>
+      </div>
+
+      <!-- Form Tambah Soal Baru (Collapsible) -->
+      <div style="display: none; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-bottom: 24px;" id="wrap-soal">
           <h4 style="margin-top: 0; font-weight: 700; color: #1e293b; margin-bottom: 16px;">
             <i class="fa fa-pencil-square-o text-primary"></i> Tulis Butir Soal Baru
           </h4>
@@ -270,8 +268,6 @@
             </tr>
           </thead>
         </table>
-
-      </div>
     </div>
   </div>
 </div>
@@ -449,8 +445,24 @@ $(document).ready(function() {
   var table_soal = $('#table_detail_soal').DataTable({
     processing: true,
     serverSide: true,
-    responsive: true,
+    responsive: false,
+    autoWidth: false,
     lengthChange: true,
+    pageLength: 10,
+    language: {
+      search: "_INPUT_",
+      searchPlaceholder: "Cari butir soal...",
+      lengthMenu: "Tampilkan _MENU_ butir",
+      info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ butir soal",
+      infoEmpty: "Tidak ada butir soal",
+      zeroRecords: "Butir soal tidak ditemukan",
+      paginate: {
+        first: "Awal",
+        last: "Akhir",
+        next: "Berikutnya",
+        previous: "Sebelumnya"
+      }
+    },
     ajax: {
       url: "{!! route('elearning.get-detail-soal') !!}",
       data: function(d) {
@@ -458,16 +470,16 @@ $(document).ready(function() {
       }
     },
     columns: [
-      { data: 'soal', name: 'soal', orderable: true, searchable: true },
+      { data: 'soal', name: 'soal', orderable: true, searchable: true, width: '55%' },
       { data: 'pila', name: 'pila', visible: false, orderable: true, searchable: true },
       { data: 'pilb', name: 'pilb', visible: false, orderable: true, searchable: true },
       { data: 'pilc', name: 'pilc', visible: false, orderable: true, searchable: true },
       { data: 'pild', name: 'pild', visible: false, orderable: true, searchable: true },
       { data: 'pile', name: 'pile', visible: false, orderable: true, searchable: true },
-      { data: 'kunci', name: 'kunci', orderable: true, searchable: true },
-      { data: 'score', name: 'score', orderable: true, searchable: true },
-      { data: 'status', name: 'status', orderable: true, searchable: true },
-      { data: 'action', name: 'action', orderable: false, searchable: false }
+      { data: 'kunci', name: 'kunci', orderable: true, searchable: true, className: 'text-center', width: '8%' },
+      { data: 'score', name: 'score', orderable: true, searchable: true, className: 'text-center', width: '8%' },
+      { data: 'status', name: 'status', orderable: true, searchable: true, className: 'text-center', width: '12%' },
+      { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center', width: '17%' }
     ]
   });
 

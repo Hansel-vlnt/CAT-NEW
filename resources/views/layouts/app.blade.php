@@ -214,10 +214,12 @@
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
     }
     label {
-        font-size: 14.5px !important;
+        font-size: 14px !important;
         font-weight: 700 !important;
         color: #334155 !important;
         margin-bottom: 6px !important;
+        line-height: 1.4 !important;
+        display: inline-block !important;
     }
     .btn {
         border-radius: 12px !important;
@@ -247,19 +249,63 @@
         border-color: #4338ca !important;
     }
     .table th, .dataTable th {
-        font-size: 16px !important;
+        font-size: 14.5px !important;
         font-weight: 700 !important;
         color: #334155 !important;
-        padding: 16px 18px !important;
+        padding: 12px 14px !important;
+        border-bottom: 2px solid #e2e8f0 !important;
     }
     .table td, .dataTable td {
-        font-size: 16.5px !important;
+        font-size: 14.5px !important;
         vertical-align: middle !important;
-        padding: 16px 18px !important;
+        padding: 12px 14px !important;
         color: #1e293b !important;
+        line-height: 1.5 !important;
     }
     .dataTables_info, .dataTables_paginate, .dataTables_length, .dataTables_filter {
-        font-size: 16px !important;
+        font-size: 14px !important;
+        color: #64748b !important;
+        margin-top: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    .dataTables_filter input {
+        border-radius: 10px !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 6px 12px !important;
+        font-size: 14px !important;
+        outline: none !important;
+        margin-left: 8px !important;
+    }
+    .dataTables_filter input:focus {
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+    }
+    .dataTables_length select {
+        border-radius: 8px !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 4px 8px !important;
+        font-size: 14px !important;
+        outline: none !important;
+        margin: 0 6px !important;
+    }
+    /* DataTables Responsive icon fix so it NEVER overlaps text */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+        padding-left: 38px !important;
+        position: relative !important;
+    }
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before {
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        left: 10px !important;
+        height: 16px !important;
+        width: 16px !important;
+        line-height: 16px !important;
+        text-align: center !important;
+        box-shadow: none !important;
     }
   </style>
   @stack('css')
