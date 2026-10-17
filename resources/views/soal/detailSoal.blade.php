@@ -1,9 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Detail Soal #' . $soal->id)
 @section('breadcrumb')
-  <div class="w-full max-w-5xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
+  <div class="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
     <div>
-      <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Bank Soal &bull; Butir Pertanyaan</div>
       <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight"><i class="fa fa-file-text-o text-indigo-600 mr-1.5"></i> Detail Soal #{{ $soal->id }}</h1>
     </div>
     <a href="{{ url('elearning/soal/detail/'.$soal->id_soal) }}" class="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-sm">
@@ -14,7 +13,7 @@
 @section('content')
 <?php include(app_path().'/functions/myconf.php'); ?>
 <div class="col-md-12">
-  <div class="w-full max-w-5xl space-y-6">
+  <div class="max-w-5xl mx-auto space-y-6">
     <div class="box box-primary" style="border-top-width: 3px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
       <div class="box-header with-border" style="padding: 16px 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">

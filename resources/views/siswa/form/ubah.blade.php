@@ -1,15 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Ubah Siswa: ' . $siswa->nama . ' - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="w-full max-w-4xl py-1">
-    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Master Data &bull; Siswa</div>
+  <div class="w-full py-1">
     <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Ubah Data Akun Siswa</h1>
   </div>
 @endsection
 @section('content')
 <?php include(app_path().'/functions/myconf.php'); ?>
 <div class="col-md-12">
-  <div class="w-full max-w-4xl space-y-6">
+  <div class="max-w-4xl mx-auto space-y-6">
 
     <!-- HERO HEADER -->
     <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 shadow-lg">

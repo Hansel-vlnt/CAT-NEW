@@ -1,15 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Katalog Latihan Soal & Bank Soal')
 @section('breadcrumb')
-  <div class="w-full max-w-7xl">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Katalog Belajar &bull; Bank Soal</div>
+  <div class="w-full">
     <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5 tracking-tight">Daftar Paket Latihan Soal</h1>
   </div>
 @endsection
 
 @section('content')
 <div class="col-md-12">
-  <div class="w-full max-w-7xl space-y-6">
+  <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- HEADER FILTER & SEARCH BANNER -->
     <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">

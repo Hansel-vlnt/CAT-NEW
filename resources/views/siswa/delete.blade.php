@@ -1,14 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Hapus Semua Siswa - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="w-full max-w-xl py-1">
-    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">Master Data &bull; Siswa</div>
+  <div class="w-full py-1">
     <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Danger Zone: Hapus Data Siswa</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="w-full max-w-xl space-y-6">
+  <div class="max-w-xl mx-auto space-y-6">
 
     <!-- DANGER CARD -->
     <div class="bg-white rounded-3xl border border-red-200 p-6 sm:p-8 shadow-sm">

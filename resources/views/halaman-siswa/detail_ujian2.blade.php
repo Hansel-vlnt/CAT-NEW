@@ -14,14 +14,13 @@
 @extends('layouts.app')
 @section('title', Auth::user()->nama)
 @section('breadcrumb')
-  <div class="w-full max-w-4xl">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Persiapan Latihan &bull; Simulasi CBT</div>
+  <div class="w-full">
     <h1 class="text-2xl font-black text-slate-900 mt-0.5">Detail Soal Ujian</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12" id="pre-exam-box">
-  <div class="w-full max-w-4xl space-y-6">
+  <div class="max-w-4xl mx-auto space-y-6">
 
     <!-- HERO BRIEFING CARD -->
     <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-9 shadow-xl">

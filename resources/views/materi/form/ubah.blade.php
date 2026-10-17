@@ -1,15 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Ubah Materi: ' . $materi->judul . ' - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="w-full max-w-5xl py-1">
-    <div class="text-xs text-slate-500 font-bold uppercase tracking-wider">E-Learning &bull; Materi</div>
+  <div class="w-full py-1">
     <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Ubah Materi Pembelajaran</h1>
   </div>
 @endsection
 
 @section('content')
 <div class="col-md-12">
-  <div class="w-full max-w-5xl space-y-6">
+  <div class="max-w-5xl mx-auto space-y-6">
 
     <!-- COMPACT ACTION HEADER -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">

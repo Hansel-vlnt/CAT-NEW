@@ -1,15 +1,14 @@
 @extends('layouts.app')
 @section('title', 'Data Siswa - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="w-full max-w-7xl">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Master Data &bull; Administrasi</div>
+  <div class="w-full">
     <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Kelola Data Siswa &amp; Peserta</h1>
   </div>
 @endsection
 @section('content')
 <?php include(app_path() . '/functions/myconf.php'); ?>
 <div class="col-md-12">
-  <div class="w-full max-w-7xl space-y-6">
+  <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- COMPACT ACTION HEADER (#04) -->
     <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm mb-6">

@@ -1,20 +1,19 @@
 @extends('layouts.app')
 @section('title', 'Pengaturan Akun')
 @section('breadcrumb')
-  <div class="w-full max-w-4xl">
+  <div class="w-full">
     <div class="flex items-center gap-2 text-sm font-semibold text-slate-500 mb-1.5">
       <a href="{{ url('/home') }}" class="hover:text-indigo-600 transition">Dashboard</a>
       <span>/</span>
       <span class="text-slate-800">Pengaturan</span>
     </div>
     <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Pengaturan Profil Pengguna</h1>
-    <p class="text-base text-slate-500 mt-1">Kelola data personal, alamat email, dan kata sandi akun Anda di Latihan Soal Abdi Praja.</p>
   </div>
 @endsection
 
 @section('content')
 <div class="col-xs-12">
-  <div class="w-full max-w-4xl py-2">
+  <div class="max-w-4xl mx-auto py-2">
     <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm relative">
 
       <!-- User Badge Summary Header -->

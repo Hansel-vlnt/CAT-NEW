@@ -1,14 +1,13 @@
 @extends('layouts.app')
 @section('title', 'Data Bank Soal - Latihan Soal Abdi Praja')
 @section('breadcrumb')
-  <div class="w-full max-w-7xl">
-    <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Manajemen Kurikulum &bull; Bank Soal</div>
+  <div class="w-full">
     <h1 class="text-xl sm:text-2xl font-black text-slate-900 mt-0.5">Kelola Paket Latihan Soal</h1>
   </div>
 @endsection
 @section('content')
 <div class="col-md-12">
-  <div class="w-full max-w-7xl space-y-6">
+  <div class="max-w-6xl mx-auto space-y-6">
 
     <!-- COMPACT ACTION HEADER -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
