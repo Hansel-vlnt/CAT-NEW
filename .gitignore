@@ -34,3 +34,5 @@ yarn-error.log
 !/storage/logs/.gitignore
 /test-results/
 /playwright-report/
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
