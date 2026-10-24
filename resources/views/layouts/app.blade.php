@@ -30,8 +30,6 @@
   <link rel="stylesheet" href="{{ url('/assets/plugins/iCheck/flat/blue.css') }}">
   <!-- Date Picker -->
   <link rel="stylesheet" href="{{ url('/assets/plugins/datepicker/datepicker3.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url('/assets/plugins/sweetalert-master/themes/facebook/facebook.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url('/assets/plugins/sweetalert2-1.0.5/dist/sweetalert2.min.css') }}">
   <link rel="icon" href="{{ url('/assets/img/favicon.jpg') }}" type="image/x-icon"/>
   <style type="text/css">
     html, body {
@@ -481,7 +479,7 @@
     <div class="pull-right hidden-xs text-slate-400">
       <b>Latihan Soal Abdi Praja</b> &bull; Versi 2.0 (Modern Bimbel)
     </div>
-    <strong>Hak Cipta &copy; {{ date('Y') }} <a href="//abdipraja.co.id" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-semibold">Latihan Soal Abdi Praja</a>.</strong> Seluruh hak cipta dilindungi.
+    <strong>Hak Cipta &copy; {{ date('Y') }} <a href="https://abdipraja.id/" target="_blank" rel="noopener noreferrer" class="text-indigo-600 hover:text-indigo-800 font-semibold">Abdi Praja Edukasi (abdipraja.id)</a>.</strong> Seluruh hak cipta dilindungi.
   </footer>
 </div>
 <!-- ./wrapper -->
@@ -496,7 +494,7 @@
 <script src="{{ url('/assets/dist/js/moment.min.js') }}"></script>
 <script src="{{ url('/assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <script src="{{ url('/assets/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
-<script src="{{ url('assets/plugins/sweetalert2-1.0.5/dist/sweetalert2.min.js') }}"></script>
+<script src="{{ url('/assets/dist/js/sweetalert2.all.min.js') }}"></script>
 <script src="{{ url('/assets/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ url('/assets/plugins/fastclick/fastclick.js') }}"></script>
 <script src="{{ url('/assets/dist/js/app.min.js') }}"></script>

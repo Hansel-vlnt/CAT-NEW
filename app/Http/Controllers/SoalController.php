@@ -119,10 +119,17 @@ class SoalController extends Controller
       ->editColumn('jenis', function ($soals) {
         return $soals->jenis;
       })
+      ->editColumn('tipe_akses', function ($soals) {
+        if ($soals->tipe_akses == 'berbayar') {
+          $hargaText = $soals->harga ? ' (Rp ' . number_format($soals->harga, 0, ',', '.') . ')' : '';
+          return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Khusus Les' . $hargaText . '</span></center>';
+        }
+        return '<center><span class="label label-success" style="background-color:#10b981; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Gratis</span></center>';
+      })
       ->addColumn('action', function ($soals) {
         return '<div style="text-align:center"><a href="soal/ubah/' . $soals->id . '" class="btn btn-success btn-xs">Ubah</a> <a href="#" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#del-soal" onclick="deleteSoal('.$soals->id.',\''.$soals->paket.'\')">Hapus</a> <a href="soal/detail/' . $soals->id . '" class="btn btn-primary btn-xs">Detail</a></div>';
       })
-      ->rawColumns(['action'])->make(true);
+      ->rawColumns(['tipe_akses', 'action'])->make(true);
   }
   public function dataSoalHome()
   {
@@ -229,6 +236,12 @@ class SoalController extends Controller
       }
       if($request->has('sub_kategori')){
         $query->sub_kategori = $request['sub_kategori'];
+      }
+      if($request->has('tipe_akses')){
+        $query->tipe_akses = $request['tipe_akses'];
+      }
+      if($request->has('harga')){
+        $query->harga = intval($request['harga']) ?: 0;
       }
       $query->save();
       return 'ok';

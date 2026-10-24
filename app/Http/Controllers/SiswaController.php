@@ -68,7 +68,7 @@ class SiswaController extends Controller
 
   public function dataSiswa()
   {
-    $siswas = User::where('status', 'S');
+    $siswas = User::with('getKelas')->where('status', 'S');
     if (auth()->user()->status == 'G') {
       return Datatables::of($siswas)
         ->editColumn('jk', function ($siswas) {
@@ -81,9 +81,17 @@ class SiswaController extends Controller
         ->addColumn('kelas', function ($siswas) {
           return $siswas->getKelas ? $siswas->getKelas->nama : '-';
         })
-        ->addColumn('action', function ($siswas) {
-          return '<div style="text-align:center"><a href="siswa/detail/' . $siswas->id . '" class="btn btn-xs btn-success">Detail</a></div>';
+        ->addColumn('status_langganan', function ($siswas) {
+          if ($siswas->isLanggananLes()) {
+            $exp = $siswas->tgl_berakhir_les ? date('d/m/Y', strtotime($siswas->tgl_berakhir_les)) : 'Aktif';
+            return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">👑 Siswa Les (' . $exp . ')</span></center>';
+          }
+          return '<center><span class="label label-default" style="background-color:#94a3b8; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Reguler / Gratis</span></center>';
         })
+        ->addColumn('action', function ($siswas) {
+          return '<div style="text-align:center"><a href="' . url('master/siswa/detail/' . $siswas->id) . '" class="btn btn-xs btn-success">Detail</a></div>';
+        })
+        ->rawColumns(['action', 'status_langganan'])
         ->make(true);
     } elseif (auth()->user()->status == 'A') {
       return Datatables::of($siswas)
@@ -97,14 +105,21 @@ class SiswaController extends Controller
         ->addColumn('kelas', function ($siswas) {
           return $siswas->getKelas ? $siswas->getKelas->nama : '-';
         })
+        ->addColumn('status_langganan', function ($siswas) {
+          if ($siswas->isLanggananLes()) {
+            $exp = $siswas->tgl_berakhir_les ? date('d/m/Y', strtotime($siswas->tgl_berakhir_les)) : 'Aktif';
+            return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">👑 Siswa Les (' . $exp . ')</span></center>';
+          }
+          return '<center><span class="label label-default" style="background-color:#94a3b8; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Reguler / Gratis</span></center>';
+        })
         ->addColumn('action', function ($siswas) {
           return '<div style="text-align:center">
-                              <a href="siswa/edit/' . $siswas->id . '" class="btn btn-xs btn-primary">Ubah</a>
+                              <a href="' . url('master/siswa/edit/' . $siswas->id) . '" class="btn btn-xs btn-primary">Ubah</a>
                               <button type="button" class="btn btn-xs btn-danger del-siswa" id="' . $siswas->id . '">Hapus</button>
-                              <a href="siswa/detail/' . $siswas->id . '" class="btn btn-xs btn-success">Detail</a>
+                              <a href="' . url('master/siswa/detail/' . $siswas->id) . '" class="btn btn-xs btn-success">Detail</a>
                             </div>';
         })
-        ->rawColumns(['action'])
+        ->rawColumns(['action', 'status_langganan'])
         ->make(true);
     }
   }
@@ -137,11 +152,23 @@ class SiswaController extends Controller
   public function dataMateri()
   {
     $materis = \App\Models\Materi::where('status', 'Y')->get();
+    $user = auth()->user();
+    $isLes = $user ? $user->isLanggananLes() : false;
+
     return Datatables::of($materis)
-      ->addColumn('action', function ($materis) {
-        return '<div style="text-align:center"><a href="' . url('/siswa/materi/detail/' . $materis->id) . '" class="btn btn-primary btn-xs">Baca Materi &rarr;</a></div>';
+      ->editColumn('judul', function ($materis) {
+        $badge = $materis->isGratis()
+          ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mr-2">🟢 Gratis</span>'
+          : '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200 mr-2">🔒 Khusus Les</span>';
+        return '<div class="flex items-center">' . $badge . '<span class="font-bold text-slate-900">' . e($materis->judul) . '</span></div>';
       })
-      ->rawColumns(['action'])
+      ->addColumn('action', function ($materis) use ($isLes) {
+        if ($materis->isGratis() || $isLes) {
+          return '<div style="text-align:center"><a href="' . url('/siswa/materi/detail/' . $materis->id) . '" class="btn btn-primary btn-xs">Baca Materi &rarr;</a></div>';
+        }
+        return '<div style="text-align:center"><button type="button" onclick="bukaModalVoucher(\'Materi: ' . addslashes($materis->judul) . '\', 0)" class="btn btn-warning btn-xs" style="background-color:#f59e0b; border-color:#d97706; color:#fff;"><i class="fa fa-lock"></i> Khusus Siswa Les</button></div>';
+      })
+      ->rawColumns(['judul', 'action'])
       ->make(true);
   }
 
@@ -150,10 +177,18 @@ class SiswaController extends Controller
     if (auth()->user()->status == 'S') {
       $user = User::where('id', auth()->user()->id)->first();
       $materi = \App\Models\Materi::where('id', $req->id)->first();
-      if ($materi) {
-        $materi->hits = $materi->hits + 1;
-        $materi->save();
+      if (!$materi) {
+        Session::flash('error', 'Materi pembelajaran tidak ditemukan!');
+        return redirect('/siswa/materi');
       }
+
+      if (!$materi->isGratis() && !$user->isLanggananLes()) {
+        Session::flash('error', 'Materi ini khusus untuk siswa bimbingan belajar Abdi Praja. Silakan daftar di website utama https://abdipraja.id/ atau masukkan kode voucher lisensi Anda.');
+        return redirect('/siswa/materi');
+      }
+
+      $materi->hits = $materi->hits + 1;
+      $materi->save();
       return view('halaman-siswa.detail_materi', compact('user', 'materi'));
     } else {
       return redirect()->route('home.index');
@@ -162,9 +197,9 @@ class SiswaController extends Controller
 
   public function ujian()
   {
-    if($this->cekVoucher() == true){
+    if (auth()->user()->status == 'S') {
       $user = User::where('id', auth()->user()->id)->first();
-      $pakets = Soal::get();
+      $pakets = Soal::orderBy('id', 'ASC')->get();
       return view('halaman-siswa.ujian', compact('user', 'pakets'));
     } else {
       return redirect()->route('home.index');
@@ -173,14 +208,26 @@ class SiswaController extends Controller
 
   public function detailUjian(Request $req)
   {
-    if($this->cekVoucher() == true){
+    if (auth()->user()->status == 'S') {
       $id         = $req->id;
       $key        = $req->key;
       $soal       = Soal::with('detail_soal_essays')->where('id', $id)->first();
+      if (!$soal) {
+        Session::flash('error', "Paket latihan soal tidak ditemukan!");
+        return redirect('/siswa/ujian');
+      }
+
+      $user = auth()->user();
+      // Guard: Cek apakah paket berbayar dan siswa belum berlangganan les
+      if (!$soal->isGratis() && !$user->isLanggananLes()) {
+        Session::flash('error', "Paket latihan ini khusus untuk siswa bimbingan belajar Abdi Praja. Silakan daftar di website utama https://abdipraja.id/ atau masukkan kode voucher lisensi Anda.");
+        return redirect('/siswa/ujian');
+      }
+
       $soals      = Detailsoal::where('id_soal', $id)->where('status', 'Y')->inRandomOrder()->get();
       $kunciSoal  = !empty($soal->password) ? hash("sha256", $soal->password.Auth::user()->id) : null;
 
-      if(empty($soal->password) || (!empty($key) && $key == $kunciSoal)){
+      if($soal->isGratis() || empty($soal->password) || (!empty($key) && $key == $kunciSoal)){
         if($soal->jenis_soal == 0){
           return view('halaman-siswa.detail_ujian', compact('soal', 'soals'));
         } else {
@@ -214,6 +261,13 @@ class SiswaController extends Controller
     $id_soal  = $req->id_soal;
     $soal     = Detailsoal::find($id);
 
+    if ($soal) {
+      $paket = Soal::find($soal->id_soal);
+      if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
+        return response("Akses ditolak: Paket soal ini khusus untuk siswa les.", 403);
+      }
+    }
+
     return view('halaman-siswa.get_soal', compact('soal'));
   }
 
@@ -235,8 +289,24 @@ class SiswaController extends Controller
     $id_detail_soal = $get_jawab[1];
     $id_siswa = $get_jawab[2];
     $detail_soal = Detailsoal::find($id_detail_soal);
+    if (!$detail_soal) {
+      return response("Soal tidak ditemukan", 404);
+    }
+    $paket = Soal::find($detail_soal->id_soal);
+    if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
+      return response('Akses ditolak', 403);
+    }
 
-    $jawab = Jawab::where('no_soal_id', $id_detail_soal)->where('id_user', auth()->user()->id)->first();
+    // Bersihkan jawaban lama yang sudah selesai (status = 1) pada paket ini agar sesi baru mulai dari nol
+    Jawab::where('id_soal', $detail_soal->id_soal)
+      ->where('id_user', auth()->user()->id)
+      ->where('status', 1)
+      ->delete();
+
+    $jawab = Jawab::where('no_soal_id', $id_detail_soal)
+      ->where('id_user', auth()->user()->id)
+      ->where('status', 0)
+      ->first();
     if (!$jawab) {
       $jawab = new Jawab;
       $jawab->revisi = 0;
@@ -299,6 +369,11 @@ class SiswaController extends Controller
 
   public function kirimJawaban(Request $req)
   {
+    $paket = Soal::find($req->id_soal);
+    if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
+      return response('Akses ditolak', 403);
+    }
+
     if($req->autoclose == 1){
       $try_count  = DB::table("jawabs_count")->select("try_count")->where([["id_soal", $req->id_soal], ["id_user", auth()->user()->id]])->first();
       if($try_count){
@@ -311,13 +386,16 @@ class SiswaController extends Controller
       DB::table('jawabs_count')->insertGetId(["id_soal" => $req->id_soal, "id_user" => auth()->user()->id, "try_count" => 3]);
     }
 
+    if (Jawab::where('id_soal', $req->id_soal)->where('id_user', auth()->user()->id)->where('status', 0)->exists()) {
+      Jawab::where('id_soal', $req->id_soal)->where('id_user', auth()->user()->id)->where('status', 1)->delete();
+    }
+
     Jawab::where('id_soal', $req->id_soal)->where('id_user', auth()->user()->id)->update(['status' => 1]);
   }
 
   public function hapusJawaban(Request $request)
   {
-    $resp = Jawab::where([['id_soal', $request->id_soal], ['id_user', auth()->user()->id], ['status', 0]])->delete();
-    //$resp = Jawab::where([['id_soal', $request->id_soal], ['id_user', auth()->user()->id], ['status', 0]])->update(['status' => -1]);
+    $resp = Jawab::where([['id_soal', $request->id_soal], ['id_user', auth()->user()->id]])->delete();
     if($resp){
       return 1;
     } else {
@@ -328,6 +406,14 @@ class SiswaController extends Controller
   public function finishUjian($id)
   {
     $soal = Soal::find($id);
+    if (!$soal) {
+      Session::flash('error', "Paket soal tidak ditemukan.");
+      return redirect('/siswa/ujian');
+    }
+    if (!$soal->isGratis() && !auth()->user()->isLanggananLes()) {
+      Session::flash('error', "Paket latihan ini khusus untuk siswa bimbingan belajar Abdi Praja. Silakan daftar di website utama https://abdipraja.id/ atau masukkan kode voucher lisensi Anda.");
+      return redirect('/siswa/ujian');
+    }
     $user_id = auth()->user()->id;
     $nilai = Jawab::where('id_soal', $id)->where('id_user', $user_id)->sum('score');
     $jawabs = Jawab::where('id_soal', $id)->where('id_user', $user_id)->get()->keyBy('no_soal_id');
@@ -400,6 +486,12 @@ class SiswaController extends Controller
   public function getDetailEssay(Request $request)
   {
     $soal_essay = DetailSoalEssay::with('userJawab')->find($request->id_soal_esay);
+    if ($soal_essay) {
+      $paket = Soal::find($soal_essay->id_soal);
+      if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
+        return response('Akses ditolak', 403);
+      }
+    }
     return view('halaman-siswa.get_soal_essay', compact('soal_essay'));
   }
 
@@ -407,6 +499,13 @@ class SiswaController extends Controller
   {
     if ($request->jawab_essay == '' || $request->jawab_essay == null) {
       return '';
+    }
+    $soal_essay = DetailSoalEssay::find($request->id_soal_esay);
+    if ($soal_essay) {
+      $paket = Soal::find($soal_essay->id_soal);
+      if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
+        return response('Akses ditolak', 403);
+      }
     }
     $check_jawaban = JawabEsay::where('id_user', auth()->user()->id)->where('id_detail_soal_esay', $request->id_soal_esay)->first();
     if (!$check_jawaban) {

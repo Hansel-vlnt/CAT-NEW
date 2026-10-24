@@ -196,7 +196,6 @@
 							<div class="col-md-8">
 							</div>
 							<div class="col-md-4 text-right">
-								<button type="button" class="btn btn-danger" id="keluar"><i class="fa fa-times-circle" aria-hidden="true"></i> Batalkan Ujian</button>
 								<button type="button" class="btn btn-success" id="kirim"><i class="fa fa-paper-plane" aria-hidden="true"></i> Selesai</button>
 							</div>
 						</div>
@@ -224,7 +223,7 @@
 									@endif
 											<div class="col-sm-2">
 												<span class="no_soal" id="{{ 'nav'.$data_number->id }}" data-id="{{ $data_number->id }}" data-no="{{ $key_number+1 }}">
-													<a class="btn btn-danger" href="#" style="margin:2px;min-width:50px !important;max-width:50px !important;">{{ $key_number+1 }}</a>
+													<a class="btn btn-danger" href="#">{{ $key_number+1 }}</a>
 												</span>
 											</div>
 									@if (($key_number+1) % 6 == 0)
@@ -278,54 +277,55 @@
 		min-height: 100vh;
 	}
 
-	.soal {
-		font-size: 17px;
-		line-height: 1.7;
+	.soal, .soal p, .soal span, .soal div {
+		font-size: 16px !important;
+		line-height: 1.7 !important;
 		color: #0f172a;
-		margin-bottom: 22px;
-		font-weight: 500;
+	}
+	@media (min-width: 640px) {
+		.soal, .soal p, .soal span, .soal div {
+			font-size: 18px !important;
+			line-height: 1.75 !important;
+		}
 	}
 
 	.jawab {
 		cursor: pointer;
 		margin-bottom: 12px;
-		padding: 16px 20px;
+		padding: 14px 16px;
 		border-radius: 14px;
 		border: 1.5px solid #cbd5e1;
 		background: #ffffff;
 		transition: all 0.15s ease-in-out;
-		font-size: 16px;
-		line-height: 1.6;
 		user-select: none;
 	}
-
-	.jawab:hover {
-		border-color: #64748b;
-		background: #f8fafc;
-	}
-
-	.jawab.dijawab {
-		background: #eff6ff !important;
-		border-color: #2563eb !important;
-		color: #1e3a8a !important;
-		font-weight: 600;
-		box-shadow: 0 2px 6px -1px rgba(37, 99, 235, 0.15);
-	}
-
-	.jawab.dijawab td {
-		color: #1e3a8a !important;
+	@media (min-width: 640px) {
+		.jawab {
+			padding: 16px 20px;
+		}
 	}
 
 	.huruf-opsi {
-		font-size: 16px;
+		font-size: 15px;
 		font-weight: 700;
 		color: #1e293b;
 	}
+	@media (min-width: 640px) {
+		.huruf-opsi {
+			font-size: 16px;
+		}
+	}
 
-	.pilihan {
-		font-size: 16px;
-		line-height: 1.6;
+	.pilihan, .pilihan p, .pilihan span, .pilihan div {
+		font-size: 15px !important;
+		line-height: 1.6 !important;
 		color: #1e293b;
+	}
+	@media (min-width: 640px) {
+		.pilihan, .pilihan p, .pilihan span, .pilihan div {
+			font-size: 16px !important;
+			line-height: 1.65 !important;
+		}
 	}
 
 	.timer {
@@ -347,11 +347,34 @@
 	.pilihan p {
 		margin: 0;
 	}
+
+	.no_soal {
+		display: inline-block !important;
+		margin: 2px !important;
+	}
+
+	.no_soal a {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
+		border-radius: 10px !important;
+		font-weight: 700 !important;
+		width: 44px !important;
+		min-width: 44px !important;
+		max-width: 44px !important;
+		height: 44px !important;
+		padding: 0 !important;
+		line-height: 1 !important;
+		font-size: 15px !important;
+		transition: all 0.15s ease-in-out;
+		text-decoration: none !important;
+		box-sizing: border-box !important;
+	}
 </style>
 @endpush
 @push('scripts')
 <script src="{{ url('js/jquery.fullscreen-min.js') }}"></script>
-<script src="{{ url('assets/dist/js/sweetalert2.all.min.js') }}"></script>
 <script>
 	var mulaiUjian = false;
 	var submitJawaban = false;
@@ -360,14 +383,25 @@
 	var violationStrikes = 0;
 	var timerInterval = null;
 
-	var activeKey = 'cbt_exam_active_{{ $soal->id }}';
-	var currentNoKey = 'cbt_exam_current_no_{{ $soal->id }}';
-	var qEndKey = 'cbt_exam_q_end_{{ $soal->id }}';
+	var activeKey = 'cbt_exam_v2_active_{{ $soal->id }}';
+	var currentNoKey = 'cbt_exam_v2_current_no_{{ $soal->id }}';
+	var qEndKey = 'cbt_exam_v2_q_end_{{ $soal->id }}';
+
+	localStorage.removeItem('cbt_exam_active_{{ $soal->id }}');
+	localStorage.removeItem('cbt_exam_current_no_{{ $soal->id }}');
+	localStorage.removeItem('cbt_exam_q_end_{{ $soal->id }}');
 
 	function clearExamStorage() {
+		if (timerInterval) {
+			clearInterval(timerInterval);
+			timerInterval = null;
+		}
 		localStorage.removeItem(activeKey);
 		localStorage.removeItem(currentNoKey);
 		localStorage.removeItem(qEndKey);
+		localStorage.removeItem('cbt_exam_active_{{ $soal->id }}');
+		localStorage.removeItem('cbt_exam_current_no_{{ $soal->id }}');
+		localStorage.removeItem('cbt_exam_q_end_{{ $soal->id }}');
 	}
 
 	function resetQuestionTimer(customSec) {
@@ -439,13 +473,14 @@
 			type: "POST",
 			url: "{{ url('siswa/ujian/kirim-jawaban') }}",
 			data: {
-				id_soal: id_soal
+				id_soal: id_soal,
+				autoclose: 1
 			},
 			success: function(data) {
-				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
+				window.location.replace("{{ url('siswa/ujian/finish/'.$soal->id) }}");
 			},
 			error: function() {
-				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
+				window.location.replace("{{ url('siswa/ujian/finish/'.$soal->id) }}");
 			}
 		});
 	}
@@ -475,9 +510,10 @@
 		if (violationStrikes === 1) {
 			if (typeof Swal !== 'undefined') {
 				Swal.fire({
+					target: '#specialstuff',
 					title: 'Peringatan Integritas!',
 					text: 'Terdeteksi ' + reason + '. Harap tetap berada di tampilan ujian. Pelanggaran berikutnya akan otomatis mengirim lembar ujian.',
-					icon: 'warning',
+					type: 'warning',
 					confirmButtonColor: '#2563eb',
 					confirmButtonText: 'Kembali Latihan'
 				}).then(function() {
@@ -504,32 +540,6 @@
 		}
 	});
 
-	$("#keluar").click(function(){
-		if (typeof Swal !== 'undefined') {
-			Swal.fire({
-				title: 'Batalkan Latihan Soal?',
-				text: 'Seluruh progres dan jawaban yang belum dikirim akan dibatalkan. Apakah Anda yakin?',
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#ef4444',
-				cancelButtonColor: '#64748b',
-				confirmButtonText: 'Ya, Batalkan Latihan',
-				cancelButtonText: 'Lanjutkan Latihan'
-			}).then(function(result) {
-				if (result.isConfirmed) {
-					batalUjian();
-					try {
-						$("#specialstuff").fullScreen(false);
-					} catch(e) {}
-				}
-			});
-		} else if (confirm('Apakah Anda yakin ingin membatalkan ujian? Semua jawaban sementara akan dihapus.')) {
-			batalUjian();
-			try {
-				$("#specialstuff").fullScreen(false);
-			} catch(e) {}
-		}
-	});
 
 	$(document).bind("fullscreenchange", function(e) {
 		if ($(document).fullScreen()) {
@@ -542,6 +552,12 @@
 	$(document).on('visibilitychange', function(){
 		if (document.hidden && mulaiUjian && !submitJawaban && !isUnloading) {
 			handleViolation('berpindah tab / aplikasi');
+		}
+	});
+
+	window.addEventListener('pageshow', function(event) {
+		if (event.persisted) {
+			window.location.reload();
 		}
 	});
 
@@ -569,6 +585,8 @@
 					targetNav.click();
 				}
 			}
+		} else {
+			clearExamStorage();
 		}
 
 		$('.no_soal').click(function() {
@@ -600,9 +618,19 @@
 		});
 
 		$("#start-exam").click(function() {
+			clearExamStorage();
 			localStorage.setItem(activeKey, '1');
 			localStorage.setItem(currentNoKey, '1');
 			resetQuestionTimer();
+
+			$('.jawab').removeClass('dijawab');
+			$('#no_soal_detail').html('1');
+
+			$.ajax({
+				type: "POST",
+				url: "{{ url('siswa/ujian/hapus-jawaban') }}",
+				data: { id_soal: "<?php echo $soal->id; ?>" }
+			});
 
 			$("#pre-exam-box").hide();
 			$("#specialstuff").show();

@@ -34,7 +34,7 @@
 	<span style="font-size: 13px; font-weight: 700; color: #475569;">Bobot: {{ $soal->score }} Poin</span>
 </div>
 
-<div class="soal" style="font-size: 17px; line-height: 1.7; color: #0f172a; margin-bottom: 22px; font-weight: 500;">
+<div class="soal" style="margin-bottom: 22px; font-weight: 500;">
 	{!! $soal->soal !!}
 </div>
 
@@ -67,9 +67,9 @@
 				<table width="100%">
 					<tr>
 						<td width="36px" valign="top">
-							<span class="huruf-opsi" style="font-size: 16px; font-weight: 700; color: #1e293b;">{{ $huruf }}.</span>
+							<span class="huruf-opsi">{{ $huruf }}.</span>
 						</td>
-						<td valign="top" class="pilihan" style="padding-top: 1px; font-size: 16px; line-height: 1.6; color: #1e293b;">
+						<td valign="top" class="pilihan" style="padding-top: 1px;">
 							{!! $teks !!}
 						</td>
 					</tr>

@@ -43,16 +43,28 @@ class HomeController extends Controller
     $aktifitas = Aktifitas::orderBy('id', 'DESC')->paginate(5);
     $userInfo = User::where('id', Auth::user()->id)->first();
     $voucher = ["status" => 0, "message" => "Anda tidak memiliki kode voucher yang aktif!", "expiry_date" => null];
+    $expiryFromVoucher = null;
 
     if(!empty($userInfo->voucher)){
       $checkVoucher   = DB::table('vouchers')->where('id_voucher', $userInfo->voucher)->whereNotNull("used_by")->first();
-      $expiry         = date('Y-m-d', strtotime(date($checkVoucher->used_date). ' + '.$checkVoucher->masa_berlaku.' days'));
-      $now            = date("Y-m-d");
-      if($now > $expiry){
-        $voucher = ["status" => 0, "message" => "Masa berlaku kode voucher Anda telah habis pada ".date("d-m-Y", strtotime($expiry)).". Silahkan gunakan kode voucher yang baru.", "expiry_date" => $expiry];
-      } else {
-        $voucher = ["status" => 1, "message" => "", "expiry_date" => $expiry];
+      if ($checkVoucher && !empty($checkVoucher->used_date)) {
+        $expiry         = date('Y-m-d', strtotime(date($checkVoucher->used_date). ' + '.$checkVoucher->masa_berlaku.' days'));
+        $expiryFromVoucher = $expiry;
+        $now            = date("Y-m-d");
+        if($now > $expiry){
+          $voucher = ["status" => 0, "message" => "Masa berlaku kode voucher Anda telah habis pada ".date("d-m-Y", strtotime($expiry)).". Silahkan gunakan kode voucher yang baru.", "expiry_date" => $expiry];
+        } else {
+          $voucher = ["status" => 1, "message" => "", "expiry_date" => $expiry];
+        }
       }
+    }
+
+    if ($userInfo && $userInfo->isLanggananLes()) {
+      $voucher = [
+        "status" => 1,
+        "message" => "",
+        "expiry_date" => $userInfo->tgl_berakhir_les ?: $expiryFromVoucher
+      ];
     }
     
     return view('home', compact('siswas', 'pakets', 'soals', 'voucher'));

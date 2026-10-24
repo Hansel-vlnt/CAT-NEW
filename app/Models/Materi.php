@@ -12,4 +12,9 @@ class Materi extends Model
   {
   	return $this->belongsTo('App\User', 'id_user');
   }
+
+  public function isGratis()
+  {
+    return empty($this->tipe_akses) || $this->tipe_akses === 'gratis';
+  }
 }

@@ -84,6 +84,9 @@ class CrudController extends Controller
       $query->judul = $request->judul;
       $query->isi = $request->isi;
       $query->status = $request->status;
+      if ($request->has('tipe_akses')) {
+        $query->tipe_akses = $request->tipe_akses;
+      }
       $query->save();
       return 'ok';
     }
@@ -211,6 +214,19 @@ class CrudController extends Controller
     $query->nisn = $request->nisn;
     $query->jk = $request->jk;
     $query->email = $request->email;
+    if ($request->has('status_langganan')) {
+      $status = trim(strtolower($request->status_langganan));
+      if ($status === 'les') {
+        $query->status_langganan = 'les';
+        $query->tgl_berakhir_les = !empty($request->tgl_berakhir_les) ? $request->tgl_berakhir_les : date('Y-m-d', strtotime('+1 year'));
+      } elseif ($status === 'gratis' || $status === 'reguler') {
+        $query->status_langganan = 'gratis';
+        $query->tgl_berakhir_les = null;
+        $query->voucher = null;
+      }
+    } elseif ($request->has('tgl_berakhir_les')) {
+      $query->tgl_berakhir_les = !empty($request->tgl_berakhir_les) ? $request->tgl_berakhir_les : null;
+    }
     $query->save();
     return 'ok';
   }
@@ -292,7 +308,14 @@ class CrudController extends Controller
     $query->status = 'S';
     $query->status_sekolah = 'Y';
     $query->email = $request->email;
-    $query->password = bcrypt(123456);
+    $rawStatus = trim(strtolower($request->status_langganan ?: 'gratis'));
+    $status_langganan = ($rawStatus === 'les') ? 'les' : 'gratis';
+    $tgl_berakhir_les = null;
+    if ($status_langganan === 'les') {
+      $tgl_berakhir_les = !empty($request->tgl_berakhir_les) ? $request->tgl_berakhir_les : date('Y-m-d', strtotime('+1 year'));
+    }
+    $query->status_langganan = $status_langganan;
+    $query->tgl_berakhir_les = $tgl_berakhir_les;
     $query->save();
     return 1;
   }
@@ -445,17 +468,26 @@ class CrudController extends Controller
 
   public function aktivasi(Request $req)
   {
-    $kode = $req->kode_voucher;
+    $kode = trim($req->kode_voucher);
 
     if(empty($kode)) {
       Session::flash('error', "Kode Voucher belum dimasukkan!");
     } else {
-      $checkVoucher = DB::table("vouchers")->where("kode_voucher", "=", $kode)->whereNull("used_by")->first();
+      $checkVoucher = DB::table("vouchers")->whereRaw('LOWER(kode_voucher) = LOWER(?)', [$kode])->whereNull("used_by")->first();
             
-      if(!empty($checkVoucher) && hash("sha256", $kode) == hash("sha256", $checkVoucher->kode_voucher)){
-        DB::table("users")->where("id", Auth::user()->id)->update(["voucher" => $checkVoucher->id_voucher]);
-        DB::table("vouchers")->where("id_voucher", $checkVoucher->id_voucher)->update(["used_by" => Auth::user()->id, "used_date" => date("Y-m-d")]);
-        Session::flash('success', "Kode Voucher berhasil diaktifkan.");
+      if(!empty($checkVoucher)){
+        $masa_berlaku = intval($checkVoucher->masa_berlaku) ?: 30;
+        $expiry = date('Y-m-d', strtotime(date("Y-m-d") . ' + ' . $masa_berlaku . ' days'));
+        DB::table("users")->where("id", Auth::user()->id)->update([
+          "voucher" => $checkVoucher->id_voucher,
+          "status_langganan" => "les",
+          "tgl_berakhir_les" => $expiry,
+        ]);
+        DB::table("vouchers")->where("id_voucher", $checkVoucher->id_voucher)->update([
+          "used_by" => Auth::user()->id,
+          "used_date" => date("Y-m-d")
+        ]);
+        Session::flash('success', "Selamat! Kode Voucher berhasil diaktifkan. Akun Anda aktif sebagai Siswa Les hingga " . date("d-m-Y", strtotime($expiry)) . ".");
       } else {
         Session::flash('error', "Kode Voucher tidak berlaku!");
       }

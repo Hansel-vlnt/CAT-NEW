@@ -31,14 +31,21 @@
         {{ csrf_field() }}
         <input type="hidden" name="sesi" value="{{ $materi->sesi }}">
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-5">
           <div class="sm:col-span-2">
             <label for="judul" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Judul Materi</label>
             <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" id="judul" name="judul" value="{{ $materi->judul }}" required>
           </div>
           <div>
+            <label for="tipe_akses" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tipe Akses</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" id="tipe_akses" name="tipe_akses">
+              <option value="gratis" {{ ($materi->tipe_akses == 'gratis' || empty($materi->tipe_akses)) ? 'selected' : '' }}>🟢 Gratis / Publik</option>
+              <option value="berbayar" {{ ($materi->tipe_akses == 'berbayar') ? 'selected' : '' }}>🔒 Khusus Siswa Les</option>
+            </select>
+          </div>
+          <div>
             <label for="status" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Publikasi</label>
-            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" id="status" name="status">
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" id="status" name="status">
               <option value="Y" {{ $materi->status == 'Y' ? 'selected' : '' }}>Terbitkan (Tampil ke Siswa)</option>
               <option value="N" {{ $materi->status == 'N' ? 'selected' : '' }}>Draft (Tidak Tampil)</option>
             </select>

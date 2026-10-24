@@ -78,7 +78,7 @@
           <div>
             <label for="kelas" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kelas / Rombel</label>
             <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition select2Class" id="kelas" name="kelas">
-              <option value="@if($siswa->getKelas) {{ $siswa->getKelas->id }} @else Pilih kelas @endif">@if($siswa->getKelas) {{ $siswa->getKelas->nama }} @else Pilih kelas @endif</option>
+              <option value="{{ $siswa->getKelas ? $siswa->getKelas->id : '' }}">{{ $siswa->getKelas ? $siswa->getKelas->nama : 'Pilih kelas' }}</option>
               @if($kelas->count())
                 @foreach($kelas as $data_kelas)
                   <option value="{{ $data_kelas->id }}">{{ $data_kelas->nama }}</option>
@@ -99,6 +99,21 @@
                 Perempuan
               </label>
             </div>
+          </div>
+
+          <div>
+            <label for="status_langganan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Keanggotaan</label>
+            <?php $isCurrentlyLes = ($siswa->status_langganan === 'les' || ($siswa->status_langganan !== 'gratis' && $siswa->isLanggananLes())); ?>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition bg-white" id="status_langganan" name="status_langganan">
+              <option value="gratis" {{ !$isCurrentlyLes ? 'selected' : '' }}>Siswa Reguler (Gratis)</option>
+              <option value="les" {{ $isCurrentlyLes ? 'selected' : '' }}>👑 Siswa Bimbingan Belajar (Les)</option>
+            </select>
+          </div>
+
+          <div id="wrap_tgl_berakhir_les" style="{{ !$isCurrentlyLes ? 'display: none;' : '' }}">
+            <label for="tgl_berakhir_les" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Masa Berlaku Les (Sampai Tanggal)</label>
+            <input type="date" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition bg-white" id="tgl_berakhir_les" name="tgl_berakhir_les" value="{{ $siswa->tgl_berakhir_les }}">
+            <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk otomatis 1 tahun ke depan.</p>
           </div>
         </div>
 
@@ -148,6 +163,15 @@ $(document).ready(function (){
         $("#message").html('<span class="text-emerald-600 font-bold">✓ Foto profil berhasil diunggah.</span>');
       }
     });
+  });
+
+  $('#status_langganan').on('change', function() {
+    if ($(this).val() === 'les') {
+      $('#wrap_tgl_berakhir_les').slideDown();
+    } else {
+      $('#wrap_tgl_berakhir_les').slideUp();
+      $('#tgl_berakhir_les').val('');
+    }
   });
 
   $("#simpan").click(function() {

@@ -40,13 +40,19 @@ class MateriController extends Controller
 	  												return 'Tidak tampil';
 	  											}
 	  										})
+	  										->editColumn('tipe_akses', function($materis) {
+	  											if ($materis->tipe_akses == 'berbayar') {
+	  												return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Khusus Les</span></center>';
+	  											}
+	  											return '<center><span class="label label-success" style="background-color:#10b981; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Gratis</span></center>';
+	  										})
 	  										->editColumn('hits', function($materis) {
 	  											return $materis->hits.' kali';
 	  										})
 	  										->addColumn('action', function($materis) {
 	  											return '<div style="text-align:center"><a href="' . url('/elearning/materi/detail/'.$materis->id) . '" class="btn btn-primary btn-xs">Detail</a> <a href="' . url('/elearning/materi/ubah/'.$materis->id) . '" class="btn btn-success btn-xs">Ubah</a></div>';
 	  										})
-	  										->rawColumns(['action', 'status'])
+	  										->rawColumns(['action', 'status', 'tipe_akses'])
 	  										->make(true);
   }
   public function detail(Request $request)

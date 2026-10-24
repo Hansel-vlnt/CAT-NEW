@@ -41,7 +41,7 @@
           <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Deskripsi materi cakupan soal">{{ $soal->deskripsi }}</textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <div>
             <label for="kategori_utama" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Kategori Utama</label>
             <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kategori_utama">
@@ -53,6 +53,19 @@
           <div>
             <label for="sub_kategori" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Sub Kategori</label>
             <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif" value="{{ $soal->sub_kategori }}">
+          </div>
+
+          <div>
+            <label for="tipe_akses" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Tipe Akses</label>
+            <select id="tipe_akses" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" name="tipe_akses">
+              <option value="gratis" {{ ($soal->tipe_akses == 'gratis' || empty($soal->tipe_akses)) ? 'selected' : '' }}>🟢 Gratis / Public Trial</option>
+              <option value="berbayar" {{ ($soal->tipe_akses == 'berbayar') ? 'selected' : '' }}>🔒 Berbayar / Khusus Les</option>
+            </select>
+          </div>
+
+          <div id="wrap_harga">
+            <label for="harga" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Harga Paket (Rp)</label>
+            <input id="harga" type="number" min="0" step="5000" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="harga" placeholder="0" value="{{ $soal->harga ?? 0 }}">
           </div>
         </div>
 
@@ -107,6 +120,18 @@
 @push('scripts')
 <script>
 $(document).ready(function(){
+  function toggleHarga() {
+    if ($("#tipe_akses").val() === 'gratis') {
+      $("#wrap_harga").hide();
+      $("#harga").prop('disabled', true).val(0);
+    } else {
+      $("#wrap_harga").show();
+      $("#harga").prop('disabled', false);
+    }
+  }
+  $("#tipe_akses").on("change", toggleHarga);
+  toggleHarga();
+
   $("#waktu_menit").on("input", function() {
     var menit = parseInt($(this).val()) || 0;
     var detik = menit * 60;

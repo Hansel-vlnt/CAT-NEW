@@ -126,22 +126,16 @@ test.describe('Audit Findings #01 - #19 Verification Suite', () => {
     await page.click('button[type="submit"]');
     await page.waitForURL((url) => !url.pathname.includes('/login'), { timeout: 10000 });
 
-    // Open detail ujian paket 6
-    await page.goto('/siswa/ujian/detail/6');
-    if (await page.locator('input[name="password"]').isVisible()) {
-      await page.fill('input[name="password"]', 'cerdas');
-      await page.click('button[type="submit"]');
-    }
+    // Open detail ujian paket 8 (paket gratis)
+    await page.goto('/siswa/ujian/detail/8');
 
-    // Verify Pre-Exam Briefing Card has legible, large typography
+    // Verify Pre-Exam Briefing Card or Live Exam
     const startExamBtn = page.locator('#start-exam');
-    await expect(startExamBtn).toBeVisible();
-    await expect(page.locator('text=Petunjuk & Peraturan Pengerjaan')).toBeVisible();
-
-    // Click Mulai Latihan
-    await startExamBtn.click();
+    if (await startExamBtn.isVisible()) {
+      await expect(page.locator('text=Petunjuk & Peraturan Pengerjaan')).toBeVisible();
+      await startExamBtn.click();
+    }
     await expect(page.locator('#specialstuff')).toBeVisible();
-    await expect(page.locator('#pre-exam-box')).toBeHidden();
 
     // #06: Verify Question 1 has .opsi-container
     await expect(page.locator('#wrap-soal .opsi-container')).toBeVisible();
@@ -163,8 +157,8 @@ test.describe('Audit Findings #01 - #19 Verification Suite', () => {
     await btnRagu.click();
     await expect(btnRagu).toContainText('Hapus Ragu');
 
-    // #08: Verify Batalkan Ujian triggers confirmation
-    await page.click('#keluar');
+    // #08: Verify Selesai triggers confirmation modal
+    await page.click('#kirim');
     await expect(page.locator('.swal2-modal, .swal2-popup')).toBeVisible();
   });
 

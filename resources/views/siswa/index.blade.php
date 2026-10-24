@@ -103,6 +103,20 @@
           </div>
         </div>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="status_langganan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Keanggotaan</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition bg-white" id="status_langganan" name="status_langganan">
+              <option value="gratis" selected>Siswa Reguler (Gratis)</option>
+              <option value="les">👑 Siswa Bimbingan Belajar (Les)</option>
+            </select>
+          </div>
+          <div>
+            <label for="tgl_berakhir_les" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Masa Berlaku Les (Sampai Tanggal)</label>
+            <input type="date" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition bg-white" id="tgl_berakhir_les" name="tgl_berakhir_les">
+          </div>
+        </div>
+
         <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
 
         <div class="pt-4 flex items-center gap-3">
@@ -160,6 +174,7 @@
               <th style="padding: 16px 18px;">NISN</th>
               <th style="padding: 16px 18px;">Gender</th>
               <th style="padding: 16px 18px;">Kelas</th>
+              <th style="padding: 16px 18px; text-align: center; width: 150px;">Status Member</th>
               <th style="padding: 16px 18px; width: 180px; text-align: center;">Aksi</th>
             </tr>
           </thead>
@@ -240,6 +255,13 @@ $(document).ready(function() {
         orderable: false,
         searchable: false,
         defaultContent: '-'
+      },
+      {
+        data: 'status_langganan',
+        name: 'status_langganan',
+        orderable: false,
+        searchable: false,
+        className: "text-center"
       },
       {
         data: 'action',

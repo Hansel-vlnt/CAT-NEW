@@ -27,4 +27,9 @@ class Soal extends Model
   {
     return $this->hasMany(DetailSoalEssay::class, 'id_soal', 'id');
   }
+
+  public function isGratis()
+  {
+    return empty($this->tipe_akses) || $this->tipe_akses === 'gratis';
+  }
 }

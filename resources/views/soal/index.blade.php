@@ -48,7 +48,7 @@
           <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Tuliskan materi yang diujikan dalam paket ini"></textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label for="kategori_utama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Utama</label>
             <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kategori_utama">
@@ -60,6 +60,19 @@
           <div>
             <label for="sub_kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Sub Kategori</label>
             <input id="sub_kategori" type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="sub_kategori" placeholder="Contoh: TIU, TWK, TKP, Kuantitatif">
+          </div>
+
+          <div>
+            <label for="tipe_akses" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tipe Akses</label>
+            <select id="tipe_akses" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" name="tipe_akses">
+              <option value="gratis" selected>🟢 Gratis / Public Trial</option>
+              <option value="berbayar">🔒 Berbayar / Khusus Les</option>
+            </select>
+          </div>
+
+          <div id="wrap_harga">
+            <label for="harga" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Harga Paket (Rp)</label>
+            <input id="harga" type="number" min="0" step="5000" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="harga" placeholder="0" value="0">
           </div>
         </div>
 
@@ -126,6 +139,7 @@
               <th style="padding: 14px 16px;">Deskripsi</th>
               <th style="padding: 14px 16px; text-align: center; width: 90px;">Waktu</th>
               <th style="padding: 14px 16px; text-align: center; width: 110px;">Model</th>
+              <th style="padding: 14px 16px; text-align: center; width: 110px;">Akses</th>
               <th style="padding: 14px 16px; text-align: center; width: 90px;">Token</th>
               <th style="padding: 14px 16px; text-align: center; width: 150px;">Aksi</th>
             </tr>
@@ -201,6 +215,7 @@ $(document).ready(function (){
       {data: 'deskripsi', name: 'deskripsi', orderable: true, searchable: true, className: "text-xs text-slate-500" },
       {data: 'waktu', name: 'waktu', orderable: true, searchable: true, className: "text-center font-bold text-xs" },
       {data: 'jenis', name: 'jenis', orderable: true, searchable: true, className: "text-center text-xs" },
+      {data: 'tipe_akses', name: 'tipe_akses', orderable: true, searchable: true, className: "text-center" },
       {data: 'password', name: 'password', orderable: true, searchable: true, className: "text-center text-xs font-mono font-bold" },
       {data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center" },
     ],
@@ -210,6 +225,18 @@ $(document).ready(function (){
   $("#btn-soal").click(function() {
     $("#wrap-soal").slideToggle();
   });
+
+  function toggleHarga() {
+    if ($("#tipe_akses").val() === 'gratis') {
+      $("#wrap_harga").hide();
+      $("#harga").prop('disabled', true).val(0);
+    } else {
+      $("#wrap_harga").show();
+      $("#harga").prop('disabled', false);
+    }
+  }
+  $("#tipe_akses").on("change", toggleHarga);
+  toggleHarga();
 
   $("#waktu_menit").on("input", function() {
     var menit = parseInt($(this).val()) || 0;

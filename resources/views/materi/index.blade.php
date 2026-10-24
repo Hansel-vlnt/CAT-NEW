@@ -40,14 +40,21 @@
         <?php $sesi = md5(microtime(true) . rand(1000, 9999)); ?>
         <input type="hidden" name="sesi" value="{{ $sesi }}">
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-5">
           <div class="sm:col-span-2">
             <label for="judul" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Judul Materi</label>
             <input type="text" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" id="judul" name="judul" placeholder="Contoh: Trik Cepat Silogisme & Logika Posisi SKD TIU" required>
           </div>
           <div>
+            <label for="tipe_akses" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Tipe Akses</label>
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" id="tipe_akses" name="tipe_akses">
+              <option value="gratis" selected>🟢 Gratis / Publik</option>
+              <option value="berbayar">🔒 Khusus Siswa Les</option>
+            </select>
+          </div>
+          <div>
             <label for="status" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Status Publikasi</label>
-            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" id="status" name="status">
+            <select class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition bg-white" id="status" name="status">
               <option value="Y" selected>Terbitkan (Tampil ke Siswa)</option>
               <option value="N">Draft (Tidak Tampil)</option>
             </select>
@@ -90,8 +97,9 @@
             <tr class="text-slate-600 text-xs font-bold uppercase tracking-wider bg-slate-50">
               <th style="padding: 14px 16px; width: 60px;">ID</th>
               <th style="padding: 14px 16px;">Judul Materi</th>
-              <th style="padding: 14px 16px; text-align: center; width: 120px;">Dibaca</th>
-              <th style="padding: 14px 16px; text-align: center; width: 120px;">Status</th>
+              <th style="padding: 14px 16px; text-align: center; width: 120px;">Akses</th>
+              <th style="padding: 14px 16px; text-align: center; width: 100px;">Dibaca</th>
+              <th style="padding: 14px 16px; text-align: center; width: 100px;">Status</th>
               <th style="padding: 14px 16px; text-align: center; width: 160px;">Aksi</th>
             </tr>
           </thead>
@@ -134,6 +142,7 @@ $(document).ready(function() {
     columns: [
       { data: 'id', name: 'id', className: 'font-mono text-slate-500' },
       { data: 'judul', name: 'judul', className: 'font-bold text-slate-900 text-sm' },
+      { data: 'tipe_akses', name: 'tipe_akses', className: 'text-center' },
       { data: 'hits', name: 'hits', className: 'text-center text-xs' },
       { data: 'status', name: 'status', className: 'text-center text-xs' },
       { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' }

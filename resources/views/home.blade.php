@@ -229,6 +229,11 @@
               <p class="text-sm text-amber-800">
                 {{ $voucher["message"] ?: 'Masukkan kode voucher yang Anda miliki untuk membuka seluruh paket latihan soal CBT.' }}
               </p>
+              <div class="pt-1">
+                <a href="https://abdipraja.id/" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-indigo-700 hover:text-indigo-900 inline-flex items-center gap-1">
+                  <i class="fa fa-globe"></i> Belum punya voucher? Beli paket bimbingan belajar di abdipraja.id &rarr;
+                </a>
+              </div>
             </div>
             <form method="post" id="voucher" action="{{ route('aktivasi') }}" class="flex flex-col sm:flex-row items-center gap-2.5 w-full md:w-auto">
               {{ csrf_field() }}

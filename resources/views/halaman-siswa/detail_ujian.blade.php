@@ -141,7 +141,7 @@
 							<span style="font-size: 13px; font-weight: 700; color: #475569;">Bobot: {{ $data->score }} Poin</span>
 						</div>
 
-						<div class="soal" style="font-size: 17px; line-height: 1.7; color: #0f172a; margin-bottom: 22px; font-weight: 500;">
+						<div class="soal" style="margin-bottom: 22px; font-weight: 500;">
 							{!! $data->soal !!}
 						</div>
 
@@ -174,9 +174,9 @@
 										<table width="100%">
 											<tr>
 												<td width="36px" valign="top">
-													<span class="huruf-opsi" style="font-size: 16px; font-weight: 700; color: #1e293b;">{{ $huruf }}.</span>
+													<span class="huruf-opsi">{{ $huruf }}.</span>
 												</td>
-												<td valign="top" class="pilihan" style="padding-top: 1px; font-size: 16px; line-height: 1.6; color: #1e293b;">
+												<td valign="top" class="pilihan" style="padding-top: 1px;">
 													{!! $teks !!}
 												</td>
 											</tr>
@@ -190,20 +190,29 @@
 						@endif
 					</div>
 				</div>
-				<div class="box-footer">
+				<div class="box-footer" style="padding: 16px 20px; background: #ffffff; border-top: 1px solid #f1f5f9;">
 					<div class="row">
-						<div id="confirm" style="display: none; margin: 15px 0; border: solid thin #aaa; padding: 10px;"></div>
+						<div id="confirm" style="display: none; margin-bottom: 16px; border-radius: 14px; border: 1.5px solid #cbd5e1; background: #f8fafc; padding: 14px 18px;"></div>
 					</div>
 					<div class="row">
-						<div class="col-md-12" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-							<div style="display: flex; gap: 8px; flex-wrap: wrap;">
-								<button type="button" class="btn btn-primary" id="prev"><i class="fa fa-arrow-left" aria-hidden="true"></i> Sebelumnya</button>
-								<button type="button" class="btn btn-warning" id="btn-ragu"><i class="fa fa-flag-o" aria-hidden="true"></i> Ragu-ragu</button>
-								<button type="button" class="btn btn-primary" id="next"><i class="fa fa-arrow-right" aria-hidden="true"></i> Selanjutnya</button>
-							</div>
-							<div style="display: flex; gap: 8px; flex-wrap: wrap;">
-								<button type="button" class="btn btn-danger" id="keluar"><i class="fa fa-times-circle" aria-hidden="true"></i> Batalkan Ujian</button>
-								<button type="button" class="btn btn-success" id="kirim"><i class="fa fa-paper-plane" aria-hidden="true"></i> Selesai</button>
+						<div class="col-md-12">
+							<div class="exam-actions-wrapper">
+								<div class="exam-action-group group-nav">
+									<button type="button" class="btn btn-primary btn-action-cbt" id="prev">
+										<i class="fa fa-arrow-left"></i> <span>Sebelumnya</span>
+									</button>
+									<button type="button" class="btn btn-warning btn-action-cbt" id="btn-ragu">
+										<i class="fa fa-flag-o"></i> <span>Ragu-ragu</span>
+									</button>
+								</div>
+								<div class="exam-action-group group-submit">
+									<button type="button" class="btn btn-primary btn-action-cbt" id="next">
+										<span>Selanjutnya</span> <i class="fa fa-arrow-right"></i>
+									</button>
+									<button type="button" class="btn btn-success btn-action-cbt" id="kirim">
+										<i class="fa fa-paper-plane"></i> <span>Selesai</span>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -237,7 +246,7 @@
 											<div class="col-sm-12 text-center">
 									@endif
 												<span class="no_soal" id="{{ 'nav'.$data_number->id }}" data-id="{{ $data_number->id }}" data-no="{{ $key_number+1 }}">
-													<a class="btn {{ $sudah_dijawab ? 'btn-success' : 'btn-default' }} num-btn {{ $key_number == 0 ? 'active-num' : '' }}" href="#" style="margin:2px;min-width:46px !important;max-width:46px !important; font-weight:bold;">{{ $key_number+1 }}</a>
+													<a class="btn {{ $sudah_dijawab ? 'btn-success' : 'btn-default' }} num-btn {{ $key_number == 0 ? 'active-num' : '' }}" href="#">{{ $key_number+1 }}</a>
 												</span>
 									@if (($key_number+1) % 6 == 0)
 											</div>
@@ -275,25 +284,32 @@
 		min-height: 100vh;
 	}
 
-	.soal {
-		font-size: 17px;
-		line-height: 1.7;
+	.soal, .soal p, .soal span, .soal div {
+		font-size: 16px !important;
+		line-height: 1.7 !important;
 		color: #0f172a;
-		margin-bottom: 22px;
-		font-weight: 500;
+	}
+	@media (min-width: 640px) {
+		.soal, .soal p, .soal span, .soal div {
+			font-size: 18px !important;
+			line-height: 1.75 !important;
+		}
 	}
 
 	.jawab {
 		cursor: pointer;
 		margin-bottom: 12px;
-		padding: 16px 20px;
+		padding: 14px 16px;
 		border-radius: 14px;
 		border: 1.5px solid #cbd5e1;
 		background: #ffffff;
 		transition: all 0.15s ease-in-out;
-		font-size: 16px;
-		line-height: 1.6;
 		user-select: none;
+	}
+	@media (min-width: 640px) {
+		.jawab {
+			padding: 16px 20px;
+		}
 	}
 
 	.jawab:hover {
@@ -314,15 +330,26 @@
 	}
 
 	.huruf-opsi {
-		font-size: 16px;
+		font-size: 15px;
 		font-weight: 700;
 		color: #1e293b;
 	}
+	@media (min-width: 640px) {
+		.huruf-opsi {
+			font-size: 16px;
+		}
+	}
 
-	.pilihan {
-		font-size: 16px;
-		line-height: 1.6;
+	.pilihan, .pilihan p, .pilihan span, .pilihan div {
+		font-size: 15px !important;
+		line-height: 1.6 !important;
 		color: #1e293b;
+	}
+	@media (min-width: 640px) {
+		.pilihan, .pilihan p, .pilihan span, .pilihan div {
+			font-size: 16px !important;
+			line-height: 1.65 !important;
+		}
 	}
 
 	.timer {
@@ -345,14 +372,28 @@
 		margin: 0;
 	}
 
+	.no_soal {
+		display: inline-block !important;
+		margin: 2px !important;
+	}
+
 	.no_soal a {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
 		border-radius: 10px !important;
 		font-weight: 700 !important;
-		min-width: 48px !important;
-		height: 42px !important;
-		line-height: 30px !important;
+		width: 44px !important;
+		min-width: 44px !important;
+		max-width: 44px !important;
+		height: 44px !important;
+		padding: 0 !important;
+		line-height: 1 !important;
 		font-size: 15px !important;
 		transition: all 0.15s ease-in-out;
+		text-decoration: none !important;
+		box-sizing: border-box !important;
 	}
 
 	.no_soal a.btn-default {
@@ -378,11 +419,84 @@
 		box-shadow: 0 0 0 3px #2563eb !important;
 		border-color: #2563eb !important;
 	}
+
+	/* ACTION BUTTONS (SEJAJAR & PERFEKSIONIS) */
+	.exam-actions-wrapper {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+		width: 100%;
+	}
+
+	.exam-action-group {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.btn-action-cbt {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		gap: 8px !important;
+		height: 46px !important;
+		padding: 0 22px !important;
+		border-radius: 12px !important;
+		font-size: 14.5px !important;
+		font-weight: 700 !important;
+		line-height: 1 !important;
+		box-sizing: border-box !important;
+		transition: all 0.15s ease-in-out !important;
+		box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+	}
+
+	.btn-action-cbt:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+	}
+
+	.btn-action-cbt:active {
+		transform: translateY(0);
+	}
+
+	@media (max-width: 640px) {
+		.exam-actions-wrapper {
+			display: grid !important;
+			grid-template-columns: 1fr 1fr !important;
+			gap: 10px !important;
+			width: 100% !important;
+		}
+
+		.exam-action-group {
+			display: contents !important;
+		}
+
+		.btn-action-cbt {
+			width: 100% !important;
+			padding: 0 10px !important;
+			font-size: 14px !important;
+			height: 46px !important;
+		}
+
+		#prev {
+			order: 1 !important;
+		}
+		#next {
+			order: 2 !important;
+		}
+		#btn-ragu {
+			order: 3 !important;
+		}
+		#kirim {
+			order: 4 !important;
+		}
+	}
 </style>
 @endpush
 @push('scripts')
 <script src="{{ url('js/jquery.fullscreen-min.js') }}"></script>
-<script src="{{ url('assets/dist/js/sweetalert2.all.min.js') }}"></script>
 <script>
 	var mulaiUjian = false;
 	var submitJawaban = false;
@@ -391,14 +505,36 @@
 	var violationStrikes = 0;
 	var timerInterval = null;
 
-	var activeKey = 'cbt_exam_active_{{ $soal->id }}';
-	var endKey = 'cbt_exam_end_{{ $soal->id }}';
-	var currentNoKey = 'cbt_exam_current_no_{{ $soal->id }}';
+	var activeKey = 'cbt_exam_v2_active_{{ $soal->id }}';
+	var endKey = 'cbt_exam_v2_end_{{ $soal->id }}';
+	var currentNoKey = 'cbt_exam_v2_current_no_{{ $soal->id }}';
+
+	// Bersihkan key versi lama yang mungkin tertinggal di browser
+	localStorage.removeItem('cbt_exam_active_{{ $soal->id }}');
+	localStorage.removeItem('cbt_exam_end_{{ $soal->id }}');
+	localStorage.removeItem('cbt_exam_current_no_{{ $soal->id }}');
 
 	function clearExamStorage() {
+		if (timerInterval) {
+			clearInterval(timerInterval);
+			timerInterval = null;
+		}
 		localStorage.removeItem(activeKey);
 		localStorage.removeItem(endKey);
 		localStorage.removeItem(currentNoKey);
+		localStorage.removeItem('cbt_exam_active_{{ $soal->id }}');
+		localStorage.removeItem('cbt_exam_end_{{ $soal->id }}');
+		localStorage.removeItem('cbt_exam_current_no_{{ $soal->id }}');
+		$('.no_soal').each(function() {
+			var id = $(this).attr('data-id');
+			localStorage.removeItem('ragu_{{$soal->id}}_' + id);
+		});
+		for (var i = localStorage.length - 1; i >= 0; i--) {
+			var k = localStorage.key(i);
+			if (k && k.indexOf('ragu_{{$soal->id}}_') === 0) {
+				localStorage.removeItem(k);
+			}
+		}
 	}
 
 	function mulaiTimer(remainingDuration) {
@@ -457,10 +593,10 @@
 				autoclose: 1
 			},
 			success: function(data) {
-				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
+				window.location.replace("{{ url('siswa/ujian/finish/'.$soal->id) }}");
 			},
 			error: function() {
-				window.location.href = "{{ url('siswa/ujian/finish/'.$soal->id) }}";
+				window.location.replace("{{ url('siswa/ujian/finish/'.$soal->id) }}");
 			}
 		});
 	}
@@ -469,15 +605,15 @@
 		var current = parseInt($("#no_soal_detail").text()) || 1;
 		var jumlah_soal = parseInt($("#jumlah_soal").text()) || 1;
 		if(current-1 > 0){
-			$("#prev").show();
+			$("#prev").prop('disabled', false).css({'opacity': '1', 'cursor': 'pointer'});
 		} else {
-			$("#prev").hide();
+			$("#prev").prop('disabled', true).css({'opacity': '0.3', 'cursor': 'not-allowed'});
 		}
 
 		if(current+1 <= jumlah_soal){
-			$("#next").show();
+			$("#next").prop('disabled', false).css({'opacity': '1', 'cursor': 'pointer'});
 		} else {
-			$("#next").hide();
+			$("#next").prop('disabled', true).css({'opacity': '0.3', 'cursor': 'not-allowed'});
 		}
 	}
 
@@ -506,9 +642,10 @@
 		if (violationStrikes === 1) {
 			if (typeof Swal !== 'undefined') {
 				Swal.fire({
+					target: '#specialstuff',
 					title: 'Peringatan Integritas!',
 					text: 'Terdeteksi ' + reason + '. Harap tetap berada di tampilan ujian. Pelanggaran berikutnya akan otomatis mengirim lembar ujian.',
-					icon: 'warning',
+					type: 'warning',
 					confirmButtonColor: '#2563eb',
 					confirmButtonText: 'Kembali Latihan'
 				}).then(function() {
@@ -535,32 +672,6 @@
 		}
 	});
 
-	$("#keluar").click(function(){
-		if (typeof Swal !== 'undefined') {
-			Swal.fire({
-				title: 'Batalkan Latihan Soal?',
-				text: 'Seluruh progres dan jawaban yang belum dikirim akan dibatalkan. Apakah Anda yakin?',
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#ef4444',
-				cancelButtonColor: '#64748b',
-				confirmButtonText: 'Ya, Batalkan Latihan',
-				cancelButtonText: 'Lanjutkan Latihan'
-			}).then(function(result) {
-				if (result.isConfirmed) {
-					batalUjian();
-					try {
-						$("#specialstuff").fullScreen(false);
-					} catch(e) {}
-				}
-			});
-		} else if (confirm('Apakah Anda yakin ingin membatalkan ujian? Semua jawaban sementara akan dihapus.')) {
-			batalUjian();
-			try {
-				$("#specialstuff").fullScreen(false);
-			} catch(e) {}
-		}
-	});
 
 	$(document).bind("fullscreenchange", function(e) {
 		if ($(document).fullScreen()) {
@@ -597,15 +708,22 @@
 		}
 	}
 
+	window.addEventListener('pageshow', function(event) {
+		if (event.persisted) {
+			window.location.reload();
+		}
+	});
+
 	$(document).ready(function() {
-		refreshRaguState();
 		updateActiveNav(1);
+		checkPrevNext();
 
 		// Periksa apakah ujian sedang aktif (misalnya setelah reload halaman)
 		var isExamActive = localStorage.getItem(activeKey) === '1';
 		var storedEndTime = parseInt(localStorage.getItem(endKey), 10);
 
 		if (isExamActive && storedEndTime) {
+			refreshRaguState();
 			var now = Date.now();
 			var remaining = Math.floor((storedEndTime - now) / 1000);
 			if (remaining > 0) {
@@ -627,13 +745,28 @@
 				$("#specialstuff").show();
 				kirimJawaban();
 			}
+		} else {
+			clearExamStorage();
 		}
 
 		$("#start-exam").click(function() {
+			clearExamStorage();
 			var waktuUjian = parseInt("<?php echo $soal->waktu; ?>", 10) || 3600;
 			localStorage.setItem(activeKey, '1');
 			localStorage.setItem(endKey, (Date.now() + (waktuUjian * 1000)).toString());
 			localStorage.setItem(currentNoKey, '1');
+
+			$('.no_soal a').removeClass('btn-success btn-warning active-num').addClass('btn-default');
+			$('.jawab').removeClass('dijawab');
+			$('#no_soal_detail').html('1');
+			updateActiveNav(1);
+			checkPrevNext();
+
+			$.ajax({
+				type: "POST",
+				url: "{{ url('siswa/ujian/hapus-jawaban') }}",
+				data: { id_soal: "<?php echo $soal->id; ?>" }
+			});
 
 			$("#pre-exam-box").hide();
 			$("#specialstuff").show();
@@ -677,6 +810,7 @@
 			localStorage.setItem(currentNoKey, no);
 			$('#wrap-soal').html('<center><i class="fa fa-spinner fa-spin" style="font-size: 30pt; color: #12b9cc; margin: 15px;" aria-hidden="true"></i></center>');
 			$('#no_soal_detail').html(no);
+			checkPrevNext();
 			updateActiveNav(no);
 			var id_soal = $this.attr('data-id');
 			var id_soal2 = "<?php echo $soal->id; ?>";
@@ -718,11 +852,29 @@
 		});
 
 		$('#kirim').click(function() {
-			$('#confirm').html(`
-				<p class="font-bold text-slate-800 mb-2">Setelah mengirimkan jawaban, latihan selesai dan nilai langsung keluar. Apakah Anda yakin?</p>
-  			<button type="button" class="btn btn-default" id="batal"><i class="fa fa-arrow-left"></i> Cek Kembali</button>
-  			<button type="button" class="btn btn-success" id="kirim-jawaban" data-id="{{ $soal->id }}"><i class="fa fa-check-circle"></i> Ya, Kumpulkan Jawaban</button>
-			`).show();
+			if (typeof Swal !== 'undefined') {
+				Swal.fire({
+					target: '#specialstuff',
+					title: 'Selesaikan & Kumpulkan Ujian?',
+					text: 'Seluruh jawaban Anda akan disimpan dan hasil nilai langsung ditampilkan.',
+					type: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#10b981',
+					cancelButtonColor: '#64748b',
+					confirmButtonText: '<i class="fa fa-paper-plane"></i> Ya, Kumpulkan Jawaban',
+					cancelButtonText: 'Cek Kembali'
+				}).then(function(result) {
+					if (result && (result.value || result.isConfirmed)) {
+						kirimJawaban();
+					}
+				});
+			} else {
+				$('#confirm').html(`
+					<p class="font-bold text-slate-800 mb-2">Setelah mengirimkan jawaban, latihan selesai dan nilai langsung keluar. Apakah Anda yakin?</p>
+					<button type="button" class="btn btn-default" id="batal"><i class="fa fa-arrow-left"></i> Cek Kembali</button>
+					<button type="button" class="btn btn-success" id="kirim-jawaban" data-id="{{ $soal->id }}"><i class="fa fa-check-circle"></i> Ya, Kumpulkan Jawaban</button>
+				`).show();
+			}
 		});
 
 		$(document).on('click', '#batal', function() {
