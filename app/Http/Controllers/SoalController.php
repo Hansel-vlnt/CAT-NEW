@@ -121,8 +121,7 @@ class SoalController extends Controller
       })
       ->editColumn('tipe_akses', function ($soals) {
         if ($soals->tipe_akses == 'berbayar') {
-          $hargaText = $soals->harga ? ' (Rp ' . number_format($soals->harga, 0, ',', '.') . ')' : '';
-          return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Khusus Les' . $hargaText . '</span></center>';
+          return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Khusus Les</span></center>';
         }
         return '<center><span class="label label-success" style="background-color:#10b981; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Gratis</span></center>';
       })
