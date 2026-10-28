@@ -78,7 +78,7 @@ class PaketLanggananController extends Controller
             'deskripsi'    => $request->deskripsi ? trim($request->deskripsi) : null,
             'fitur'        => $request->fitur ? trim($request->fitur) : null,
             'urutan'       => $request->urutan ? intval($request->urutan) : 0,
-            'is_aktif'     => $request->has('is_aktif') ? 1 : 1,
+            'is_aktif'     => 1,
         ]);
 
         $aktifitas = new Aktifitas;
@@ -131,7 +131,6 @@ class PaketLanggananController extends Controller
             'deskripsi'    => $request->deskripsi ? trim($request->deskripsi) : null,
             'fitur'        => $request->fitur ? trim($request->fitur) : null,
             'urutan'       => $request->urutan ? intval($request->urutan) : 0,
-            'is_aktif'     => $request->has('is_aktif') ? 1 : 0,
         ]);
 
         $aktifitas = new Aktifitas;

@@ -232,16 +232,10 @@
           <p class="text-[11px] text-slate-400 mt-1">Setiap baris baru akan otomatis ditampilkan sebagai checklist centang hijau di kartu siswa.</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="pt-2">
           <div>
             <label for="urutan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Urutan Tampil</label>
             <input type="number" min="0" name="urutan" id="urutan" value="1" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition font-semibold">
-          </div>
-          <div class="flex items-center pt-6">
-            <label class="inline-flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="is_aktif" value="1" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-              <span class="text-sm font-bold text-slate-700">Aktifkan di Katalog Siswa</span>
-            </label>
           </div>
         </div>
 
@@ -322,16 +316,10 @@
           <textarea name="fitur" id="edit_fitur" rows="4" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition font-sans"></textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div class="pt-2">
           <div>
             <label for="edit_urutan" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Urutan Tampil</label>
             <input type="number" min="0" name="urutan" id="edit_urutan" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition font-semibold">
-          </div>
-          <div class="flex items-center pt-6">
-            <label class="inline-flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="is_aktif" id="edit_is_aktif" value="1" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
-              <span class="text-sm font-bold text-slate-700">Aktifkan di Katalog Siswa</span>
-            </label>
           </div>
         </div>
 
@@ -413,7 +401,6 @@
     document.getElementById('edit_deskripsi').value = paket.deskripsi || '';
     document.getElementById('edit_fitur').value = paket.fitur || '';
     document.getElementById('edit_urutan').value = paket.urutan || 0;
-    document.getElementById('edit_is_aktif').checked = paket.is_aktif ? true : false;
     $('#modal-edit-paket').modal('show');
   }
 

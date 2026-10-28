@@ -208,7 +208,7 @@
                   </span>
                 @else
                   <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1.5">
-                    <i class="fa fa-lock text-slate-400"></i> Khusus Les @if($paket_soal->harga) &bull; Rp {{ number_format($paket_soal->harga, 0, ',', '.') }} @endif
+                    <i class="fa fa-lock text-slate-400"></i> Khusus Les
                   </span>
                 @endif
               </div>
@@ -228,12 +228,6 @@
                   <i class="fa fa-check-square-o text-slate-400 text-base w-5"></i>
                   <span>KKM: <b>{{ $paket_soal->kkm ?? 70 }}</b></span>
                 </div>
-                @if(!$isGratis && !$isLes && $paket_soal->harga)
-                  <div class="flex items-center gap-2 text-slate-700 font-medium text-xs">
-                    <i class="fa fa-tag text-slate-400 text-base w-5"></i>
-                    <span>Harga: <b>Rp {{ number_format($paket_soal->harga, 0, ',', '.') }}</b></span>
-                  </div>
-                @endif
               </div>
             </div>
 
@@ -254,7 +248,7 @@
                   </a>
                 @endif
               @else
-                <button type="button" onclick="bukaModalVoucher('{{ addslashes($paket_soal->paket) }}', {{ $paket_soal->harga ?? 0 }})" class="w-full py-3.5 px-5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-base transition shadow-sm text-center block cursor-pointer">
+                <button type="button" onclick="bukaModalVoucher('{{ addslashes($paket_soal->paket) }}', 0)" class="w-full py-3.5 px-5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-base transition shadow-sm text-center block cursor-pointer">
                   <span class="flex items-center justify-center gap-2">
                     <i class="fa fa-lock"></i>
                     <span>Buka Akses / Aktivasi</span> &rarr;
