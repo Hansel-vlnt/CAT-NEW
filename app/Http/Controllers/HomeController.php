@@ -67,7 +67,9 @@ class HomeController extends Controller
       ];
     }
     
-    return view('home', compact('siswas', 'pakets', 'soals', 'voucher'));
+    $pakets_langganan = \App\Models\PaketLangganan::where('is_aktif', 1)->orderBy('urutan', 'asc')->orderBy('harga', 'asc')->get();
+
+    return view('home', compact('siswas', 'pakets', 'soals', 'voucher', 'pakets_langganan'));
     // if (Auth::user()->status == 'A' || Auth::user()->status == 'S') {
     // }else{
     //   return view('home', compact('siswas', 'gurus', 'pakets', 'materis', 'aktifitas'));

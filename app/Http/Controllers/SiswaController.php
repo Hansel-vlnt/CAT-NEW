@@ -18,6 +18,7 @@ use App\Models\Distribusisoal;
 use App\Models\Detailsoal;
 use App\Models\DetailSoalEssay;
 use App\Models\JawabEsay;
+use App\Models\PaketLangganan;
 
 class SiswaController extends Controller
 {
@@ -143,7 +144,8 @@ class SiswaController extends Controller
   {
     if (auth()->user()->status == 'S') {
       $user = User::where('id', auth()->user()->id)->first();
-      return view('halaman-siswa.index', compact('user'));
+      $pakets_langganan = PaketLangganan::where('is_aktif', 1)->orderBy('urutan', 'asc')->orderBy('harga', 'asc')->get();
+      return view('halaman-siswa.index', compact('user', 'pakets_langganan'));
     } else {
       return redirect()->route('home.index');
     }
@@ -200,7 +202,8 @@ class SiswaController extends Controller
     if (auth()->user()->status == 'S') {
       $user = User::where('id', auth()->user()->id)->first();
       $pakets = Soal::orderBy('id', 'ASC')->get();
-      return view('halaman-siswa.ujian', compact('user', 'pakets'));
+      $pakets_langganan = PaketLangganan::where('is_aktif', 1)->orderBy('urutan', 'asc')->orderBy('harga', 'asc')->get();
+      return view('halaman-siswa.ujian', compact('user', 'pakets', 'pakets_langganan'));
     } else {
       return redirect()->route('home.index');
     }

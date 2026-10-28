@@ -448,7 +448,10 @@
           </ul>
         </li>
         <li class="{{ Request::is('master*') == true ? 'active' : '' }}"><a href="{{ url('/master/siswa') }}"><i class="fa fa-users"></i> <span>Data Siswa</span></a></li>
+        @if($user->status == 'A')
+        <li class="{{ Request::is('paket-langganan*') == true ? 'active' : '' }}"><a href="{{ url('/paket-langganan') }}"><i class="fa fa-cubes"></i> <span>Paket Langganan</span></a></li>
         <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
+        @endif
         @elseif($user->status == 'S')
         <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Katalog Latihan Soal</span></a></li>
         <li class="{{ Request::is('siswa/materi*') == true ? 'active' : '' }}"><a href="{{ url('siswa/materi') }}"><i class="fa fa-file-text-o"></i> <span>Materi Pembelajaran</span></a></li>

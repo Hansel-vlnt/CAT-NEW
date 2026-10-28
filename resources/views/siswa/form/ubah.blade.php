@@ -113,6 +113,13 @@
           <div id="wrap_tgl_berakhir_les" style="{{ !$isCurrentlyLes ? 'display: none;' : '' }}">
             <label for="tgl_berakhir_les" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Masa Berlaku Les (Sampai Tanggal)</label>
             <input type="date" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition bg-white" id="tgl_berakhir_les" name="tgl_berakhir_les" value="{{ $siswa->tgl_berakhir_les }}">
+            <div class="flex items-center gap-1.5 flex-wrap mt-2">
+              <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mr-1">Preset Durasi:</span>
+              <button type="button" onclick="setPresetExpiry(1)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 text-xs font-bold transition border border-slate-200">+1 Bulan</button>
+              <button type="button" onclick="setPresetExpiry(3)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 text-xs font-bold transition border border-slate-200">+3 Bulan</button>
+              <button type="button" onclick="setPresetExpiry(6)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 text-xs font-bold transition border border-slate-200">+6 Bulan</button>
+              <button type="button" onclick="setPresetExpiry(12)" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 text-xs font-bold transition border border-slate-200">+1 Tahun</button>
+            </div>
             <p class="text-[11px] text-slate-400 mt-1">Kosongkan untuk otomatis 1 tahun ke depan.</p>
           </div>
         </div>
@@ -164,6 +171,15 @@ $(document).ready(function (){
       }
     });
   });
+
+  window.setPresetExpiry = function(months) {
+    var d = new Date();
+    d.setMonth(d.getMonth() + months);
+    var yyyy = d.getFullYear();
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    $('#tgl_berakhir_les').val(yyyy + '-' + mm + '-' + dd);
+  };
 
   $('#status_langganan').on('change', function() {
     if ($(this).val() === 'les') {

@@ -477,17 +477,25 @@ class CrudController extends Controller
             
       if(!empty($checkVoucher)){
         $masa_berlaku = intval($checkVoucher->masa_berlaku) ?: 30;
-        $expiry = date('Y-m-d', strtotime(date("Y-m-d") . ' + ' . $masa_berlaku . ' days'));
-        DB::table("users")->where("id", Auth::user()->id)->update([
+        $currentUser = Auth::user();
+
+        // Smart Extension: jika siswa saat ini masih aktif, perpanjang dari tgl_berakhir sebelumnya
+        $baseDate = date('Y-m-d');
+        if ($currentUser->isLanggananLes() && !empty($currentUser->tgl_berakhir_les) && $currentUser->tgl_berakhir_les >= $baseDate) {
+          $baseDate = $currentUser->tgl_berakhir_les;
+        }
+
+        $expiry = date('Y-m-d', strtotime($baseDate . ' + ' . $masa_berlaku . ' days'));
+        DB::table("users")->where("id", $currentUser->id)->update([
           "voucher" => $checkVoucher->id_voucher,
           "status_langganan" => "les",
           "tgl_berakhir_les" => $expiry,
         ]);
         DB::table("vouchers")->where("id_voucher", $checkVoucher->id_voucher)->update([
-          "used_by" => Auth::user()->id,
+          "used_by" => $currentUser->id,
           "used_date" => date("Y-m-d")
         ]);
-        Session::flash('success', "Selamat! Kode Voucher berhasil diaktifkan. Akun Anda aktif sebagai Siswa Les hingga " . date("d-m-Y", strtotime($expiry)) . ".");
+        Session::flash('success', "Selamat! Kode Voucher berhasil diaktifkan. Akun Anda aktif sebagai Member All-Access hingga " . date("d-m-Y", strtotime($expiry)) . ".");
       } else {
         Session::flash('error', "Kode Voucher tidak berlaku!");
       }

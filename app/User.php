@@ -35,6 +35,17 @@ class User extends Authenticatable
   protected $cachedIsLanggananLes = null;
   protected static $voucherMap = null;
 
+  public function refresh()
+  {
+    $this->cachedIsLanggananLes = null;
+    return parent::refresh();
+  }
+
+  public function resetCachedMembership()
+  {
+    $this->cachedIsLanggananLes = null;
+  }
+
   public function isLanggananLes()
   {
     if ($this->cachedIsLanggananLes !== null) {

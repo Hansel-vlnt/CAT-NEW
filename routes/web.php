@@ -11,6 +11,15 @@ Route::get('vouchers', 'HomeController@vouchers')->name('vouchers');
 Route::post('vouchers', 'HomeController@vouchers_save')->name('vouchers.save');
 Route::delete('vouchers', 'HomeController@vouchers_delete')->name('vouchers.delete');
 
+Route::group(['prefix' => 'paket-langganan', 'middleware' => ['auth']], function () {
+	Route::get('/', 'PaketLanggananController@index')->name('paket-langganan.index');
+	Route::post('/', 'PaketLanggananController@store')->name('paket-langganan.store');
+	Route::post('/update/{id}', 'PaketLanggananController@update')->name('paket-langganan.update');
+	Route::delete('/{id}', 'PaketLanggananController@destroy')->name('paket-langganan.destroy');
+	Route::post('/toggle-status/{id}', 'PaketLanggananController@toggleStatus')->name('paket-langganan.toggle');
+	Route::post('/generate-vouchers/{id}', 'PaketLanggananController@generateVouchers')->name('paket-langganan.generate_vouchers');
+});
+
 Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/home', 'HomeController@index')->name('home');
 // reute group for crud

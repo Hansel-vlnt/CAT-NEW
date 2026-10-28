@@ -35,8 +35,12 @@
         <div>
           <div class="flex items-center gap-2 mb-2">
             @if(Auth::user()->isLanggananLes())
+              @php
+                $tglBerakhir = Auth::user()->tgl_berakhir_les;
+                $sisaHari = $tglBerakhir ? max(0, (int)ceil((strtotime($tglBerakhir) - strtotime(date('Y-m-d'))) / 86400)) : null;
+              @endphp
               <span class="px-3 py-1 rounded-full bg-amber-500 text-slate-900 text-xs font-black uppercase tracking-wider shadow-sm flex items-center gap-1.5">
-                👑 Siswa Les Aktif @if(Auth::user()->tgl_berakhir_les) (s/d {{ date('d-m-Y', strtotime(Auth::user()->tgl_berakhir_les)) }}) @endif
+                👑 Siswa Les Aktif @if($tglBerakhir) (s/d {{ date('d-m-Y', strtotime($tglBerakhir)) }} &bull; Sisa {{ $sisaHari }} Hari) @endif
               </span>
             @else
               <span class="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider">
@@ -54,8 +58,15 @@
             <i class="fa fa-play-circle"></i> Buka Katalog Soal &rarr;
           </a>
           @if(!Auth::user()->isLanggananLes())
-            <button type="button" onclick="bukaModalVoucher('Aktivasi Voucher Bimbingan Belajar', 0)" class="px-4 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="bukaModalVoucher('All-Access Pass CBT', 0, 'paket')" class="px-4 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+              <i class="fa fa-diamond"></i> Paket Langganan
+            </button>
+            <button type="button" onclick="bukaModalVoucher('Aktivasi Voucher', 0, 'voucher')" class="px-4 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
               <i class="fa fa-key"></i> Aktivasi Lisensi
+            </button>
+          @else
+            <button type="button" onclick="bukaModalVoucher('Perpanjang Pass', 0, 'paket')" class="px-4 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-1.5 cursor-pointer">
+              <i class="fa fa-refresh"></i> Perpanjang Pass
             </button>
           @endif
         </div>
@@ -86,52 +97,8 @@
   </div>
 </div>
 
-<!-- MODAL AKTIVASI VOUCHER LISENSI -->
-<div id="modal-voucher" style="display: none;" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-  <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative">
-    <div class="flex items-start justify-between pb-4 border-b border-slate-100">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center text-lg shrink-0">
-          <i class="fa fa-lock"></i>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-slate-900 tracking-tight" id="modal-paket-title">Modul Khusus Siswa Les</h3>
-          <p class="text-xs text-slate-500 mt-0.5" id="modal-paket-price">Memerlukan akses keanggotaan aktif</p>
-        </div>
-      </div>
-      <button type="button" onclick="tutupModalVoucher()" class="text-slate-400 hover:text-slate-600 text-lg font-bold p-1 cursor-pointer">✕</button>
-    </div>
-
-    <div class="py-5 space-y-4">
-      <form action="{{ url('/crud/aktivasi') }}" method="POST" class="space-y-3">
-        {{ csrf_field() }}
-        <div>
-          <label for="kode_voucher_input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kode Voucher</label>
-          <input type="text" id="kode_voucher_input" name="kode_voucher" required class="w-full px-4 py-3 text-sm font-mono tracking-wider rounded-xl border border-slate-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 outline-none transition" placeholder="Masukkan kode voucher">
-        </div>
-        <button type="submit" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer flex items-center justify-center gap-2">
-          <i class="fa fa-key"></i> Aktifkan Lisensi
-        </button>
-      </form>
-
-      <div class="relative flex items-center justify-center py-1">
-        <div class="border-t border-slate-200 w-full"></div>
-        <span class="bg-white px-3 text-xs text-slate-400 uppercase tracking-wider font-semibold">atau</span>
-      </div>
-
-      <a href="https://abdipraja.id/" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-700 font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center justify-center gap-2 text-center">
-        <i class="fa fa-globe text-indigo-600"></i>
-        <span>Dapatkan Akses di abdipraja.id ↗</span>
-      </a>
-    </div>
-
-    <div class="pt-3 border-t border-slate-100 flex items-center justify-end">
-      <button type="button" onclick="tutupModalVoucher()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer">
-        Tutup
-      </button>
-    </div>
-  </div>
-</div>
+<!-- MODAL AKTIVASI VOUCHER LISENSI & PAKET PASS -->
+@include('halaman-siswa.modal_pass_langganan')
 </div>
 @endsection
 @push('css')
@@ -145,20 +112,6 @@
 <script src="{{URL::asset('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js')}}"></script>
 <script>
-function bukaModalVoucher(title, harga) {
-  if (title) {
-    document.getElementById('modal-paket-title').textContent = title;
-  }
-  document.getElementById('modal-voucher').style.display = 'flex';
-  setTimeout(function() {
-    document.getElementById('kode_voucher_input').focus();
-  }, 150);
-}
-
-function tutupModalVoucher() {
-  document.getElementById('modal-voucher').style.display = 'none';
-}
-
 $(document).ready(function (){
   $('#table_soal').DataTable({
     processing: true,
