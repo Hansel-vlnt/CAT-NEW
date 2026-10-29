@@ -240,6 +240,19 @@ class SiswaController extends Controller
         return redirect('/siswa/ujian');
       }
 
+      // Guard: Cek apakah sudah selesai dan sudah mencapai batas percobaan (>= 3)
+      $checkFinished = Jawab::where([['id_soal', $soal->id], ['id_user', Auth::user()->id], ['status', 1]])->first();
+      $tryCountRow = DB::table("jawabs_count")->where([['id_soal', $soal->id], ['id_user', Auth::user()->id]])->first();
+      $tryCount = !empty($tryCountRow) ? $tryCountRow->try_count : 0;
+      if ($checkFinished && $tryCount >= 3) {
+        return redirect('/siswa/ujian/finish/' . $soal->id);
+      }
+
+      // Catat server-side timestamp ujian jika belum ada
+      if (!session()->has('exam_start_' . $id . '_' . Auth::id())) {
+        session(['exam_start_' . $id . '_' . Auth::id() => time()]);
+      }
+
       $soals      = Detailsoal::where('id_soal', $id)->where('status', 'Y')->inRandomOrder()->get();
       $kunciSoal  = !empty($soal->password) ? hash("sha256", $soal->password.Auth::user()->id) : null;
 
@@ -311,6 +324,13 @@ class SiswaController extends Controller
     $paket = Soal::find($detail_soal->id_soal);
     if ($paket && !$paket->isGratis() && !auth()->user()->isLanggananLes()) {
       return response('Akses ditolak', 403);
+    }
+
+    // Server-side timer boundary check (toleransi 5 menit untuk lag/koneksi jaringan)
+    $serverStart = session('exam_start_' . $detail_soal->id_soal . '_' . auth()->user()->id);
+    $durasiDetik = intval($paket->waktu) ?: 3600;
+    if ($serverStart && (time() > $serverStart + $durasiDetik + 300)) {
+      return response('Waktu pengerjaan ujian telah berakhir di server.', 403);
     }
 
     // Bersihkan jawaban lama yang sudah selesai (status = 1) pada paket ini agar sesi baru mulai dari nol
@@ -390,6 +410,8 @@ class SiswaController extends Controller
       return response('Akses ditolak', 403);
     }
 
+    session()->forget('exam_start_' . $req->id_soal . '_' . auth()->user()->id);
+
     if($req->autoclose == 1){
       $try_count  = DB::table("jawabs_count")->select("try_count")->where([["id_soal", $req->id_soal], ["id_user", auth()->user()->id]])->first();
       if($try_count){
@@ -412,6 +434,7 @@ class SiswaController extends Controller
   public function hapusJawaban(Request $request)
   {
     $resp = Jawab::where([['id_soal', $request->id_soal], ['id_user', auth()->user()->id]])->delete();
+    session(['exam_start_' . $request->id_soal . '_' . auth()->user()->id => time()]);
     if($resp){
       return 1;
     } else {
@@ -431,8 +454,8 @@ class SiswaController extends Controller
       return redirect('/siswa/ujian');
     }
     $user_id = auth()->user()->id;
-    $nilai = Jawab::where('id_soal', $id)->where('id_user', $user_id)->sum('score');
-    $jawabs = Jawab::where('id_soal', $id)->where('id_user', $user_id)->get()->keyBy('no_soal_id');
+    $nilai = Jawab::where('id_soal', $id)->where('id_user', $user_id)->where('status', 1)->sum('score');
+    $jawabs = Jawab::where('id_soal', $id)->where('id_user', $user_id)->where('status', 1)->get()->keyBy('no_soal_id');
     $detail_soals = Detailsoal::where('id_soal', $id)->where('status', 'Y')->get();
 
     $total_soal = $detail_soals->count();
@@ -473,12 +496,18 @@ class SiswaController extends Controller
 
   public function delete()
   {
+    if (auth()->user()->status !== 'A') {
+      return redirect()->route('home.index');
+    }
     return view('siswa.delete');
   }
 
   public function getBtnDelete($password)
   {
-    $validate_admin = User::where('email', auth()->user()->email)->first();
+    if (auth()->user()->status !== 'A') {
+      return response('Unauthorized', 403);
+    }
+    $validate_admin = User::where('id', auth()->user()->id)->first();
     if ($validate_admin && Hash::check($password, $validate_admin->password)) {
       $cocok = 'Y';
     } else {
@@ -487,16 +516,22 @@ class SiswaController extends Controller
     return view('siswa.tombol_hapus', compact('cocok'));
   }
 
-  public function deleteAll()
+  public function deleteAll(Request $request)
   {
+    if (auth()->user()->status !== 'A') {
+      return response()->json(['status' => 'error', 'message' => 'Akses ditolak: Hanya Administrator yang diizinkan.'], 403);
+    }
+    if (empty($request->password) || !Hash::check($request->password, auth()->user()->password)) {
+      return response()->json(['status' => 'error', 'message' => 'Password konfirmasi salah. Penghapusan dibatalkan.'], 403);
+    }
+
     $users = User::where('status', 'S')->get();
-    foreach ($users as $key => $value) {
-      $jawab = Jawab::where('id_user', $value->id)->first();
-      if ($jawab) {
-        $jawab->delete();
-      }
+    foreach ($users as $value) {
+      Jawab::where('id_user', $value->id)->delete();
     }
     User::where('status', 'S')->delete();
+
+    return response()->json(['status' => 'success', 'message' => 'Seluruh data siswa berhasil dibersihkan.']);
   }
 
   public function getDetailEssay(Request $request)

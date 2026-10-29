@@ -28,6 +28,9 @@
           </p>
         </div>
         <div class="flex items-center gap-2">
+          <a href="{{ url('/cetak/excel/hasil-ujian-perkelas/'.$soal->id) }}" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider shadow transition flex items-center gap-2">
+            <i class="fa fa-file-excel-o"></i> Ekspor Excel
+          </a>
           <a href="{{ url('/elearning/laporan') }}" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold border border-white/20 transition flex items-center gap-2">
             <i class="fa fa-arrow-left"></i> Kembali ke Rekap
           </a>

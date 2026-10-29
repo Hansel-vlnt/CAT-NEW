@@ -1,35 +1,142 @@
-@extends('layouts.app')
-@section('title', '404 - Halaman Tidak Ditemukan - Latihan Soal Abdi Praja')
-@section('breadcrumb')
-  <div class="w-full py-1">
-    <h1 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">Halaman Tidak Ditemukan</h1>
-  </div>
-@endsection
-@section('content')
-<div class="col-md-12">
-  <div class="max-w-xl mx-auto space-y-6">
-
-    <!-- 404 CARD -->
-    <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm text-center">
-      <div class="w-20 h-20 rounded-3xl bg-amber-50 text-amber-500 flex items-center justify-center font-black text-3xl mx-auto mb-6 border border-amber-200 shadow-sm">
-        404
-      </div>
-
-      <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Halaman Tidak Ditemukan</h2>
-      <p class="text-sm text-slate-500 leading-relaxed max-w-md mx-auto mb-8">
-        Halaman atau modul latihan yang Anda tuju mungkin telah dipindahkan, sedang dalam persiapan, atau alamat URL yang Anda masukkan kurang tepat.
-      </p>
-
-      <div class="flex items-center justify-center gap-3 flex-wrap">
-        <a href="{{ url('/') }}" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2">
-          <i class="fa fa-home"></i> Kembali ke Beranda
-        </a>
-        <button onclick="self.history.back()" class="px-5 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2">
-          <i class="fa fa-arrow-left"></i> Halaman Sebelumnya
-        </button>
-      </div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Halaman Tidak Ditemukan | Latihan Soal Abdi Praja</title>
+  <link rel="icon" href="{{ url('/assets/dist/img/logo.jpg') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url('assets/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url('assets/font-awesome/css/font-awesome.min.css') }}">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card-404 {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+      padding: 48px 36px;
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+    }
+    .badge-code {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      color: #d97706;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.08);
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    p {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .btn-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2563eb;
+      color: #ffffff !important;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      text-decoration: none !important;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .btn-main:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      color: #334155 !important;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 14px 24px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: #e2e8f0;
+      color: #0f172a !important;
+    }
+    .footer-brand {
+      margin-top: 32px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+  <div class="card-404">
+    <div class="badge-code">
+      404
     </div>
-
+    <h1>Halaman Tidak Ditemukan</h1>
+    <p>
+      Halaman atau materi ujian yang Anda tuju mungkin telah dipindahkan, sedang dalam penyusunan, atau alamat URL yang Anda masukkan keliru.
+    </p>
+    <div class="actions">
+      <a href="{{ url('/') }}" class="btn-main">
+        <i class="fa fa-home"></i> Kembali ke Beranda
+      </a>
+      <button onclick="window.history.back()" class="btn-secondary">
+        <i class="fa fa-arrow-left"></i> Halaman Sebelumnya
+      </button>
+    </div>
+    <div class="footer-brand">
+      &copy; {{ date('Y') }} Abdi Praja Edukasi &bull; Platform CBT Terpadu
+    </div>
   </div>
-</div>
-@endsection
+</body>
+</html>

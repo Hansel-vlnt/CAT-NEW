@@ -7,9 +7,11 @@ Auth::routes(['register' => true, 'password.request' => true, 'password.reset' =
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get('/register/success', 'Auth\RegisterController@registerSuccess')->name('register.success');
 
-Route::get('vouchers', 'HomeController@vouchers')->name('vouchers');
-Route::post('vouchers', 'HomeController@vouchers_save')->name('vouchers.save');
-Route::delete('vouchers', 'HomeController@vouchers_delete')->name('vouchers.delete');
+Route::group(['middleware' => ['auth']], function () {
+	Route::get('vouchers', 'HomeController@vouchers')->name('vouchers');
+	Route::post('vouchers', 'HomeController@vouchers_save')->name('vouchers.save');
+	Route::delete('vouchers', 'HomeController@vouchers_delete')->name('vouchers.delete');
+});
 
 Route::group(['prefix' => 'paket-langganan', 'middleware' => ['auth']], function () {
 	Route::get('/', 'PaketLanggananController@index')->name('paket-langganan.index');
@@ -23,7 +25,7 @@ Route::group(['prefix' => 'paket-langganan', 'middleware' => ['auth']], function
 Route::get('/', 'HomeController@index')->name('home.index');
 Route::get('/home', 'HomeController@index')->name('home');
 // reute group for crud
-Route::group(['prefix' => 'crud'], function () {
+Route::group(['prefix' => 'crud', 'middleware' => ['auth']], function () {
 	Route::post('simpan-soal', 'SoalController@simpanSoal');
 	Route::post('update-profil', 'CrudController@updateProfil');
 	Route::post('simpan-materi', 'CrudController@simpanMateri');
@@ -75,7 +77,7 @@ Route::group(['prefix' => 'master'], function () {
 		Route::get('edit/{id}', 'SiswaController@editSiswa');
 		Route::get('delete', 'SiswaController@delete');
 		Route::get('get-btn-delete/{password}', 'SiswaController@getBtnDelete');
-		Route::get('delete-all', 'SiswaController@deleteAll');
+		Route::post('delete-all', 'SiswaController@deleteAll')->name('master.siswa.delete_all');
 	});
 });
 
@@ -114,8 +116,9 @@ Route::group(['prefix' => 'elearning'], function () {
 	});
 });
 Route::get('/download-file-format/{filename}', 'DownloadController@download')->name('download');
+Route::get('/elearning/laporan/excel-hasil-ujian-perkelas', 'LaporanController@excelHasilUjianPerkelas');
 Route::group(['prefix' => 'cetak'], function () {
-	Route::get('/excel/hasil-ujian-perkelas/{soal}', 'LaporanController@excelHasilUjianPerkelas');
+	Route::get('/excel/hasil-ujian-perkelas/{soal?}', 'LaporanController@excelHasilUjianPerkelas');
 	Route::get('/pdf/hasil-ujian-persiswa/{siswa}/{soal}', 'LaporanController@pdfHasilUjianPersiswa');
 });
 Route::get('/activity', 'HomeController@activity');

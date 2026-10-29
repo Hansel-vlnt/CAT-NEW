@@ -30,6 +30,20 @@ class CrudController extends Controller
     $this->middleware('auth');
   }
 
+  private function checkAdminOrGuru()
+  {
+    if (!Auth::check() || (!in_array(Auth::user()->status, ['A', 'G']))) {
+      abort(403, 'Akses ditolak: Hanya Administrator atau Guru yang diizinkan.');
+    }
+  }
+
+  private function checkAdminOnly()
+  {
+    if (!Auth::check() || Auth::user()->status !== 'A') {
+      abort(403, 'Akses ditolak: Hanya Administrator yang diizinkan.');
+    }
+  }
+
   public function updateProfil(Request $request)
   {
     if ($request->nama == "") {
@@ -41,15 +55,16 @@ class CrudController extends Controller
     } elseif (!filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Email tidak valid.";
     } else {
-      $cek_email = User::where('id', '!=', auth()->user()->id)->where('email', $request->email)->first();
+      $targetId = (auth()->user()->status === 'A' && !empty($request->id)) ? $request->id : auth()->user()->id;
+      $cek_email = User::where('id', '!=', $targetId)->where('email', $request->email)->first();
       if ($cek_email != "") {
         return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Email sudah terdaftar, silahkan ganti dengan yang lain.";
       } else {
-        $query = User::where('id', $request->id)->first();
+        $query = User::where('id', $targetId)->first();
         if ($query != "") {
           $query->nama = $request->nama;
           $query->jk = $request->jk;
-          $cek_email = User::where('email', $request->email)->where('id', '!=', $request->id)->first();
+          $cek_email = User::where('email', $request->email)->where('id', '!=', $targetId)->first();
           if ($cek_email == "") {
             $query->email = $request->email;
           }
@@ -64,6 +79,7 @@ class CrudController extends Controller
   }
   public function simpanMateri(Request $request)
   {
+    $this->checkAdminOrGuru();
     // return $request->judul;
     if ($request->judul == "") {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Judul tidak boleh kosong.";
@@ -93,6 +109,7 @@ class CrudController extends Controller
   }
   public function simpanGambarMateri(Request $request)
   {
+    $this->checkAdminOrGuru();
     $sesi = $request->sesi_gambar;
     $uniqname = date('ymdhis') . rand(00000, 99999);
     $filename = trim(addslashes($_FILES['file']['name']));
@@ -129,6 +146,7 @@ class CrudController extends Controller
   }
   public function terbitSoal(Request $request)
   {
+    $this->checkAdminOrGuru();
     $cek = Distribusisoal::where('id_soal', $request->id_soal)->where('id_kelas', $request->id_kelas)->first();
     if ($cek != "") {
       Distribusisoal::where('id_soal', $request->id_soal)->where('id_kelas', $request->id_kelas)->delete();
@@ -143,6 +161,7 @@ class CrudController extends Controller
   }
   public function hapusGambarMateri(Request $request)
   {
+    $this->checkAdminOrGuru();
     $cek = Materi::where('id', $request->id)->first();
     if ($cek != "") {
       unlink('assets/img/materi/' . $cek->gambar);
@@ -176,6 +195,7 @@ class CrudController extends Controller
 
   public function updateProfilSekolah(Request $request)
   {
+    $this->checkAdminOnly();
     $jenis = $request->jenisInfo;
     $query = School::first();
     $query->nama = $request->nama;
@@ -198,6 +218,7 @@ class CrudController extends Controller
 
   public function updateSiswa(Request $request)
   {
+    $this->checkAdminOnly();
     // dd($request->all());
     if ($request->id == 'N') {
       $query = new User;
@@ -232,6 +253,7 @@ class CrudController extends Controller
   }
   public function updateGuru(Request $request)
   {
+    $this->checkAdminOnly();
     // dd($request->all());
     if ($request->id == 'N') {
       $query = new User;
@@ -252,6 +274,7 @@ class CrudController extends Controller
 
   public function simpanKelas(Request $request)
   {
+    $this->checkAdminOnly();
     if (!$request->nama) {
       return 'Nama kelas tidak boleh kosong';
     }
@@ -269,6 +292,7 @@ class CrudController extends Controller
 
   public function deleteKelas(Request $request)
   {
+    $this->checkAdminOnly();
     User::where('id_kelas', $request->id_kelas)->update(['id_kelas' => '']);
     Kelas::find($request->id_kelas)->delete();
     return 1;
@@ -276,18 +300,21 @@ class CrudController extends Controller
 
   public function deleteGuru(Request $request)
   {
+    $this->checkAdminOnly();
     User::where('id', $request->id_guru)->delete();
     return 1;
   }
 
   public function deleteSiswa(Request $request)
   {
+    $this->checkAdminOnly();
     User::where('id', $request->id_siswa)->delete();
     return 1;
   }
 
   public function simpanSiswa(Request $request)
   {
+    $this->checkAdminOnly();
     if ($request->nama == "") {
       return "<i class='fa fa-exclamation-circle' aria-hidden='true'></i> Nama tidak boleh kosong.";
     } elseif ($request->email == "") {
@@ -322,6 +349,7 @@ class CrudController extends Controller
 
   public function updateImgSiswa(Request $request)
   {
+    $this->checkAdminOnly();
     $file_upload_url_img = trim(addslashes($_FILES['upload_url_img']['name']));
     $ext = pathinfo($file_upload_url_img, PATHINFO_EXTENSION);
     $save_url_img = auth()->user()->id . '_' . uniqid() . '.' . $ext;
@@ -346,6 +374,7 @@ class CrudController extends Controller
 
   public function simpanSiswaViaExcel(Request $request)
   {
+    $this->checkAdminOnly();
     if ($request->hasFile('file')) {
       // $path = $request->file('file')->getRealPath();
       $kesalahan = '';
@@ -454,6 +483,7 @@ class CrudController extends Controller
 
   public function resetUjian(Request $request)
   {
+    $this->checkAdminOrGuru();
     $jawab = Jawab::findorfail($request->id_ujian);
     Jawab::where('id_soal', $jawab->id_soal)
       ->where('id_user', $jawab->id_user)

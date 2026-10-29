@@ -15,8 +15,7 @@ use App\Models\Soal;
 use App\Models\Detailsoal;
 use App\Models\DetailSoalEssay;
 use App\Models\JawabEsay;
-// use Barryvdh\DomPDF\PDF;
-// use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\HasilUjianPerKelasExport;
 use DataTables;
 
 class LaporanController extends Controller
@@ -132,30 +131,40 @@ class LaporanController extends Controller
       ->rawColumns(['dataSoal'])
       ->make(true);
   }
-  public function excelHasilUjianPerkelas(Request $request)
+  public function excelHasilUjianPerkelas(Request $request, $soalId = null)
   {
-    $soal = Soal::where('id', $request->soal)->first();
-    $detailSoal = Detailsoal::where('id_soal', $request->soal)->get();
-    $jawabs = Jawab::where('id_soal', $request->soal)->groupBy('id_user')->get();
-    $soal_essay = DetailSoalEssay::where('id_soal', $request->soal)->get();
-    // return view('laporan.excel.excel_hasil_ujian_perkelas', compact('jawabs', 'soal', 'kelas', 'detailSoal'));
+    if (auth()->user()->status !== 'A' && auth()->user()->status !== 'G') {
+      abort(403, 'Akses ditolak: Hanya Administrator atau Guru yang dapat mengunduh laporan nilai.');
+    }
+    $id = $soalId ?: $request->soal;
+    $soal = Soal::where('id', $id)->first();
+    if (!$soal) {
+      return redirect()->back()->with('error', 'Paket soal tidak ditemukan.');
+    }
+    $detailSoal = Detailsoal::where('id_soal', $id)->get();
+    $jawabs = Jawab::where('id_soal', $id)->groupBy('id_user')->get();
+    $soal_essay = DetailSoalEssay::where('id_soal', $id)->get();
 
-    Excel::create('Laporan Nilai', function ($excel) use ($jawabs, $soal, $detailSoal, $soal_essay) {
-      $excel->sheet('New sheet', function ($sheet) use ($jawabs, $soal, $detailSoal, $soal_essay) {
-        $sheet->setStyle(array(
-          'font' => array(
-            'size' =>  12,
-          )
-        ));
-        $sheet->loadView('laporan.excel.excel_hasil_ujian_perkelas', compact('jawabs', 'soal', 'detailSoal', 'soal_essay'));
-      });
-    })->download('xlsx');
+    $cleanPaketName = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $soal->paket);
+    $fileName = 'laporan_nilai_' . $cleanPaketName . '.xlsx';
+
+    return \Maatwebsite\Excel\Facades\Excel::download(
+      new HasilUjianPerKelasExport(compact('jawabs', 'soal', 'detailSoal', 'soal_essay')),
+      $fileName
+    );
   }
+
   public function pdfHasilUjianPersiswa(Request $request)
   {
+    if (auth()->user()->status !== 'A' && auth()->user()->status !== 'G' && auth()->user()->id != $request->siswa) {
+      abort(403, 'Akses ditolak: Anda hanya dapat mencetak hasil ujian milik sendiri.');
+    }
     $siswa = User::where('id', $request->siswa)->first();
+    if (!$siswa) {
+      abort(404, 'Data siswa tidak ditemukan.');
+    }
     $jumlah_soal = Detailsoal::where('id_soal', $request->soal)->count();
-    $soals = Detailsoal::where('id_soal', $request->soal)->where('status', 1)->get();
+    $soals = Detailsoal::where('id_soal', $request->soal)->where('status', 'Y')->get();
     $jawabs = Jawab::where('id_soal', $request->soal)->where('id_user', $request->siswa)->where('status', 1)->get();
     $jawabBenar = Jawab::where('id_soal', $request->soal)->where('id_user', $request->siswa)->where('status', 1)->where('score', '!=', '0')->get();
     $jawab_first = Jawab::where('id_soal', $request->soal)
@@ -168,6 +177,5 @@ class LaporanController extends Controller
       ->first();
     $pdf = PDF::loadView('laporan.pdf.hasil_ujian', compact('jawabs', 'siswa', 'soals', 'jawabBenar', 'jumlah_jawaban_benar', 'jawab_first', 'jumlah_soal'));
     return $pdf->setPaper('legal')->stream('hasil_ujian.pdf');
-    //return view('laporan.pdf.hasil_ujian', compact('jawabs', 'siswa', 'soals', 'jawabBenar', 'jumlah_jawaban_benar', 'jawab_first', 'jumlah_soal'));
   }
 }

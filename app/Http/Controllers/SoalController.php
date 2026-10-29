@@ -225,6 +225,9 @@ class SoalController extends Controller
   // for crud
   public function simpanSoal(Request $request)
   {
+    if (Auth::user()->status !== 'A' && Auth::user()->status !== 'G') {
+      return response()->json(['status' => 'error', 'message' => 'Akses ditolak.'], 403);
+    }
     if ($request['paket'] == "") {
       return response()->json(['status' => 'error', 'message' => 'Nama paket soal tidak boleh kosong.'], 422);
     } elseif ($request['deskripsi'] == "") {
@@ -312,6 +315,9 @@ class SoalController extends Controller
   }
   public function simpanDetailSoal(Request $request)
   {
+    if (Auth::user()->status !== 'A' && Auth::user()->status !== 'G') {
+      return "Akses ditolak.";
+    }
     if ($request->soal == "") {
       return "Soal tidak boleh kosong.";
     }
@@ -395,6 +401,9 @@ class SoalController extends Controller
 
   public function simpanDetailSoalExcel(Request $request)
   {
+    if (Auth::user()->status !== 'A' && Auth::user()->status !== 'G') {
+      abort(403, 'Akses ditolak.');
+    }
     $sesi = md5(rand(0000000000, mt_getrandmax()));
     $sukses = 0;
     $gagal = 0;
@@ -586,6 +595,9 @@ class SoalController extends Controller
 
   public function uploadGambarSoal(Request $request)
   {
+    if (Auth::user()->status !== 'A' && Auth::user()->status !== 'G') {
+      return response("Akses ditolak.", 403);
+    }
     if ($request->hasFile('image')) {
       $file = $request->file('image');
       $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();

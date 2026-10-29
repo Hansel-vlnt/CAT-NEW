@@ -70,11 +70,32 @@ $(document).ready(function() {
   }, 700));
 
   $(document).on('click', '#delete-all', function() {
+    var password = $('#password').val();
+    if (!password) {
+      alert('Silahkan masukkan password admin!');
+      return;
+    }
+    if (!confirm('PERINGATAN TERAKHIR: Anda yakin ingin menghapus SELURUH data siswa dan riwayat ujiannya secara permanen?')) {
+      return;
+    }
     $.ajax({
-      type: "GET",
+      type: "POST",
       url: "{{ url('master/siswa/delete-all') }}",
+      data: {
+        _token: "{{ csrf_token() }}",
+        password: password
+      },
       success: function(data) {
-        window.location.href = "{{ url('master/siswa') }}";
+        if (data && data.status === 'success') {
+          alert(data.message);
+          window.location.href = "{{ url('master/siswa') }}";
+        } else {
+          alert(data.message || 'Gagal menghapus data.');
+        }
+      },
+      error: function(xhr) {
+        var msg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Terjadi kesalahan sistem.';
+        alert(msg);
       }
     });
   });

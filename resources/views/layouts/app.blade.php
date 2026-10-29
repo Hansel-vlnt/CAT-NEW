@@ -456,27 +456,28 @@
         <ul class="nav navbar-nav">
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              @if(Auth::user()->gambar != "")
+              @if(Auth::check() && !empty(Auth::user()->gambar))
                 <img src="{{ url('/assets/img/user/'.Auth::user()->gambar) }}" class="user-image" alt="User Image">
               @else
                 <img src="{{ url('/assets/dist/img/logo.jpg') }}" class="user-image" alt="User Image">
               @endif
-              <span class="hidden-xs font-semibold">{{ Auth::user()->nama }}</span>
+              <span class="hidden-xs font-semibold">{{ Auth::check() ? Auth::user()->nama : 'Pengguna' }}</span>
             </a>
             <ul class="dropdown-menu shadow-xl border border-slate-200 rounded-xl overflow-hidden">
               <li class="user-header" style="background-color: #0f172a !important; border-bottom: 1px solid #1e293b;">
-                @if(Auth::user()->gambar)
+                @if(Auth::check() && !empty(Auth::user()->gambar))
                   <img src="{{ url('/assets/img/user/'.Auth::user()->gambar) }}" class="img-circle border-2 border-indigo-500" alt="User Image">
                 @else
                   <img src="{{ url('/assets/dist/img/logo.jpg') }}" class="img-circle border-2 border-indigo-500" alt="User Image">
                 @endif
 
                 <p class="text-white font-bold text-base mt-2">
-                  {{ Auth::user()->nama }}
+                  {{ Auth::check() ? Auth::user()->nama : 'Pengguna' }}
                   <small class="text-slate-400 mt-1">
-                    @if($user->status == 'A')
+                    @php $roleStatus = Auth::check() ? Auth::user()->status : (isset($user) ? $user->status : 'S'); @endphp
+                    @if($roleStatus == 'A')
                       Administrator
-                    @elseif($user->status == 'G')
+                    @elseif($roleStatus == 'G')
                       Guru / Instruktur
                     @else
                       Siswa / Peserta Ujian

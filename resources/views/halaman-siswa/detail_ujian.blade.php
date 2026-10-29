@@ -1,16 +1,3 @@
-<?php
-	$check = App\Models\Jawab::where([['id_soal', $soal->id], ['id_user', Auth::user()->id], ['status', 1]])->first();
-	$tryCount	= DB::table("jawabs_count")->where([['id_soal', $soal->id], ['id_user', Auth::user()->id]])->first();
-	if(!empty($tryCount)){
-		$tryCount = $tryCount->try_count;
-	} else {
-		$tryCount = 0;
-	}
-	if($check && $tryCount >= 3){
-		header("Location: /siswa/ujian/finish/".$soal->id."");
-  		exit();
-	}
-?>
 @extends('layouts.app')
 @section('title', Auth::user()->nama)
 @section('breadcrumb')

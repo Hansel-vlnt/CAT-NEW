@@ -77,6 +77,9 @@ class HomeController extends Controller
   }
 
   public function vouchers(){
+    if (!Auth::check() || Auth::user()->status !== 'A') {
+      return redirect()->route('home.index')->with('error', 'Akses ditolak: Hanya Administrator yang berhak mengelola voucher.');
+    }
     $user = User::findorfail(Auth::user()->id);
     $vouchers = DB::table('vouchers')->whereNull("used_by")->orderBy("id_voucher", "asc")->paginate(20);
     return View::make('vouchers')->with(compact("vouchers", "user"));
@@ -95,6 +98,9 @@ class HomeController extends Controller
   }
 
   public function vouchers_save(Request $req){
+      if (!Auth::check() || Auth::user()->status !== 'A') {
+          abort(403, 'Akses ditolak: Hanya Administrator yang berhak membuat voucher.');
+      }
       $kode_voucher   = $req->kode_voucher;
       $masa_berlaku   = $req->masa_berlaku;
       $masa_berlaku2  = $req->masa_berlaku2;
@@ -148,6 +154,9 @@ class HomeController extends Controller
 
   public function vouchers_delete(Request $req)
   {
+      if (!Auth::check() || Auth::user()->status !== 'A') {
+          abort(403, 'Akses ditolak: Hanya Administrator yang berhak menghapus voucher.');
+      }
       $del = DB::table('vouchers')->where("id_voucher", $req->delete_id)->delete();
 
       if ($del) {
