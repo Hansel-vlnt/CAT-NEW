@@ -145,12 +145,9 @@ test.describe('CBT Freemium & Membership Les E2E Tests', () => {
     });
     await expect(page.locator('#tipe_akses')).toBeVisible();
 
-    // Tipe akses default adalah gratis -> #wrap_harga disembunyikan
-    await expect(page.locator('#wrap_harga')).toBeHidden();
-
-    // Ubah ke berbayar -> #wrap_harga harus muncul
+    // Ubah ke berbayar -> tipe akses terupdate
     await page.selectOption('#tipe_akses', 'berbayar');
-    await expect(page.locator('#wrap_harga')).toBeVisible();
+    await expect(page.locator('#tipe_akses')).toHaveValue('berbayar');
 
     await page.screenshot({ path: `screenshots/freemium_06_admin_bank_soal_form${suffix}`, fullPage: true });
 

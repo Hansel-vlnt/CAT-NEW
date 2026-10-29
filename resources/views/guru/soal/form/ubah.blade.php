@@ -41,7 +41,7 @@
           <textarea id="deskripsi" name="deskripsi" rows="3" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" placeholder="Deskripsi materi cakupan soal">{{ $soal->deskripsi }}</textarea>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <div>
             <label for="kategori_utama" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Kategori Utama</label>
             <select id="kategori_utama" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="kategori_utama">
@@ -62,12 +62,8 @@
               <option value="berbayar" {{ ($soal->tipe_akses == 'berbayar') ? 'selected' : '' }}>🔒 Berbayar / Khusus Les</option>
             </select>
           </div>
-
-          <div id="wrap_harga">
-            <label for="harga" class="block text-sm font-bold text-slate-700 mb-1.5" style="line-height: 1.4;">Harga Paket (Rp)</label>
-            <input id="harga" type="number" min="0" step="5000" class="w-full px-4 py-3 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition" name="harga" placeholder="0" value="{{ $soal->harga ?? 0 }}">
-          </div>
         </div>
+        <input type="hidden" name="harga" id="harga" value="{{ $soal->harga ?? 0 }}">
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
           <div>
@@ -120,18 +116,6 @@
 @push('scripts')
 <script>
 $(document).ready(function(){
-  function toggleHarga() {
-    if ($("#tipe_akses").val() === 'gratis') {
-      $("#wrap_harga").hide();
-      $("#harga").prop('disabled', true).val(0);
-    } else {
-      $("#wrap_harga").show();
-      $("#harga").prop('disabled', false);
-    }
-  }
-  $("#tipe_akses").on("change", toggleHarga);
-  toggleHarga();
-
   $("#waktu_menit").on("input", function() {
     var menit = parseInt($(this).val()) || 0;
     var detik = menit * 60;
