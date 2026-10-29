@@ -97,13 +97,13 @@
           </div>
         </div>
 
-        <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
+        <div id="notif" style="display: none;" class="p-4 rounded-xl text-xs font-semibold"></div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
-          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm" id="btnSimpan">
-            Simpan Perubahan Paket
+          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer flex items-center gap-2" id="btnSimpan">
+            <span>Simpan Perubahan Paket</span>
           </button>
-          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition" onclick="self.history.back()">
+          <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer" onclick="self.history.back()">
             Batal
           </button>
         </div>
@@ -125,19 +125,37 @@ $(document).ready(function(){
 
   $("#btnSimpan").click(function(){
     var dataString = $("#formSoal").serialize();
+    $("#btnSimpan").prop('disabled', true).html('<i class="fa fa-spinner fa-spin mr-1"></i> Menyimpan...');
+    $("#notif").hide().empty();
+
     $.ajax({
       type: "POST",
       url: "{{ url('/crud/simpan-soal') }}",
       data: dataString,
       success: function(data){
-        if (data == 'ok') {
-          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ Data paket berhasil disimpan.").show();
+        $("#btnSimpan").prop('disabled', false).html('<span>Simpan Perubahan Paket</span>');
+        if (typeof data === 'object' && data.status === 'ok') {
+          $("#notif").removeClass('bg-red-50 text-red-700 border-red-200').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ " + (data.message || "Perubahan paket berhasil disimpan.")).show();
           setTimeout(function() {
             window.location.href = "{{ url('elearning/soal/detail/'.$soal->id) }}";
-          }, 600);
+          }, 500);
+        } else if (data === 'ok') {
+          $("#notif").removeClass('bg-red-50 text-red-700 border-red-200').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ Data paket berhasil disimpan.").show();
+          setTimeout(function() {
+            window.location.href = "{{ url('elearning/soal/detail/'.$soal->id) }}";
+          }, 500);
         } else {
-          $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(data).show();
+          var msg = (typeof data === 'object' && data.message) ? data.message : (typeof data === 'string' && data ? data : "Terjadi kesalahan.");
+          $("#notif").removeClass('bg-emerald-50 text-emerald-800 border-emerald-200').addClass('bg-red-50 text-red-700 border border-red-200').html("✕ " + msg).show();
         }
+      },
+      error: function(xhr){
+        $("#btnSimpan").prop('disabled', false).html('<span>Simpan Perubahan Paket</span>');
+        var msg = "Gagal menyimpan perubahan paket.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          msg = xhr.responseJSON.message;
+        }
+        $("#notif").removeClass('bg-emerald-50 text-emerald-800 border-emerald-200').addClass('bg-red-50 text-red-700 border border-red-200').html("✕ " + msg).show();
       }
     });
   });

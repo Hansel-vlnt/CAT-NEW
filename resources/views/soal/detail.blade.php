@@ -340,33 +340,55 @@
 </div>
 
 <!-- Modal Import Soal Excel -->
-<div class="modal fade" id="modal-import-soal">
-  <div class="modal-dialog">
-    <div class="modal-content" style="border-radius: 12px;">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="font-weight: 700;"><i class="fa fa-file-excel-o text-success"></i> Import Butir Soal via Excel</h4>
+<div class="modal fade" id="modal-import-soal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+      <div class="modal-header" style="padding: 20px 24px; background: #0f172a; color: white;">
+        <button type="button" class="close text-white opacity-80 hover:opacity-100" data-dismiss="modal" style="margin-top: -2px; font-size: 24px;">&times;</button>
+        <h4 class="modal-title font-bold text-white text-base flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm border border-emerald-500/30">
+            <i class="fa fa-file-excel-o"></i>
+          </span>
+          <span>Import Butir Soal via Excel</span>
+        </h4>
       </div>
-      <form action="{{ url('/crud/simpan-detail-soal-via-excel') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ url('/crud/simpan-detail-soal-via-excel') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-5">
         @csrf
-        <div class="modal-body" style="padding: 20px;">
-          <input type="hidden" name="id_soal" value="{{ $soal->id }}">
-          <div class="form-group">
-            <label style="font-weight: 600; margin-bottom: 6px;">Pilih File Excel (.xlsx / .xls)</label>
-            <input type="file" name="file" required class="form-control" accept=".xlsx,.xls">
-          </div>
-          <div class="alert alert-info" style="font-size: 12px; margin-bottom: 0;">
-            <i class="fa fa-info-circle"></i> Pastikan format file sesuai dengan template.
-            <div style="margin-top: 6px;">
-              <a href="{{ url('/download-file-format/soal') }}" class="btn btn-default btn-xs" style="font-weight: 600;">
-                <i class="fa fa-download"></i> Unduh Format Soal Excel
-              </a>
+        <input type="hidden" name="id_soal" value="{{ $soal->id }}">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Pilih Berkas Excel (.xlsx / .xls) *</label>
+          <input type="file" name="file" required accept=".xlsx,.xls" class="block w-full text-sm text-slate-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 border border-slate-200 rounded-xl p-2 cursor-pointer bg-slate-50/50 transition">
+          <p class="text-[11px] text-slate-400 mt-1.5">Mendukung berkas format spreadsheet Microsoft Excel (.xlsx dan .xls).</p>
+        </div>
+
+        <!-- Template Download Box: Elegant, High Contrast & Clear Button -->
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3.5">
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 text-base font-bold border border-emerald-200 mt-0.5">
+              <i class="fa fa-file-excel-o"></i>
+            </div>
+            <div>
+              <div class="text-sm font-bold text-slate-900" style="font-size: 14px;">Format Kolom Soal Wajib Sesuai Template</div>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed" style="font-size: 12.5px;">
+                Susunan kolom harus mengikuti template resmi (Kolom Soal, Pilihan A-E, Kunci Jawaban, dan Bobot Skor) agar proses impor berjalan lancar tanpa kendala.
+              </p>
             </div>
           </div>
+          <div class="pt-1">
+            <a href="{{ url('/download-file-format/soal') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-sm" style="font-size: 13px; color: #ffffff !important;">
+              <i class="fa fa-download text-sm" style="color: #ffffff !important;"></i>
+              <span style="color: #ffffff !important;">Unduh Format Template Excel (.xlsx)</span>
+            </a>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-          <button type="submit" class="btn btn-success font-bold"><i class="fa fa-upload"></i> Unggah &amp; Import</button>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+          <button type="button" class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer" data-dismiss="modal">Batal</button>
+          <button type="submit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-md flex items-center gap-2 cursor-pointer">
+            <i class="fa fa-upload"></i>
+            <span>Unggah &amp; Import</span>
+          </button>
         </div>
       </form>
     </div>
@@ -374,27 +396,29 @@
 </div>
 
 <!-- Modal Hapus Soal -->
-<div class="modal fade" id="del-soal">
-  <div class="modal-dialog">
-    <div class="modal-content" style="border-radius: 8px;">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" style="font-weight: 600;">Hapus Butir Soal</h4>
+<div class="modal fade" id="del-soal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content" style="border-radius: 20px; overflow: hidden; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+      <div class="modal-header" style="padding: 18px 22px; background: #ef4444; color: white;">
+        <button type="button" class="close text-white opacity-80 hover:opacity-100" data-dismiss="modal" style="margin-top: -2px; font-size: 22px;">&times;</button>
+        <h4 class="modal-title font-bold text-white text-base flex items-center gap-2">
+          <i class="fa fa-trash-o"></i> Hapus Butir Soal
+        </h4>
       </div>
-      <div class="modal-body">
+      <div class="p-6 space-y-4">
         <form role="form" id="delete" action="{{ route('soal.hapus') }}" method="post">
           @csrf
           @method('delete')
           <input type="hidden" id="id_soal" name="id_soal">
         </form>
-        <p>Anda yakin ingin menghapus butir soal ini? Tindakan ini tidak dapat dibatalkan.</p>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Apakah Anda yakin ingin menghapus butir soal ini? Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
+        </p>
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer" data-dismiss="modal">Batal</button>
+          <button id="button-delete" type="button" class="px-5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer" onclick="$('#delete').submit();">Ya, Hapus</button>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-        <button id="button-delete" type="button" class="btn btn-danger" onclick="$('#delete').submit();">Ya, Hapus</button>
-      </div>
-    </div>
-  </div>
     </div>
   </div>
 </div>
