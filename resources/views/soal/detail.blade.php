@@ -371,7 +371,7 @@
             <div>
               <div class="text-sm font-bold text-slate-900" style="font-size: 14px;">Format Kolom Soal Wajib Sesuai Template</div>
               <p class="text-xs text-slate-500 mt-1 leading-relaxed" style="font-size: 12.5px;">
-                Susunan kolom harus mengikuti template resmi (Kolom Soal, Pilihan A-E, Kunci Jawaban, dan Bobot Skor) agar proses impor berjalan lancar tanpa kendala.
+                Template baru mendukung <b>Single Key</b>, <b>Multi Key (contoh: A,B,C)</b>, <b>Trik Cepat</b>, dan <b>Pembahasan Konseptual</b>. Kolom ID Soal boleh dikosongkan (otomatis masuk ke paket ini).
               </p>
             </div>
           </div>

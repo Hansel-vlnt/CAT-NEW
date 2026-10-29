@@ -10,6 +10,7 @@ use DB;
 // use Input;
 use Spreadsheet_Excel_Reader;
 use Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 use App\User;
 use App\Models\Soal;
@@ -395,75 +396,189 @@ class SoalController extends Controller
   public function simpanDetailSoalExcel(Request $request)
   {
     $sesi = md5(rand(0000000000, mt_getrandmax()));
-    $baris = 1;
     $sukses = 0;
     $gagal = 0;
+    $jumlah = 0;
     $kesalahan = '';
+    $target_id_soal = $request->id_soal ?: null;
+
     if ($request->hasFile('file')) {
-      $path = $request->file('file')->getRealPath();
-      $data = Excel::load($request->file('file'), function ($reader) {
-      })->get();
-      foreach ($data as $data_arr) {
-        foreach ($data_arr as $key => $value) {
-          $jumlah = $key;
-          if ($value->id_soal == '') {
-            if ($kesalahan) {
-              $kesalahan = $kesalahan . '<br>- Kode soal kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            } else {
-              $kesalahan = $kesalahan . '- Kode soal kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            }
-            return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan'));
-          } elseif ($value->soal == '') {
-            if ($kesalahan) {
-              $kesalahan = $kesalahan . '<br>- Soal kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            } else {
-              $kesalahan = $kesalahan . '- Soal kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            }
-            return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan'));
-          } elseif ($value->kunci_jawaban == '') {
-            if ($kesalahan) {
-              $kesalahan = $kesalahan . '<br>- Pilihan jawaban kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            } else {
-              $kesalahan = $kesalahan . '- Pilihan jawaban kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            }
-            return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan'));
-          } elseif ($value->score == '') {
-            if ($kesalahan) {
-              $kesalahan = $kesalahan . '<br>- Score kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            } else {
-              $kesalahan = $kesalahan . '- Score kosong pada baris <b>' . $baris . '</b>, proses upload dihentikan. Silahkan cek file Excel Anda lalu upload kembali.';
-            }
-            return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan'));
+      $file = $request->file('file');
+      $filePath = $file->getRealPath();
+
+      try {
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray(null, true, true, true);
+      } catch (\Exception $e) {
+        $kesalahan = 'Format berkas Excel tidak valid atau rusak: ' . $e->getMessage();
+        return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan', 'target_id_soal'));
+      }
+
+      if (empty($rows) || count($rows) < 2) {
+        $kesalahan = 'Berkas Excel kosong atau tidak memiliki baris data soal.';
+        return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan', 'target_id_soal'));
+      }
+
+      // 1. Dynamic Header Mapping
+      $headers = [];
+      foreach ($rows[1] as $col => $val) {
+        $clean = strtolower(trim(preg_replace('/[^a-zA-Z0-9]/', '', (string)$val)));
+        $headers[$col] = $clean;
+      }
+
+      $colMap = [
+        'id_soal' => null,
+        'soal' => null,
+        'pila' => null,
+        'pilb' => null,
+        'pilc' => null,
+        'pild' => null,
+        'pile' => null,
+        'tipe_soal' => null,
+        'kunci' => null,
+        'score' => null,
+        'pembahasan_cepat' => null,
+        'pembahasan_konsep' => null,
+      ];
+
+      foreach ($headers as $col => $name) {
+        if (in_array($name, ['idsoal', 'kodesoal', 'id'])) $colMap['id_soal'] = $col;
+        elseif (in_array($name, ['soal', 'pertanyaan', 'butirsoal'])) $colMap['soal'] = $col;
+        elseif (in_array($name, ['pilihana', 'opsia', 'a'])) $colMap['pila'] = $col;
+        elseif (in_array($name, ['pilihanb', 'opsib', 'b'])) $colMap['pilb'] = $col;
+        elseif (in_array($name, ['pilihanc', 'opsic', 'c'])) $colMap['pilc'] = $col;
+        elseif (in_array($name, ['pilihand', 'opsid', 'd'])) $colMap['pild'] = $col;
+        elseif (in_array($name, ['pilihane', 'opsie', 'e'])) $colMap['pile'] = $col;
+        elseif (in_array($name, ['tipesoal', 'tipe', 'jenissoal', 'jenis'])) $colMap['tipe_soal'] = $col;
+        elseif (in_array($name, ['kuncijawaban', 'kunci', 'jawaban', 'kuncibenar'])) $colMap['kunci'] = $col;
+        elseif (in_array($name, ['score', 'skor', 'bobot', 'nilai', 'poin'])) $colMap['score'] = $col;
+        elseif (in_array($name, ['trikcepat', 'pembahasancepat', 'trik', 'caracepat'])) $colMap['pembahasan_cepat'] = $col;
+        elseif (in_array($name, ['pembahasankonseptual', 'pembahasankonsep', 'pembahasan', 'konsep', 'penjelasan'])) $colMap['pembahasan_konsep'] = $col;
+      }
+
+      // Positional fallback if headers were modified or missing
+      if ($colMap['soal'] === null) {
+        if (count($headers) >= 12) {
+          $colMap = [
+            'id_soal' => 'A', 'soal' => 'B', 'pila' => 'C', 'pilb' => 'D', 'pilc' => 'E',
+            'pild' => 'F', 'pile' => 'G', 'tipe_soal' => 'H', 'kunci' => 'I', 'score' => 'J',
+            'pembahasan_cepat' => 'K', 'pembahasan_konsep' => 'L'
+          ];
+        } else {
+          // Legacy 9-column
+          $colMap = [
+            'id_soal' => 'A', 'soal' => 'B', 'pila' => 'C', 'pilb' => 'D', 'pilc' => 'E',
+            'pild' => 'F', 'pile' => 'G', 'kunci' => 'H', 'score' => 'I',
+            'tipe_soal' => null, 'pembahasan_cepat' => null, 'pembahasan_konsep' => null
+          ];
+        }
+      }
+
+      // 2. Iterate data rows starting from row 2
+      $rowCount = count($rows);
+      for ($i = 2; $i <= $rowCount; $i++) {
+        $row = $rows[$i];
+
+        $val_soal = !empty($colMap['soal']) ? trim((string)($row[$colMap['soal']] ?? '')) : '';
+        $val_pila = !empty($colMap['pila']) ? trim((string)($row[$colMap['pila']] ?? '')) : '';
+        $val_pilb = !empty($colMap['pilb']) ? trim((string)($row[$colMap['pilb']] ?? '')) : '';
+        $val_pilc = !empty($colMap['pilc']) ? trim((string)($row[$colMap['pilc']] ?? '')) : '';
+        $val_pild = !empty($colMap['pild']) ? trim((string)($row[$colMap['pild']] ?? '')) : '';
+        $val_pile = !empty($colMap['pile']) ? trim((string)($row[$colMap['pile']] ?? '')) : '';
+
+        // If entire row is blank, skip gracefully
+        if ($val_soal === '' && $val_pila === '' && $val_pilb === '' && $val_pilc === '') {
+          continue;
+        }
+
+        $jumlah++;
+
+        // ID Soal: use cell value, or fallback to $request->id_soal
+        $val_id_soal = !empty($colMap['id_soal']) ? trim((string)($row[$colMap['id_soal']] ?? '')) : '';
+        if ($val_id_soal === '') {
+          $val_id_soal = $request->id_soal;
+        }
+        if (!$target_id_soal && !empty($val_id_soal)) {
+          $target_id_soal = $val_id_soal;
+        }
+
+        // Validate required fields
+        if ($val_id_soal === '') {
+          $gagal++;
+          $kesalahan .= ($kesalahan ? '<br>' : '') . '- Kode ID Soal kosong pada baris <b>' . $i . '</b>.';
+          continue;
+        }
+
+        if ($val_soal === '') {
+          $gagal++;
+          $kesalahan .= ($kesalahan ? '<br>' : '') . '- Teks pertanyaan/soal kosong pada baris <b>' . $i . '</b>.';
+          continue;
+        }
+
+        $val_kunci = !empty($colMap['kunci']) ? trim((string)($row[$colMap['kunci']] ?? '')) : '';
+        $val_kunci = strtoupper(preg_replace('/\s*,\s*/', ',', $val_kunci));
+
+        if ($val_kunci === '') {
+          $gagal++;
+          $kesalahan .= ($kesalahan ? '<br>' : '') . '- Kunci jawaban kosong pada baris <b>' . $i . '</b>.';
+          continue;
+        }
+
+        // Tipe Soal resolution: auto-detect multi key if comma or >1 char
+        $val_tipe = !empty($colMap['tipe_soal']) ? strtolower(trim((string)($row[$colMap['tipe_soal']] ?? ''))) : '';
+        if ($val_tipe === '') {
+          $val_tipe = (strpos($val_kunci, ',') !== false || strlen($val_kunci) > 1) ? 'multi' : 'single';
+        } else {
+          if (in_array($val_tipe, ['multi', 'majemuk', 'kompleks', 'multikey'])) {
+            $val_tipe = 'multi';
+          } elseif (in_array($val_tipe, ['tkp', 'bobot'])) {
+            $val_tipe = 'tkp';
+          } else {
+            $val_tipe = 'single';
           }
+        }
+
+        $val_score = !empty($colMap['score']) ? trim((string)($row[$colMap['score']] ?? '')) : '';
+        if ($val_score === '' || !is_numeric($val_score)) {
+          $val_score = 5;
+        }
+
+        $val_cepat = !empty($colMap['pembahasan_cepat']) ? trim((string)($row[$colMap['pembahasan_cepat']] ?? '')) : null;
+        $val_konsep = !empty($colMap['pembahasan_konsep']) ? trim((string)($row[$colMap['pembahasan_konsep']] ?? '')) : null;
+
+        try {
           $query = new Detailsoal;
-          $query->id_soal = $value->id_soal;
-          $query->soal = $value->soal;
-          $query->pila = $value->pilihan_a;
-          $query->pilb = $value->pilihan_b;
-          $query->pilc = $value->pilihan_c;
-          $query->pild = $value->pilihan_d;
-          $query->pile = $value->pilihan_e;
-          $query->kunci = $value->kunci_jawaban;
-          $query->score = $value->score;
+          $query->id_soal = $val_id_soal;
+          $query->jenis = 1;
+          $query->soal = $val_soal;
+          $query->pila = $val_pila;
+          $query->pilb = $val_pilb;
+          $query->pilc = $val_pilc;
+          $query->pild = $val_pild;
+          $query->pile = $val_pile;
+          $query->kunci = $val_kunci;
+          $query->score = $val_score;
           $query->id_user = Auth::user()->id;
           $query->status = 'Y';
           $query->sesi = $sesi;
-          $query->tipe_soal = isset($value->tipe_soal) ? $value->tipe_soal : 'single';
-          $query->pembahasan_cepat = isset($value->pembahasan_cepat) ? $value->pembahasan_cepat : (isset($value->trik_cepat) ? $value->trik_cepat : null);
-          $query->pembahasan_konsep = isset($value->pembahasan_konsep) ? $value->pembahasan_konsep : (isset($value->pembahasan) ? $value->pembahasan : null);
-          if ($query->save()) {
-            $sukses = $sukses + 1;
-          }
+          $query->tipe_soal = $val_tipe;
+          $query->pembahasan_cepat = !empty($val_cepat) ? $val_cepat : null;
+          $query->pembahasan_konsep = !empty($val_konsep) ? $val_konsep : null;
+          $query->save();
+          $sukses++;
+        } catch (\Exception $e) {
+          $gagal++;
+          $kesalahan .= ($kesalahan ? '<br>' : '') . '- Gagal menyimpan soal pada baris <b>' . $i . '</b>: ' . $e->getMessage();
         }
       }
-      if ($sukses > $jumlah) {
-        $sukses == $jumlah;
-      }
+
       $aktifitas = new Aktifitas;
       $aktifitas->id_user = Auth::user()->id;
-      $aktifitas->nama = 'Mengupload data detail soal via Excel. Jumlah data ' . $jumlah . ', sukses diupload sebanyak: ' . $sukses . ' dan gagal diupload sebanyak: ' . $gagal;
+      $aktifitas->nama = 'Mengupload data detail soal via Excel. Jumlah data: ' . $jumlah . ', sukses diupload: ' . $sukses . ', gagal: ' . $gagal;
       $aktifitas->save();
-      return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan'));
+
+      return view('soal.hasil_upload_via_excel', compact('sukses', 'gagal', 'jumlah', 'kesalahan', 'target_id_soal'));
     } else {
       return redirect()->route('soal');
     }

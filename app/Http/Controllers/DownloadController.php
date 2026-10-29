@@ -11,16 +11,14 @@ class DownloadController extends Controller
   {
   	$filename = $request->filename;
   	if ($filename == "soal") {
-  		$file = public_path(). "/file/soal.xls";
+  		$file = file_exists(public_path() . "/file/soal.xlsx") ? (public_path() . "/file/soal.xlsx") : (public_path() . "/file/soal.xls");
 	    $headers = array(
-			  'Content-Type' => 'application/csv',
-			  'Content-Disposition' => 'attachment; filename=' . $filename,
+			  'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			  'Content-Disposition' => 'attachment; filename=format_template_soal.xlsx',
 			);
 			if ( file_exists( $file ) ) {
-        // Send Download
-        return Response::download($file, 'format_soal.xls', $headers);
+        return Response::download($file, 'format_template_soal.xlsx', $headers);
       } else {
-        // Error
         exit( 'Requested file does not exist on our server!' );
       }
   	}

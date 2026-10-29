@@ -39,9 +39,15 @@
         </div>
       @endif
 
-      <div class="pt-4 border-t border-slate-100 flex items-center justify-center gap-3">
-        <a href="{{ url('/elearning/soal') }}" class="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm">
-          Kembali ke Daftar Soal &rarr;
+      <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-center gap-3">
+        @if(!empty($target_id_soal))
+          <a href="{{ url('/elearning/soal/detail/' . $target_id_soal) }}" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2" style="color: #ffffff !important;">
+            <i class="fa fa-arrow-left"></i>
+            <span>Lihat Paket Soal Ini</span>
+          </a>
+        @endif
+        <a href="{{ url('/elearning/soal') }}" class="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition">
+          Semua Paket Soal &rarr;
         </a>
       </div>
     </div>
