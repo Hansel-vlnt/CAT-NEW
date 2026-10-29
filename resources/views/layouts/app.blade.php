@@ -353,6 +353,77 @@
         text-align: center !important;
         box-shadow: none !important;
     }
+
+    /* Summernote Dropdown Bulletproof Visibility & Theme Integration */
+    .note-editor .dropdown-menu {
+      background-color: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+      padding: 6px 0 !important;
+      z-index: 1050 !important;
+      min-width: 120px !important;
+    }
+    .note-editor .dropdown-menu.note-check {
+      max-height: 260px !important;
+      overflow-y: auto !important;
+    }
+    .note-editor .dropdown-menu.note-check li {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .note-editor .dropdown-menu.note-check li a {
+      display: flex !important;
+      align-items: center !important;
+      padding: 7px 14px !important;
+      color: #1e293b !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+      line-height: 1.4 !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      cursor: pointer !important;
+    }
+    .note-editor .dropdown-menu.note-check li a span {
+      color: #1e293b !important;
+      visibility: visible !important;
+      display: inline-block !important;
+    }
+    .note-editor .dropdown-menu.note-check li a:hover,
+    .note-editor .dropdown-menu.note-check li a:focus {
+      background-color: #f1f5f9 !important;
+      color: #4f46e5 !important;
+    }
+    .note-editor .dropdown-menu.note-check li a:hover span,
+    .note-editor .dropdown-menu.note-check li a:focus span {
+      color: #4f46e5 !important;
+    }
+    .note-editor .dropdown-menu.note-check li a.checked {
+      font-weight: 700 !important;
+      color: #4f46e5 !important;
+      background-color: #eef2ff !important;
+    }
+    .note-editor .dropdown-menu.note-check li a.checked span {
+      color: #4f46e5 !important;
+      font-weight: 700 !important;
+    }
+    .note-editor .dropdown-menu.note-check li a i.note-icon-check {
+      display: inline-block !important;
+      width: 16px !important;
+      margin-right: 8px !important;
+      font-family: FontAwesome !important;
+      font-style: normal !important;
+      color: transparent !important;
+      visibility: visible !important;
+    }
+    .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check {
+      color: #4f46e5 !important;
+    }
+    .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check:before {
+      content: "\f00c" !important;
+    }
   </style>
   @stack('css')
 </head>

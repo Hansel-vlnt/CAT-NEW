@@ -112,12 +112,12 @@
 @endsection
 
 @push('css')
-<link rel="stylesheet" href="{{ url('/assets/plugins/summernote/summernote.css') }}">
+<link rel="stylesheet" href="{{ url('/assets/plugins/summernote/summernote.css') }}?v={{ time() }}">
 <link rel="stylesheet" href="{{ url('/assets/plugins/datatables/media/css/dataTables.bootstrap.css') }}">
 @endpush
 
 @push('scripts')
-<script src="{{ url('/assets/plugins/summernote/summernote.min.js') }}"></script>
+<script src="{{ url('/assets/plugins/summernote/summernote.min.js') }}?v={{ time() }}"></script>
 <script src="{{ url('/assets/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ url('/assets/plugins/datatables/media/js/dataTables.bootstrap.min.js') }}"></script>
 <script>

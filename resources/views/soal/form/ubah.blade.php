@@ -217,15 +217,73 @@
 @endsection
 
 @push('css')
-<link rel="stylesheet" href="{{URL::asset('assets/plugins/summernote/summernote.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/summernote/summernote.css')}}?v={{ time() }}">
 <style type="text/css">
   .panel { margin-bottom: 5px !important; }
   .form-group { margin-bottom: 12px; }
+
+  /* Summernote Dropdown Bulletproof Styling */
+  .note-editor .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+    padding: 6px 0 !important;
+    z-index: 1050 !important;
+    min-width: 120px !important;
+  }
+  .note-editor .dropdown-menu.note-check {
+    max-height: 260px !important;
+    overflow-y: auto !important;
+  }
+  .note-editor .dropdown-menu.note-check li {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 7px 14px !important;
+    color: #1e293b !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    line-height: 1.4 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+  }
+  .note-editor .dropdown-menu.note-check li a:hover,
+  .note-editor .dropdown-menu.note-check li a:focus {
+    background-color: #f1f5f9 !important;
+    color: #4f46e5 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked {
+    font-weight: 700 !important;
+    color: #4f46e5 !important;
+    background-color: #eef2ff !important;
+  }
+  .note-editor .dropdown-menu.note-check li a i.note-icon-check {
+    display: inline-block !important;
+    width: 16px !important;
+    margin-right: 8px !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    color: transparent !important;
+    visibility: visible !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check {
+    color: #4f46e5 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check:before {
+    content: "\f00c" !important;
+  }
 </style>
 @endpush
 
 @push('scripts')
-<script src="{{URL::asset('assets/plugins/summernote/summernote.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/summernote/summernote.min.js')}}?v={{ time() }}"></script>
 <script>
 function toggleTipeSoal(tipe) {
   if (tipe === 'multi') {
@@ -265,6 +323,28 @@ function sendFile(file, editor) {
 $(document).ready(function (){
   toggleTipeSoal('{{ $soal->tipe_soal ?: "single" }}');
 
+  // DOM Rehydrator on font and size dropdown clicks
+  $(document).on('click', '.note-fontname .dropdown-toggle, .note-fontsize .dropdown-toggle', function() {
+    var $menu = $(this).closest('.btn-group').find('.dropdown-menu');
+    setTimeout(function() {
+      $menu.find('li a').each(function() {
+        var val = $(this).attr('data-value');
+        if ($(this).find('span').length) {
+          $(this).find('span').css({
+            'color': '#1e293b',
+            'visibility': 'visible',
+            'display': 'inline-block'
+          });
+        } else if (val) {
+          var textNode = $(this).contents().filter(function() { return this.nodeType === 3; }).first();
+          if (textNode.length) {
+            textNode.replaceWith('<span class="dropdown-item-label" style="display:inline-block; color:#1e293b; font-weight:600; font-size:13px;">' + val + '</span>');
+          }
+        }
+      });
+    }, 10);
+  });
+
   $('.textarea, .textarea-main').summernote({
     toolbar: [
       ['style', ['style']],
@@ -277,9 +357,9 @@ $(document).ready(function (){
       ['view', ['fullscreen', 'codeview']]
     ],
     height: 120,
-    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
-    fontNamesIgnoreCheck: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
-    fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '36', '48', '64', '82', '150'],
+    fontNames: ['Plus Jakarta Sans', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
+    fontNamesIgnoreCheck: ['Plus Jakarta Sans', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
+    fontSizes: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '18', '20', '24', '28', '36', '48', '64', '82', '150'],
     callbacks: {
       onImageUpload: function(files) {
         sendFile(files[0], this);

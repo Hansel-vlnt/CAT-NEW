@@ -107,8 +107,9 @@
         <div id="notif" style="display: none;" class="p-3.5 rounded-xl text-xs font-semibold"></div>
 
         <div class="pt-4 border-t border-slate-100 flex items-center gap-3" id="wrap-btn">
-          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer" id="btnSimpan">
-            Simpan &amp; Buat Paket
+          <button type="button" class="px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider transition shadow-sm cursor-pointer flex items-center gap-2" id="btnSimpan">
+            <span>Simpan &amp; Lanjut Buat Butir Soal</span>
+            <i class="fa fa-arrow-right"></i>
           </button>
           <button type="button" class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider transition cursor-pointer" onclick="$('#wrap-soal').slideUp();">
             Batal
@@ -133,11 +134,12 @@
               <th style="padding: 14px 16px; width: 60px;">ID</th>
               <th style="padding: 14px 16px;">Nama Paket</th>
               <th style="padding: 14px 16px;">Deskripsi</th>
+              <th style="padding: 14px 16px; text-align: center; width: 100px;">Jumlah Soal</th>
               <th style="padding: 14px 16px; text-align: center; width: 90px;">Waktu</th>
-              <th style="padding: 14px 16px; text-align: center; width: 110px;">Model</th>
-              <th style="padding: 14px 16px; text-align: center; width: 110px;">Akses</th>
+              <th style="padding: 14px 16px; text-align: center; width: 100px;">Akses</th>
+              <th style="padding: 14px 16px; text-align: center; width: 100px;">Status</th>
               <th style="padding: 14px 16px; text-align: center; width: 90px;">Token</th>
-              <th style="padding: 14px 16px; text-align: center; width: 150px;">Aksi</th>
+              <th style="padding: 14px 16px; text-align: center; width: 160px;">Aksi</th>
             </tr>
           </thead>
         </table>
@@ -209,9 +211,10 @@ $(document).ready(function (){
       {data: 'id', name: 'id', orderable: true, searchable: true, className: "font-mono font-bold text-slate-500" },
       {data: 'paket', name: 'paket', orderable: true, searchable: true, className: "font-bold text-slate-900 text-sm" },
       {data: 'deskripsi', name: 'deskripsi', orderable: true, searchable: true, className: "text-xs text-slate-500" },
+      {data: 'jumlah_soal', name: 'jumlah_soal', orderable: false, searchable: false, className: "text-center" },
       {data: 'waktu', name: 'waktu', orderable: true, searchable: true, className: "text-center font-bold text-xs" },
-      {data: 'jenis', name: 'jenis', orderable: true, searchable: true, className: "text-center text-xs" },
       {data: 'tipe_akses', name: 'tipe_akses', orderable: true, searchable: true, className: "text-center" },
+      {data: 'status_terbit', name: 'status_terbit', orderable: false, searchable: false, className: "text-center" },
       {data: 'password', name: 'password', orderable: true, searchable: true, className: "text-center text-xs font-mono font-bold" },
       {data: 'action', name: 'action', orderable: false, searchable: false, className: "text-center" },
     ],
@@ -231,23 +234,67 @@ $(document).ready(function (){
 
   $("#btnSimpan").click(function(){
     var dataString = $("#formSoal").serialize();
+    $("#btnSimpan").prop('disabled', true).html('<i class="fa fa-spinner fa-spin mr-1"></i> Menyimpan...');
     $.ajax({
       type: "POST",
       url: "{{ url('/crud/simpan-soal') }}",
       data: dataString,
       success: function(data){
-        if (data == 'ok') {
-          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ Paket soal berhasil dibuat.").show();
+        $("#btnSimpan").prop('disabled', false).html('<span>Simpan &amp; Lanjut Buat Butir Soal</span> <i class="fa fa-arrow-right"></i>');
+        if (typeof data === 'object' && data.status === 'ok' && data.redirect) {
+          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ " + data.message).show();
+          setTimeout(function() {
+            window.location.href = data.redirect;
+          }, 400);
+        } else if (data === 'ok' || (typeof data === 'object' && data.status === 'ok')) {
+          $("#notif").removeClass('bg-red-50 text-red-700').addClass('bg-emerald-50 text-emerald-800 border border-emerald-200').html("✓ Paket soal berhasil disimpan.").show();
           setTimeout(function() {
             window.location.reload();
           }, 600);
         } else {
-          $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(data).show();
+          var msg = (typeof data === 'object' && data.message) ? data.message : data;
+          $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(msg).show();
         }
+      },
+      error: function(xhr){
+        $("#btnSimpan").prop('disabled', false).html('<span>Simpan &amp; Lanjut Buat Butir Soal</span> <i class="fa fa-arrow-right"></i>');
+        var msg = "Terjadi kesalahan.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          msg = xhr.responseJSON.message;
+        }
+        $("#notif").removeClass('bg-emerald-50 text-emerald-800').addClass('bg-red-50 text-red-700 border border-red-200').html(msg).show();
       }
     });
   });
 });
+
+function togglePublish(id) {
+  $.ajax({
+    url: "{{ url('/elearning/soal/toggle-publish') }}/" + id,
+    type: "POST",
+    data: {
+      _token: "{{ csrf_token() }}"
+    },
+    success: function(res) {
+      if (res.success) {
+        table_soal.ajax.reload(null, false);
+      }
+    },
+    error: function(xhr) {
+      var msg = "Gagal mengubah status publikasi.";
+      if (xhr.responseJSON && xhr.responseJSON.message) {
+        msg = xhr.responseJSON.message;
+      }
+      swal({
+        title: "Perhatian",
+        text: msg,
+        type: "warning",
+        confirmButtonColor: "#4f46e5",
+        confirmButtonText: "Mengerti"
+      });
+    }
+  });
+}
 
 function deleteSoal(id_soal, paketSoal) {
   $("#id_soal").val(id_soal);

@@ -201,7 +201,14 @@ class SiswaController extends Controller
   {
     if (auth()->user()->status == 'S') {
       $user = User::where('id', auth()->user()->id)->first();
-      $pakets = Soal::orderBy('id', 'ASC')->get();
+      $pakets = Soal::where(function($q) {
+          $q->where('tampil', 1)->orWhere(function($sub) {
+            $sub->whereNull('tampil');
+          });
+        })
+        ->has('detailSoal')
+        ->orderBy('id', 'ASC')
+        ->get();
       $pakets_langganan = PaketLangganan::where('is_aktif', 1)->orderBy('urutan', 'asc')->orderBy('harga', 'asc')->get();
       return view('halaman-siswa.ujian', compact('user', 'pakets', 'pakets_langganan'));
     } else {
@@ -221,6 +228,12 @@ class SiswaController extends Controller
       }
 
       $user = auth()->user();
+      // Guard: Cek apakah paket draft atau belum memiliki butir soal
+      if ($soal->detailSoal()->count() == 0 || $soal->tampil === 0 || $soal->tampil === '0') {
+        Session::flash('error', "Paket latihan soal ini masih dalam status DRAFT (sedang disusun) dan belum diterbitkan.");
+        return redirect('/siswa/ujian');
+      }
+
       // Guard: Cek apakah paket berbayar dan siswa belum berlangganan les
       if (!$soal->isGratis() && !$user->isLanggananLes()) {
         Session::flash('error', "Paket latihan ini khusus untuk siswa bimbingan belajar Abdi Praja. Silakan daftar di website utama https://abdipraja.id/ atau masukkan kode voucher lisensi Anda.");

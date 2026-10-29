@@ -32,4 +32,14 @@ class Soal extends Model
   {
     return empty($this->tipe_akses) || $this->tipe_akses === 'gratis';
   }
+
+  public function isPublished()
+  {
+    return $this->tampil == 1 || ($this->tampil === null && $this->detailSoal()->count() > 0);
+  }
+
+  public function getJumlahSoalAttribute()
+  {
+    return $this->detailSoal()->count();
+  }
 }

@@ -119,16 +119,35 @@ class SoalController extends Controller
       ->editColumn('jenis', function ($soals) {
         return $soals->jenis;
       })
+      ->addColumn('jumlah_soal', function ($soals) {
+        $count = $soals->detailSoal()->count();
+        if ($count > 0) {
+          return '<center><span class="label label-info" style="background-color:#e0e7ff; color:#3730a3; font-weight:700; padding:4px 8px; border-radius:6px; border:1px solid #c7d2fe;">' . $count . ' Butir</span></center>';
+        }
+        return '<center><span class="label label-default" style="background-color:#f1f5f9; color:#64748b; font-weight:700; padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1;">0 Butir (Kosong)</span></center>';
+      })
       ->editColumn('tipe_akses', function ($soals) {
         if ($soals->tipe_akses == 'berbayar') {
           return '<center><span class="label label-warning" style="background-color:#f59e0b; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Khusus Les</span></center>';
         }
         return '<center><span class="label label-success" style="background-color:#10b981; color:#fff; font-weight:bold; padding:4px 8px; border-radius:6px;">Gratis</span></center>';
       })
-      ->addColumn('action', function ($soals) {
-        return '<div style="text-align:center"><a href="soal/ubah/' . $soals->id . '" class="btn btn-success btn-xs">Ubah</a> <a href="#" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#del-soal" onclick="deleteSoal('.$soals->id.',\''.$soals->paket.'\')">Hapus</a> <a href="soal/detail/' . $soals->id . '" class="btn btn-primary btn-xs">Detail</a></div>';
+      ->addColumn('status_terbit', function ($soals) {
+        $count = $soals->detailSoal()->count();
+        $isPub = $soals->tampil == 1 || ($soals->tampil === null && $count > 0);
+        if ($isPub) {
+          return '<center><button type="button" onclick="togglePublish('.$soals->id.')" class="btn btn-xs cursor-pointer" style="background-color:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; font-weight:700; border-radius:6px; padding:3px 8px;" title="Klik untuk ubah ke Draft"><i class="fa fa-check-circle text-emerald-600"></i> Terbit</button></center>';
+        }
+        return '<center><button type="button" onclick="togglePublish('.$soals->id.')" class="btn btn-xs cursor-pointer" style="background-color:#fef3c7; color:#92400e; border:1px solid #fde68a; font-weight:700; border-radius:6px; padding:3px 8px;" title="Klik untuk terbitkan paket"><i class="fa fa-clock-o text-amber-600"></i> Draft</button></center>';
       })
-      ->rawColumns(['tipe_akses', 'action'])->make(true);
+      ->addColumn('action', function ($soals) {
+        return '<div style="text-align:center; display:flex; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap;">'
+          . '<a href="soal/detail/' . $soals->id . '" class="btn btn-primary btn-xs font-bold" title="Kelola Butir Soal"><i class="fa fa-tasks"></i> Isi Soal</a> '
+          . '<a href="soal/ubah/' . $soals->id . '" class="btn btn-default btn-xs font-bold" title="Ubah Info Paket"><i class="fa fa-pencil text-blue-600"></i></a> '
+          . '<button type="button" class="btn btn-danger btn-xs" title="Hapus Paket" data-toggle="modal" data-target="#del-soal" onclick="deleteSoal('.$soals->id.',\''.addslashes($soals->paket).'\')"><i class="fa fa-trash"></i></button>'
+          . '</div>';
+      })
+      ->rawColumns(['tipe_akses', 'jumlah_soal', 'status_terbit', 'action'])->make(true);
   }
   public function dataSoalHome()
   {
@@ -206,19 +225,19 @@ class SoalController extends Controller
   public function simpanSoal(Request $request)
   {
     if ($request['paket'] == "") {
-      return "Nama paket soal tidak boleh kosong.";
-    } elseif ($request['paket'] == "") {
-      return "Nama paket soal tidak boleh kosong.";
+      return response()->json(['status' => 'error', 'message' => 'Nama paket soal tidak boleh kosong.'], 422);
     } elseif ($request['deskripsi'] == "") {
-      return "Deskripsi tidak boleh kosong.";
+      return response()->json(['status' => 'error', 'message' => 'Deskripsi tidak boleh kosong.'], 422);
     } elseif ($request['waktu'] == "") {
-      return "Waktu tidak boleh kosong.";
+      return response()->json(['status' => 'error', 'message' => 'Waktu tidak boleh kosong.'], 422);
     } elseif ($request['jenis'] == "") {
-      return "Jenis soal belum dipilih.";
+      return response()->json(['status' => 'error', 'message' => 'Jenis waktu ujian belum dipilih.'], 422);
     } else {
-      if ($request['id'] == 'N') {
+      $isNew = ($request['id'] == 'N');
+      if ($isNew) {
         $query = new Soal;
         $query->id_user = Auth::user()->id;
+        $query->tampil = 0; // Default DRAFT: paket baru yang belum berisi butir soal tidak langsung terbit ke siswa
       } else {
         $query = Soal::where('id', $request['id'])->first();
       }
@@ -243,7 +262,51 @@ class SoalController extends Controller
         $query->harga = intval($request['harga']) ?: 0;
       }
       $query->save();
-      return 'ok';
+
+      if ($isNew) {
+        return response()->json([
+          'status' => 'ok',
+          'id' => $query->id,
+          'message' => 'Paket soal berhasil dibuat! Mengalihkan ke pengisian butir soal...',
+          'redirect' => url('/elearning/soal/detail/' . $query->id . '?baru=1')
+        ]);
+      }
+      return response()->json(['status' => 'ok', 'message' => 'Perubahan paket soal berhasil disimpan.']);
+    }
+  }
+
+  public function togglePublish($id)
+  {
+    if (Auth::user()->status != 'G' && Auth::user()->status != 'A') {
+      return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+    }
+    $soal = Soal::findOrFail($id);
+    $count = $soal->detailSoal()->count();
+
+    $isCurrentlyPublished = ($soal->tampil == 1 || ($soal->tampil === null && $count > 0));
+
+    if ($isCurrentlyPublished) {
+      $soal->tampil = 0;
+      $soal->save();
+      return response()->json([
+        'success' => true,
+        'tampil' => 0,
+        'message' => 'Paket soal berhasil diubah menjadi DRAFT (disembunyikan dari katalog siswa).'
+      ]);
+    } else {
+      if ($count == 0) {
+        return response()->json([
+          'success' => false,
+          'message' => 'Paket soal belum memiliki butir soal! Tambahkan minimal 1 butir soal sebelum menerbitkan paket ini ke siswa.'
+        ], 422);
+      }
+      $soal->tampil = 1;
+      $soal->save();
+      return response()->json([
+        'success' => true,
+        'tampil' => 1,
+        'message' => 'Paket soal berhasil DITERBITKAN dan kini dapat diakses oleh siswa di katalog.'
+      ]);
     }
   }
   public function simpanDetailSoal(Request $request)

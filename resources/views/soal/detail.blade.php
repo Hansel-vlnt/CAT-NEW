@@ -16,7 +16,10 @@
   </div>
 @endsection
 @section('content')
-<?php include(app_path() . '/functions/myconf.php'); ?>
+<?php
+  include(app_path() . '/functions/myconf.php');
+  $isPublished = ($soal->tampil == 1 || ($soal->tampil === null && $soals->count() > 0));
+?>
 <div class="col-md-12">
   <div class="max-w-6xl mx-auto space-y-6">
 
@@ -42,6 +45,17 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+          @if($isPublished)
+            <button type="button" id="btn-toggle-publish" onclick="togglePublishDetail({{ $soal->id }})" class="px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer" title="Paket sedang aktif terbit di katalog siswa. Klik untuk ubah ke Draft.">
+              <i class="fa fa-check-circle text-emerald-600"></i>
+              <span>Sedang Terbit (Draftkan)</span>
+            </button>
+          @else
+            <button type="button" id="btn-toggle-publish" onclick="togglePublishDetail({{ $soal->id }})" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer" title="Klik untuk menerbitkan paket ke katalog siswa">
+              <i class="fa fa-paper-plane"></i>
+              <span>Terbitkan Paket ke Siswa</span>
+            </button>
+          @endif
           <button type="button" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-2 shadow-sm cursor-pointer" data-toggle="modal" data-target="#modal-import-soal">
             <i class="fa fa-file-excel-o"></i> Import Excel
           </button>
@@ -52,11 +66,11 @@
       </div>
 
       <!-- Quick Specs Pills Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-100">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3.5 mt-6 pt-6 border-t border-slate-100">
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
-          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Durasi Pengerjaan</div>
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Durasi</div>
           <div class="text-lg font-bold text-slate-900 mt-0.5">{{ round($soal->waktu / 60) }} Menit</div>
-          <div class="text-xs text-slate-400">Total: {{ number_format($soal->waktu, 0, ',', '.') }} detik</div>
+          <div class="text-xs text-slate-400">Total: {{ number_format($soal->waktu, 0, ',', '.') }}s</div>
         </div>
 
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
@@ -66,18 +80,72 @@
         </div>
 
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
-          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Waktu Ujian</div>
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Mode CBT</div>
           <div class="text-lg font-bold text-slate-900 mt-0.5">{{ $soal->jenis_soal == 0 ? 'Total Paket' : 'Per Nomor' }}</div>
-          <div class="text-xs text-slate-400">Mode pengerjaan CBT</div>
+          <div class="text-xs text-slate-400">Hitung mundur</div>
         </div>
 
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60">
           <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Token Akses</div>
-          <div class="text-lg font-mono font-bold text-slate-900 mt-0.5">{{ $soal->password ?: 'Bebas Akses' }}</div>
-          <div class="text-xs text-slate-400">{{ $soal->password ? 'Wajib verifikasi token' : 'Tanpa password token' }}</div>
+          <div class="text-lg font-mono font-bold text-slate-900 mt-0.5">{{ $soal->password ?: 'Bebas' }}</div>
+          <div class="text-xs text-slate-400">{{ $soal->password ? 'Wajib token' : 'Tanpa token' }}</div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/60 col-span-2 sm:col-span-1">
+          <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Status Siswa</div>
+          <div class="text-sm font-bold mt-1">
+            @if($isPublished)
+              <span class="text-emerald-700 flex items-center gap-1"><i class="fa fa-check-circle text-emerald-600"></i> Terbit</span>
+            @else
+              <span class="text-amber-700 flex items-center gap-1"><i class="fa fa-clock-o text-amber-600"></i> Draft</span>
+            @endif
+          </div>
+          <div class="text-[11px] text-slate-400 mt-0.5">{{ $isPublished ? 'Tampil di katalog' : 'Belum tampil' }}</div>
         </div>
       </div>
     </div>
+
+    <!-- Banner Onboarding Paket Baru -->
+    @if(request()->has('baru'))
+    <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 text-indigo-900 shadow-sm" id="welcome-new-banner">
+      <div class="w-10 h-10 rounded-xl bg-indigo-100 border border-indigo-300 flex items-center justify-center shrink-0 text-indigo-700 font-bold text-lg">
+        <i class="fa fa-check"></i>
+      </div>
+      <div>
+        <div class="font-bold text-sm text-indigo-950">
+          Paket Soal Baru Berhasil Dibuat! Langkah Selanjutnya: Tulis Butir Soal
+        </div>
+        <p class="text-xs text-indigo-800 mt-0.5 leading-relaxed">
+          Formulir penulisan butir soal telah dibuka otomatis di bawah. Anda juga dapat menggunakan opsi <b>"Import Excel"</b> jika sudah memiliki berkas bank soal. Setelah selesai menambahkan soal, klik tombol <b>"Terbitkan Paket ke Siswa"</b> di atas.
+        </p>
+      </div>
+    </div>
+    @endif
+
+    <!-- Banner Draft Guidance -->
+    @if(!$isPublished)
+    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-amber-900 shadow-sm" id="draft-banner">
+      <div class="flex items-start sm:items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0 text-amber-700 font-bold text-lg">
+          <i class="fa fa-clock-o"></i>
+        </div>
+        <div>
+          <div class="font-bold text-sm text-amber-950 flex items-center gap-2">
+            <span>Status Paket: DRAFT (Belum Terbit ke Siswa)</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-200/80 text-amber-900 uppercase tracking-wider">Mode Penyusunan</span>
+          </div>
+          <p class="text-xs text-amber-800 mt-0.5 max-w-2xl leading-relaxed">
+            Paket ini tersimpan aman sebagai draft dan belum dapat dilihat oleh siswa di katalog. Tambahkan butir soal di bawah (minimal 1 soal), lalu klik <b>"Terbitkan Sekarang"</b> agar dapat dikerjakan siswa.
+          </p>
+        </div>
+      </div>
+      <div class="shrink-0 flex items-center gap-2">
+        <button type="button" onclick="togglePublishDetail({{ $soal->id }})" class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+          <i class="fa fa-paper-plane"></i> Terbitkan Sekarang
+        </button>
+      </div>
+    </div>
+    @endif
 
     <!-- Full-Width Card: Butir Soal Table -->
     <div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
@@ -336,7 +404,7 @@
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/media/css/dataTables.bootstrap.css')}}">
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/Responsive/css/responsive.dataTables.css')}}">
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/css/fixedHeader.bootstrap.css')}}">
-<link rel="stylesheet" href="{{URL::asset('assets/plugins/summernote/summernote.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/summernote/summernote.css')}}?v={{ time() }}">
 <style type="text/css">
   .panel { margin-bottom: 5px !important; }
   .form-group { margin-bottom: 10px; }
@@ -350,6 +418,64 @@
     border: solid 1px #f87171;
     color: #b91c1c !important;
   }
+
+  /* Summernote Dropdown Bulletproof Styling */
+  .note-editor .dropdown-menu {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+    padding: 6px 0 !important;
+    z-index: 1050 !important;
+    min-width: 120px !important;
+  }
+  .note-editor .dropdown-menu.note-check {
+    max-height: 260px !important;
+    overflow-y: auto !important;
+  }
+  .note-editor .dropdown-menu.note-check li {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 7px 14px !important;
+    color: #1e293b !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    line-height: 1.4 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+  }
+  .note-editor .dropdown-menu.note-check li a:hover,
+  .note-editor .dropdown-menu.note-check li a:focus {
+    background-color: #f1f5f9 !important;
+    color: #4f46e5 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked {
+    font-weight: 700 !important;
+    color: #4f46e5 !important;
+    background-color: #eef2ff !important;
+  }
+  .note-editor .dropdown-menu.note-check li a i.note-icon-check {
+    display: inline-block !important;
+    width: 16px !important;
+    margin-right: 8px !important;
+    font-family: FontAwesome !important;
+    font-style: normal !important;
+    color: transparent !important;
+    visibility: visible !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check {
+    color: #4f46e5 !important;
+  }
+  .note-editor .dropdown-menu.note-check li a.checked i.note-icon-check:before {
+    content: "\f00c" !important;
+  }
 </style>
 @endpush
 
@@ -358,7 +484,7 @@
 <script src="{{URL::asset('assets/plugins/datatables/media/js/dataTables.bootstrap.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatables/extensions/Responsive/js/dataTables.responsive.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/summernote/summernote.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/summernote/summernote.min.js')}}?v={{ time() }}"></script>
 <script>
 function toggleFormTipeSoal(tipe) {
   if (tipe === 'multi') {
@@ -395,6 +521,42 @@ function sendFile(file, editor) {
   });
 }
 
+function togglePublishDetail(id) {
+  $.ajax({
+    url: "{{ url('/elearning/soal/toggle-publish') }}/" + id,
+    type: "POST",
+    data: {
+      _token: "{{ csrf_token() }}"
+    },
+    success: function(res) {
+      if (res.success) {
+        swal({
+          title: "Berhasil!",
+          text: res.message,
+          type: "success",
+          confirmButtonColor: "#4f46e5",
+          confirmButtonText: "Sip, Mengerti"
+        }, function() {
+          window.location.reload();
+        });
+      }
+    },
+    error: function(xhr) {
+      var msg = "Gagal mengubah status publikasi.";
+      if (xhr.responseJSON && xhr.responseJSON.message) {
+        msg = xhr.responseJSON.message;
+      }
+      swal({
+        title: "Perhatian",
+        text: msg,
+        type: "warning",
+        confirmButtonColor: "#4f46e5",
+        confirmButtonText: "Mengerti"
+      });
+    }
+  });
+}
+
 $(document).ready(function() {
   toggleFormTipeSoal('single');
 
@@ -403,6 +565,39 @@ $(document).ready(function() {
   });
   $("#batal").click(function() {
     $("#wrap-soal").slideToggle();
+  });
+
+  @if(request()->has('baru') || $soals->count() == 0)
+    $("#wrap-soal").show();
+    setTimeout(function() {
+      if ($("#wrap-soal").length) {
+        $('html, body').animate({
+          scrollTop: $("#wrap-soal").offset().top - 80
+        }, 400);
+      }
+    }, 250);
+  @endif
+
+  // DOM Rehydrator on font and size dropdown clicks
+  $(document).on('click', '.note-fontname .dropdown-toggle, .note-fontsize .dropdown-toggle', function() {
+    var $menu = $(this).closest('.btn-group').find('.dropdown-menu');
+    setTimeout(function() {
+      $menu.find('li a').each(function() {
+        var val = $(this).attr('data-value');
+        if ($(this).find('span').length) {
+          $(this).find('span').css({
+            'color': '#1e293b',
+            'visibility': 'visible',
+            'display': 'inline-block'
+          });
+        } else if (val) {
+          var textNode = $(this).contents().filter(function() { return this.nodeType === 3; }).first();
+          if (textNode.length) {
+            textNode.replaceWith('<span class="dropdown-item-label" style="display:inline-block; color:#1e293b; font-weight:600; font-size:13px;">' + val + '</span>');
+          }
+        }
+      });
+    }, 10);
   });
 
   $('.textarea-main').summernote({
@@ -417,9 +612,9 @@ $(document).ready(function() {
       ['view', ['fullscreen', 'codeview']]
     ],
     height: 120,
-    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
-    fontNamesIgnoreCheck: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
-    fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '36', '48', '64', '82', '150'],
+    fontNames: ['Plus Jakarta Sans', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
+    fontNamesIgnoreCheck: ['Plus Jakarta Sans', 'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Helvetica Neue', 'Helvetica', 'Impact', 'Lucida Grande', 'Tahoma', 'Times New Roman', 'Verdana'],
+    fontSizes: ['8', '9', '10', '11', '12', '13', '14', '15', '16', '18', '20', '24', '28', '36', '48', '64', '82', '150'],
     callbacks: {
       onImageUpload: function(files) {
         sendFile(files[0], this);

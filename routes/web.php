@@ -101,6 +101,7 @@ Route::group(['prefix' => 'elearning'], function () {
 		Route::delete('/paket-soal', 'SoalController@deletePaketSoal')->name('soal.paket.hapus');
 		Route::delete('/', 'SoalController@deleteSoal')->name('soal.hapus');
 		Route::get('/ubah/{id}', 'SoalController@ubahSoal')->name('soal.ubah');
+		Route::post('/toggle-publish/{id}', 'SoalController@togglePublish')->name('soal.toggle-publish');
 		Route::get('/detail/{id}', 'SoalController@detail')->name('elearning.detail-soal');
 		Route::get('/get-soal', 'SoalController@dataSoal')->name('elearning.get-soal');
 		Route::get('/get-soal-home', 'SoalController@dataSoalHome')->name('elearning.get-soal-home');
