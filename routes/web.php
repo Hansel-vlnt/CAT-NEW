@@ -50,8 +50,19 @@ Route::group(['prefix' => 'crud', 'middleware' => ['auth']], function () {
 	Route::post('aktivasi', 'CrudController@aktivasi')->name('aktivasi');
 });
 
-Route::group(['prefix' => 'pengaturan'], function () {
+Route::group(['prefix' => 'pengaturan', 'middleware' => ['auth']], function () {
 	Route::get('/', 'HomeController@pengaturan')->name('pengaturan');
+	Route::post('/update-kontak-pembayaran', 'HomeController@updateKontakPembayaran')->name('pengaturan.update-kontak-pembayaran');
+});
+
+// Pembayaran QRIS & Transfer Bank dengan Deteksi Otomatis
+Route::group(['prefix' => 'pembayaran'], function () {
+	Route::post('/buat-pesanan', 'PembayaranController@buatPesanan')->name('pembayaran.buat-pesanan')->middleware('auth');
+	Route::get('/cek-status/{order_id}', 'PembayaranController@cekStatus')->name('pembayaran.cek-status');
+	Route::post('/simulasi-bayar/{order_id}', 'PembayaranController@simulasiBayar')->name('pembayaran.simulasi-bayar');
+	Route::post('/webhook', 'PembayaranController@webhook')->name('pembayaran.webhook');
+	Route::get('/riwayat', 'PembayaranController@riwayatAdmin')->name('pembayaran.riwayat')->middleware('auth');
+	Route::post('/konfirmasi-admin/{id}', 'PembayaranController@konfirmasiAdmin')->name('pembayaran.konfirmasi-admin')->middleware('auth');
 });
 
 Route::group(['prefix' => 'master'], function () {

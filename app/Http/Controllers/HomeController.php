@@ -172,7 +172,43 @@ class HomeController extends Controller
   public function pengaturan()
   {
     $user = User::findorfail(Auth::user()->id);
-    return view('pengaturan.index', compact('user'));
+    $settings = [
+      'no_wa_admin'        => \App\Models\Setting::get('no_wa_admin', '085767629211'),
+      'nama_bank'          => \App\Models\Setting::get('nama_bank', 'Bank BCA'),
+      'no_rekening'        => \App\Models\Setting::get('no_rekening', '8280912345'),
+      'atas_nama_rekening' => \App\Models\Setting::get('atas_nama_rekening', 'Abdi Praja Edukasi'),
+      'jam_layanan'        => \App\Models\Setting::get('jam_layanan', '09.00 - 21.00 WIB'),
+      'qris_image'         => \App\Models\Setting::get('qris_image', ''),
+    ];
+    return view('pengaturan.index', compact('user', 'settings'));
+  }
+
+  public function updateKontakPembayaran(Request $request)
+  {
+    if (!Auth::check() || Auth::user()->status !== 'A') {
+      return response()->json(['success' => false, 'message' => 'Akses ditolak: Hanya Administrator yang berhak mengubah kontak dan pembayaran.'], 403);
+    }
+
+    $request->validate([
+      'no_wa_admin'         => 'required|string|max:30',
+      'nama_bank'           => 'nullable|string|max:100',
+      'no_rekening'         => 'nullable|string|max:100',
+      'atas_nama_rekening'  => 'nullable|string|max:150',
+      'jam_layanan'         => 'nullable|string|max:100',
+    ]);
+
+    \App\Models\Setting::set('no_wa_admin', trim($request->no_wa_admin));
+    \App\Models\Setting::set('nama_bank', trim($request->nama_bank ?: 'Bank BCA'));
+    \App\Models\Setting::set('no_rekening', trim($request->no_rekening ?: '8280912345'));
+    \App\Models\Setting::set('atas_nama_rekening', trim($request->atas_nama_rekening ?: 'Abdi Praja Edukasi'));
+    \App\Models\Setting::set('jam_layanan', trim($request->jam_layanan ?: '09.00 - 21.00 WIB'));
+
+    return response()->json([
+      'success'         => true,
+      'message'         => 'Nomor WhatsApp Admin & Pengaturan Pembayaran berhasil diperbarui!',
+      'no_wa_display'   => \App\Models\Setting::getAdminWa(),
+      'no_wa_sanitized' => \App\Models\Setting::getAdminWaSanitized(),
+    ]);
   }
 
   public function activity()

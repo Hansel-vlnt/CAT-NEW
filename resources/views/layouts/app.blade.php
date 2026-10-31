@@ -523,6 +523,7 @@
         @if($user->status == 'A')
         <li class="{{ Request::is('paket-langganan*') == true ? 'active' : '' }}"><a href="{{ url('/paket-langganan') }}"><i class="fa fa-cubes"></i> <span>Paket Langganan</span></a></li>
         <li class="{{ Request::is('vouchers*') == true ? 'active' : '' }}"><a href="{{ url('/vouchers') }}"><i class="fa fa-id-card"></i> <span>Voucher Lisensi</span></a></li>
+        <li class="{{ Request::is('pembayaran/riwayat*') == true ? 'active' : '' }}"><a href="{{ url('/pembayaran/riwayat') }}"><i class="fa fa-credit-card"></i> <span>Transaksi Masuk</span></a></li>
         @endif
         @elseif($user->status == 'S')
         <li class="{{ Request::is('siswa/ujian*') == true ? 'active' : '' }}"><a href="{{ url('siswa/ujian') }}"><i class="fa fa-book"></i> <span>Katalog Latihan Soal</span></a></li>
