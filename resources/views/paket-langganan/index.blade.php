@@ -228,7 +228,7 @@
 
         <div>
           <label for="fitur" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Daftar Fitur &amp; Fasilitas (Satu baris per poin)</label>
-          <textarea name="fitur" id="fitur" rows="4" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition font-sans" placeholder="Akses Semua 30+ Tryout SKD CAT Kedinasan&#10;Kunci Jawaban &amp; Pembahasan Lengkap&#10;Seluruh Modul Materi &amp; Rangkuman E-Book&#10;Simulasi Ranking Nasional"></textarea>
+          <textarea name="fitur" id="fitur" rows="4" class="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition font-sans" placeholder="Akses Seluruh Paket Latihan Soal CAT&#10;Kunci Jawaban &amp; Pembahasan Soal&#10;Akses Modul Materi Pembelajaran&#10;Cetak Rapor Nilai &amp; Hasil Latihan"></textarea>
           <p class="text-[11px] text-slate-400 mt-1">Setiap baris baru akan otomatis ditampilkan sebagai checklist centang hijau di kartu siswa.</p>
         </div>
 

@@ -41,7 +41,7 @@
           </div>
           <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">Buka Akses Penuh ke Seluruh Paket Soal</h3>
           <p class="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl">
-            Anda dapat langsung mengerjakan paket bertanda <b class="text-emerald-400">🟢 Gratis</b>. Dapatkan akses ke seluruh simulasi CAT kedinasan, kunci jawaban, trik cepat, dan ranking nasional dengan berlangganan Pass CBT.
+            Anda dapat langsung mengerjakan paket bertanda <b class="text-emerald-400">🟢 Gratis</b>. Untuk membuka seluruh paket latihan soal, kunci jawaban, dan pembahasan materi, silakan aktifkan akun langganan Anda.
           </p>
         </div>
         <div class="shrink-0 flex items-center gap-2.5 flex-wrap">
