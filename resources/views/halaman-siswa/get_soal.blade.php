@@ -67,7 +67,11 @@
 				<table width="100%">
 					<tr>
 						<td width="36px" valign="top">
-							<span class="huruf-opsi">{{ $huruf }}.</span>
+							@if($soal->tipe_soal == 'multi')
+								<span class="kotak-centang"><i class="fa fa-check icon-centang"></i></span>
+							@else
+								<span class="huruf-opsi">{{ $huruf }}.</span>
+							@endif
 						</td>
 						<td valign="top" class="pilihan" style="padding-top: 1px;">
 							{!! $teks !!}

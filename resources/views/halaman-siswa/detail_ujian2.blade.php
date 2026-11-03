@@ -161,7 +161,11 @@
 										<table width="100%">
 											<tr>
 												<td width="36px" valign="top">
-													<span class="huruf-opsi" style="font-size: 16px; font-weight: 700; color: #1e293b;">{{ $huruf }}.</span>
+													@if(($data->tipe_soal ?? '') == 'multi')
+														<span class="kotak-centang"><i class="fa fa-check icon-centang"></i></span>
+													@else
+														<span class="huruf-opsi" style="font-size: 16px; font-weight: 700; color: #1e293b;">{{ $huruf }}.</span>
+													@endif
 												</td>
 												<td valign="top" class="pilihan" style="padding-top: 1px; font-size: 16px; line-height: 1.6; color: #1e293b;">
 													{!! $teks !!}
@@ -301,6 +305,41 @@
 		.huruf-opsi {
 			font-size: 16px;
 		}
+	}
+
+	.kotak-centang {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 2px solid #94a3b8;
+		border-radius: 6px;
+		background: #ffffff;
+		transition: all 0.15s ease-in-out;
+		margin-top: 2px;
+		vertical-align: middle;
+	}
+
+	.kotak-centang .icon-centang {
+		font-size: 13px;
+		color: transparent;
+		transition: all 0.15s ease-in-out;
+		transform: scale(0.6);
+	}
+
+	.jawab:hover .kotak-centang {
+		border-color: #2563eb;
+	}
+
+	.jawab.dijawab .kotak-centang {
+		background: #2563eb !important;
+		border-color: #2563eb !important;
+	}
+
+	.jawab.dijawab .kotak-centang .icon-centang {
+		color: #ffffff !important;
+		transform: scale(1);
 	}
 
 	.pilihan, .pilihan p, .pilihan span, .pilihan div {
@@ -632,9 +671,22 @@
 			var $this = $(this);
 			var get_jawab = $this.attr('data-jawab');
 			var id_soal = $this.attr('data-id');
+			var container = $this.closest('.opsi-container');
+			var tipe = container.length ? container.attr('data-tipe') : 'single';
 
-			$(".jawab").removeClass('dijawab');
-			$this.addClass('dijawab');
+			if (tipe === 'multi') {
+				$this.toggleClass('dijawab');
+				var anySelected = container.find('.jawab.dijawab').length > 0;
+				if (anySelected) {
+					$('#nav' + id_soal).find('a').removeClass("btn-default btn-danger").addClass("btn-success");
+				} else {
+					$('#nav' + id_soal).find('a').removeClass("btn-success btn-danger").addClass("btn-default");
+				}
+			} else {
+				$(".jawab").removeClass('dijawab');
+				$this.addClass('dijawab');
+				$('#nav' + id_soal).find('a').removeClass("btn-default btn-danger").addClass("btn-success");
+			}
 
 			$.ajax({
 				type: "POST",

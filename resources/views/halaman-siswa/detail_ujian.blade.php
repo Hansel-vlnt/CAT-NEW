@@ -161,7 +161,11 @@
 										<table width="100%">
 											<tr>
 												<td width="36px" valign="top">
-													<span class="huruf-opsi">{{ $huruf }}.</span>
+													@if(($data->tipe_soal ?? '') == 'multi')
+														<span class="kotak-centang"><i class="fa fa-check icon-centang"></i></span>
+													@else
+														<span class="huruf-opsi">{{ $huruf }}.</span>
+													@endif
 												</td>
 												<td valign="top" class="pilihan" style="padding-top: 1px;">
 													{!! $teks !!}
@@ -325,6 +329,41 @@
 		.huruf-opsi {
 			font-size: 16px;
 		}
+	}
+
+	.kotak-centang {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 2px solid #94a3b8;
+		border-radius: 6px;
+		background: #ffffff;
+		transition: all 0.15s ease-in-out;
+		margin-top: 2px;
+		vertical-align: middle;
+	}
+
+	.kotak-centang .icon-centang {
+		font-size: 13px;
+		color: transparent;
+		transition: all 0.15s ease-in-out;
+		transform: scale(0.6);
+	}
+
+	.jawab:hover .kotak-centang {
+		border-color: #2563eb;
+	}
+
+	.jawab.dijawab .kotak-centang {
+		background: #2563eb !important;
+		border-color: #2563eb !important;
+	}
+
+	.jawab.dijawab .kotak-centang .icon-centang {
+		color: #ffffff !important;
+		transform: scale(1);
 	}
 
 	.pilihan, .pilihan p, .pilihan span, .pilihan div {

@@ -76,8 +76,16 @@
               @if(!empty($teks))
                 <?php $is_kunci = in_array($huruf, $kunci_arr); ?>
                 <div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; border-radius: 8px; border: 1px solid {{ $is_kunci ? '#10b981' : '#e2e8f0' }}; background: {{ $is_kunci ? '#ecfdf5' : '#ffffff' }}; transition: all 0.2s;">
-                  <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 13px; flex-shrink: 0; background: {{ $is_kunci ? '#10b981' : '#e2e8f0' }}; color: {{ $is_kunci ? '#ffffff' : '#334155' }};">
-                    {{ $huruf }}
+                  <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: {{ $soal->tipe_soal == 'multi' ? '6px' : '50%' }}; font-weight: 700; font-size: 13px; flex-shrink: 0; background: {{ $is_kunci ? '#10b981' : '#e2e8f0' }}; color: {{ $is_kunci ? '#ffffff' : '#334155' }};">
+                    @if($soal->tipe_soal == 'multi')
+                      @if($is_kunci)
+                        <i class="fa fa-check"></i>
+                      @else
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; border: 1.5px solid #94a3b8;"></span>
+                      @endif
+                    @else
+                      {{ $huruf }}
+                    @endif
                   </span>
                   <div style="flex-grow: 1; font-size: 14px; line-height: 1.6; color: #1e293b; padding-top: 3px;">
                     {!! $teks !!}

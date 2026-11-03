@@ -158,11 +158,20 @@
                 </div>
 
                 <div class="text-xs sm:text-sm text-slate-600">
-                  @if($item->tipe_soal != 'tkp')
+                  @if($item->tipe_soal == 'multi')
+                    Kunci: <b class="text-emerald-700 font-bold">{{ count($kunci_arr) }} opsi wajib dicentang</b>
+                    @if(!$is_empty)
+                      &bull; Kamu Centang: <b class="{{ $is_correct ? 'text-emerald-700' : 'text-red-700' }}">{{ count($user_arr) }} opsi ({{ $is_correct ? 'Benar Lengkap' : 'Belum Sesuai' }})</b>
+                    @endif
+                  @elseif($item->tipe_soal != 'tkp')
                     Kunci Resmi: <b class="text-emerald-700 text-sm sm:text-base font-black">{{ is_array($kunci_arr) ? implode(', ', $kunci_arr) : $item->kunci }}</b>
-                  @endif
-                  @if(!$is_empty)
-                    &bull; Kamu Pilih: <b class="{{ ($item->tipe_soal == 'tkp' || $is_correct) ? 'text-emerald-700' : 'text-red-700' }}">{{ is_array($user_arr) ? implode(', ', $user_arr) : $user_jawaban }}</b>
+                    @if(!$is_empty)
+                      &bull; Kamu Pilih: <b class="{{ ($item->tipe_soal == 'tkp' || $is_correct) ? 'text-emerald-700' : 'text-red-700' }}">{{ is_array($user_arr) ? implode(', ', $user_arr) : $user_jawaban }}</b>
+                    @endif
+                  @else
+                    @if(!$is_empty)
+                      Kamu Pilih: <b class="text-emerald-700">{{ is_array($user_arr) ? implode(', ', $user_arr) : $user_jawaban }}</b>
+                    @endif
                   @endif
                 </div>
               </div>
@@ -185,9 +194,15 @@
                       $opsi_bobot = isset($bobot_arr[$label]) ? $bobot_arr[$label] : null;
                     ?>
                     <div class="p-3.5 sm:p-4 rounded-xl border flex items-start gap-3 transition {{ $is_this_key ? 'bg-emerald-50/80 border-emerald-300 font-semibold text-emerald-950' : ($is_this_user ? 'bg-blue-50/80 border-blue-300 text-blue-950' : 'bg-white border-slate-200 text-slate-800') }}">
-                      <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-bold text-xs sm:text-sm shadow-xs {{ $is_this_key ? 'bg-emerald-600 text-white' : ($is_this_user ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200') }}">
-                        {{ $label }}
-                      </span>
+                      @if($item->tipe_soal == 'multi')
+                        <span class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 text-xs shadow-xs {{ $is_this_key ? 'bg-emerald-600 text-white border border-emerald-600' : ($is_this_user ? 'bg-red-500 text-white border border-red-500' : 'bg-white border-2 border-slate-300 text-transparent') }}">
+                          <i class="fa fa-check {{ ($is_this_key || $is_this_user) ? 'opacity-100' : 'opacity-0' }}"></i>
+                        </span>
+                      @else
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 font-bold text-xs sm:text-sm shadow-xs {{ $is_this_key ? 'bg-emerald-600 text-white' : ($is_this_user ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200') }}">
+                          {{ $label }}
+                        </span>
+                      @endif
                       <div class="flex-1 pt-0.5 text-[15px] sm:text-base leading-relaxed opsi-text">{!! $text !!}</div>
                       @if($item->tipe_soal == 'tkp' && $opsi_bobot !== null)
                         <span class="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded-md shrink-0">{{ $opsi_bobot }} Poin</span>
@@ -196,7 +211,7 @@
                         <span class="text-xs font-bold text-emerald-700 shrink-0 flex items-center gap-1">✓ Kunci Benar</span>
                       @endif
                       @if($is_this_user)
-                        <span class="text-xs font-bold text-blue-700 shrink-0">Pilihanmu</span>
+                        <span class="text-xs font-bold {{ ($item->tipe_soal == 'multi' && !$is_this_key) ? 'text-red-700' : 'text-blue-700' }} shrink-0">{{ $item->tipe_soal == 'multi' ? 'Centanganmu' : 'Pilihanmu' }}</span>
                       @endif
                     </div>
                   @endif
